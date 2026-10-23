@@ -3275,6 +3275,7 @@ F.store = {
   flush() {
     if (!F._pending) return; F._pending = false;
     if (F.resetting) return;
+    if (F.acct) F.acct.sync();   // the shared account (Velvet and Practice) first: 04b-account-sync.js
     let ok = LS.set(K, JSON.stringify(F.S));
     if (!ok && LS.full && F.store.compact()) ok = LS.set(K, JSON.stringify(F.S));
     if (ok && LS.set(K + '.rev', F.S.rev + ':' + F.TAB)) F._stamp = F.S.rev + ':' + F.TAB;   // a tiny stamp, so other writes can be spotted without reading the whole store
@@ -3344,6 +3345,61 @@ F.ev = (type, entity, meta) => {
   F.S.events.push({ id: 'e' + Date.now().toString(36) + (evn++), type, at: Date.now(), entity: entity || null, meta: meta || null });
   if (F.S.events.length > 1500) F.S.events.splice(0, F.S.events.length - 1500);
 };
+})();
+
+/* ---- 04b-account-sync.js ---- */
+/* One FLINGR account on all three sites. Velvet and Practice keep accounts in the passport (localStorage
+   'flingr.passport'); FLINGR keeps them in its own store. This keeps the two in step, both ways, field by field:
+   profile, identity check, cards, Wallet, Reserve, health records and a booked screening, new accounts, and who is signed
+   in. A field changed on one side since the last sync wins; when only the other side changed, it comes across.
+   Runs on start-up, before every save, and whenever another tab (any of the three sites) writes the passport. */
+(() => {
+'use strict';
+const PK = 'flingr.passport';
+const SHARED = ['name', 'email', 'password', 'phone', 'dob', 'verified', 'verifiedAt', 'idDoc', 'emergency', 'methods', 'wallet', 'reserve', 'health', 'healthTest'];
+const hash = v => U.hash(JSON.stringify(v === undefined ? null : v));
+const clone = v => v === undefined ? undefined : JSON.parse(JSON.stringify(v));
+const same = (a, b) => a.id === b.id || (!!a.email && !!b.email && a.email.toLowerCase() === b.email.toLowerCase());
+// a FLINGR account as the passport keeps it (the passport fills in the rest on load)
+const toPassport = u => Object.assign({ id: u.id, city: u.city, color: u.color, createdAt: u.createdAt || Date.now(), prefs: { discreet: u.prefs ? u.prefs.discreet !== false : true, walletCur: u.prefs && u.prefs.walletCur } }, ...SHARED.map(k => ({ [k]: clone(u[k]) })));
+// an account made on Velvet or Practice, as FLINGR keeps it (the store's repair fills in the rest)
+const fromPassport = p => Object.assign({ id: p.id, city: p.city || 'la', color: p.color, createdAt: p.createdAt || Date.now(), saved: [], helpful: [], blocked: [], prefs: { notif: { bookings: true, reminders: true, morning: true, offers: true, aftercare: true }, discreet: true, quiet: { on: false, from: '23:00', to: '08:00' }, comm: 'app', walletCur: p.prefs && p.prefs.walletCur } }, ...SHARED.map(k => ({ [k]: clone(p[k]) })));
+F.acct = {
+  // returns true when FLINGR's store changed (the caller saves and redraws)
+  sync() {
+    if (!F.S || F.resetting) return false;
+    let raw = null; try { raw = window.localStorage.getItem(PK); } catch (e) { return false; }
+    if (!raw) return false;   // nobody has opened Velvet or Practice yet: they copy FLINGR's accounts when they do
+    let P; try { P = JSON.parse(raw); } catch (e) { return false; }
+    if (!P || !Array.isArray(P.users)) return false;
+    const S = F.S, mine = S.users.filter(u => !u.gen && u.email);
+    let toP = false, toF = false, added = false;
+    for (const u of mine) {
+      const p = P.users.find(x => same(x, u));
+      if (!p) { P.users.push(toPassport(u)); toP = true; continue; }
+      const last = u._sync || (u._sync = {});
+      for (const k of SHARED) {
+        const hf = hash(u[k]), hp = hash(p[k]);
+        if (hf === hp) { if (last[k] !== hf) { last[k] = hf; toF = true; } continue; }
+        if (last[k] === hf) { u[k] = clone(p[k]); last[k] = hp; toF = true; }   // changed on Velvet or Practice
+        else { p[k] = clone(u[k]); last[k] = hf; toP = true; }                  // changed here (here wins if both did)
+      }
+    }
+    for (const p of P.users) if (p.email && !S.users.some(u => same(u, p))) { const u = fromPassport(p); u._sync = Object.fromEntries(SHARED.map(k => [k, hash(u[k])])); S.users.push(u); toF = added = true; }
+    // who is signed in: the side that changed since the last sync wins
+    const ss = S.session._sync || (S.session._sync = {}), fu = S.session.userId || null, pu = (P.session && P.session.userId) || null;
+    if (fu !== pu) {
+      if (ss.u === fu && (!pu || S.users.some(x => x.id === pu))) { S.session.userId = pu; S.session.lastActive = Date.now(); ss.u = pu; toF = true; }
+      else { P.session = Object.assign({}, P.session, { userId: fu, lastActive: Date.now() }); ss.u = fu; toP = true; }
+    } else if (ss.u !== fu) { ss.u = fu; toF = true; }
+    if (added && F.store.repair) F.store.repair(S);
+    if (toP) { P.rev = (P.rev || 0) + 1; P.savedBy = 'flingr-' + F.TAB; try { window.localStorage.setItem(PK, JSON.stringify(P)); window.localStorage.setItem(PK + '.rev', P.rev + ':' + P.savedBy); } catch (e) { } }
+    if (toF) F.E.invalidate();
+    return toF;
+  }
+};
+// Velvet or Practice (another tab) changed the account: bring it in and redraw
+window.addEventListener('storage', e => { if (e.key !== PK || !F.S) return; if (F.acct.sync()) { F.store.save(); if (F.chromeCounts) F.chromeCounts(); if (!F._modal && F.rerender) F.rerender(); } });
 })();
 
 /* ---- 05-engine.js ---- */
@@ -5857,7 +5913,7 @@ const SCENE = { light: ['Low and warm', 'Candlelight', 'Bright', 'Your choice'],
 const AFTER = ['Cuddles', 'Talking it through', 'Quiet space', 'A shower', 'Water and a snack', 'A message the next day'];
 
 /* ---------- logic ---------- */
-E.healthOk = u => !!u && (u.health || []).some(r => r.verified && now() - r.at < F.HEALTH_DAYS * D);
+E.healthOk = u => !!u && (u.health || []).some(r => (r.verified || r.ok) && now() - r.at < F.HEALTH_DAYS * D);
 E.latestHealth = u => ((u && u.health) || []).slice().sort((a, b) => b.at - a.at)[0] || null;
 E.healthVisible = o => ['confirmed', 'checked_in', 'in_progress'].includes(o.status) || (o.status === 'completed' && now() < o.end + D);
 E.guestSheet = (u, o) => Object.assign({}, (u && u.prefs.sheet) || {}, (o && o.sheet) || {});
@@ -5918,7 +5974,7 @@ E.intimacyTick = (st, n) => {
     }
   }
   for (const u of st.users) {
-    if (u.healthTest && n >= u.healthTest.ready) { const t = u.healthTest; u.health = (u.health || []).concat({ id: U.uid('hr'), hospital: t.hospital, at: t.ready, ref: 'LAB-' + String(100000 + U.hash(u.id + t.ready) % 900000), verified: true }); u.healthTest = null; E.notify(u.id, 'reminders', 'Your results are ready', `${F.hospital(t.hospital).name}: verified, all clear. You can now share them with hosts.`, '#/account/preferences?s=health', n); changed = true; }
+    if (F.health && F.health.complete(u, n)) changed = true;   // a booked screening's results (shared/js/health.js: the same on all three sites)
     const last = E.latestHealth(u);
     if (last && n - last.at > F.HEALTH_DAYS * D && !u.healthTest && (!u.healthReminded || n - u.healthReminded > 30 * D) && st.session.userId === u.id) { u.healthReminded = n; E.notify(u.id, 'reminders', 'Time for a check-up', 'Your last screening is more than 90 days old. Some hosts ask for a recent one.', '#/account/preferences', n); changed = true; }
   }
@@ -5928,7 +5984,7 @@ const pickBy = (k, a) => a[U.hash(k) % a.length];
 
 /* ---------- shared bits of UI ---------- */
 const GOPTS = Object.entries(F.GUEST_ANS), HOPTS = Object.entries(F.HOST_ANS);
-F.healthCard = (rec, name, ref = '') => { const hs = F.hospital(rec.hospital), old = now() - rec.at > F.HEALTH_DAYS * D; return `<div class="hrec ${old ? 'old' : ''}"><div class="row between"><strong>${esc(name || '')}${name ? ' · ' : ''}${esc(hs.name)}</strong>${old ? '<span class="badge">Over 90 days</span>' : `<span class="badge b-ok">${F.ic('shield', 11)} Verified</span>`}</div><div class="tiny muted mt4">${esc(hs.acc)} · tested ${U.fmt(rec.at, 'UTC', 'md')} · ${rec.ref}</div><div class="row between mt8"><span class="small ${old ? 'muted' : 'ok-t'}">${F.PANEL.length} of ${F.PANEL.length} not detected</span>${ref ? `<button class="btn-link tiny" data-a="labDoc" ${ref}>View lab report</button>` : ''}</div></div>`; };
+F.healthCard = (rec, name, ref = '') => { const hs = rec.hospital ? F.hospital(rec.hospital) : { name: rec.lab || 'Independent clinic', acc: 'Independent test, checked with the lab' + (rec.hrn ? ' · record ' + rec.hrn : '') }; if (!rec.hospital) ref = ''; const old = now() - rec.at > F.HEALTH_DAYS * D; return `<div class="hrec ${old ? 'old' : ''}"><div class="row between"><strong>${esc(name || '')}${name ? ' · ' : ''}${esc(hs.name)}</strong>${old ? '<span class="badge">Over 90 days</span>' : `<span class="badge b-ok">${F.ic('shield', 11)} Verified</span>`}</div><div class="tiny muted mt4">${esc(hs.acc)} · tested ${U.fmt(rec.at, 'UTC', 'md')} · ${rec.ref}</div><div class="row between mt8"><span class="small ${old ? 'muted' : 'ok-t'}">${rec.panel ? rec.panel.length : F.PANEL.length} tested, none detected</span>${ref ? `<button class="btn-link tiny" data-a="labDoc" ${ref}>View lab report</button>` : ''}</div></div>`; };
 F.matchChip = h => { const u = E.user(), s = u && E.matchScore(h, u); return s == null ? '' : `<span class="mchip ${s >= 80 ? 'hi' : s >= 60 ? 'mid' : ''}" title="How your sheet matches theirs">${s}% match</span>`; };
 
 /* ---------- booking: Match tab ---------- */
@@ -6018,7 +6074,7 @@ F.prefsPage = u => {
   return `<div class="stack-l">${F.sheetTile(u)}
 <div class="card" id="health"><div class="row between"><h2 class="h-disp h4">Health screenings</h2>${mine.length ? `<button class="btn btn-ghost btn-sm" data-a="healthPass">${F.ic('card', 13)} Health pass</button>` : ''}</div><p class="small muted mt8">Only results issued by large accredited hospitals are accepted. They’re verified directly with the hospital and shown to a host only when you choose, for one booking at a time.</p>
   <div class="stack mt16">${mine.length ? mine.map(r => F.healthCard(r, '', `data-k="me" data-i="${r.id}"`)).join('') : '<p class="small muted">No screenings yet.</p>'}</div>
-  ${t ? F.healthAppt(u, t) : F.healthBookForm(u)}</div></div>`;
+  ${t ? F.healthAppt(u, t) : F.healthBookForm(u)}<div class="row wrap-gap mt16"><span class="small muted">Tested somewhere else?</span><button class="btn btn-ghost btn-sm" data-a="hIndep">Add an independent test</button></div></div></div>`;
 };
 A.pref = el => { const k = el.dataset.k, v = el.dataset.v; F.sheetSnap(); F.store.commit(() => { const u = E.user(); u.prefs.sheet = u.prefs.sheet || {}; if (u.prefs.sheet[k] === v) delete u.prefs.sheet[k]; else u.prefs.sheet[k] = v; }); F.sheetDone(); };
 A.prefClear = () => { F.sheetSnap(); F.store.commit(() => { E.user().prefs.sheet = {}; E.user().prefs.preset = {}; }); F.toast('Sheet erased. Bookings keep their own answers.', 'ok', { label: 'Undo', fn: () => A.prefUndo() }); F.sheetDone(); };
@@ -7174,7 +7230,6 @@ ${F.homeEscapes(c.id)}
   ${later ? `<div class="stack-l mb48">${later}</div>` : ''}
   <div class="sec-head"><div><div class="eyebrow ln">Also by FLINGR</div><h2 class="h-cond h2 mt16">Learn it. <span class="it">Feel it.</span></h2></div><p class="small muted fam-note">Your FLINGR account, Wallet and cards work on both.</p></div>
   <div class="g g2">${F.FAMILY.map(x => `<a class="fam-c rv" href="${x.url}">${F.sitePlate('family-' + x.id, '#2A0609', 'r169')}<div class="fam-b"><span class="eyebrow">${x.name} by FLINGR</span><h3 class="h-disp h4 mt8">${x.line}</h3><p class="small muted mt8">${x.desc}</p><span class="btn-link mt16">Visit ${x.name} ${F.ic('arrow', 12)}</span></div></a>`).join('')}</div>
-  <div class="mt24">${F.aaBand()}</div>
 </div></section>
 
 <section class="sec-md sec-ink hide-ph"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Journal</div><h2 class="h-cond h3 mt16">Notes on <span class="it">doing</span> it well</h2></div><a class="btn-link" href="#/journal">All articles</a></div>
@@ -10059,7 +10114,6 @@ F.nudge('escapeYear', u => { const o = E.myEscapes(u).find(x => x.status === 'co
 // Across the family: Velvet after a night, and All-Access once you use two sites
 F.nudge('velvet', u => { const last = E.myOrders(u).find(o => o.status === 'completed'); if (!last || (F.hub.read().seen.velvet || {})[u.id]) return null; return { kind: 'family', key: 'velvet-once', at: last.end + 2 * D, priority: 6, eyebrow: 'Also by FLINGR', title: 'The morning after, at Velvet', body: 'Licensed hands, a long bath and nothing to arrange. Same account.', href: F.hub.url('velvet'), cta: 'Visit Velvet' }; });
 F.nudge('practice', u => { const os = E.myOrders(u), first = os.length && os.every(o => o.status !== 'completed') && os.filter(o => E.BLOCK.includes(o.status)).sort((a, b) => a.start - b.start)[0]; if (!first || (F.hub.read().seen.practice || {})[u.id] || first.start - now() < D) return null; return { kind: 'family', key: 'practice-' + first.id, at: first.start - 6 * D, priority: 6, eyebrow: 'Before your first night', title: 'Nervous? A lesson first', body: 'Practice by FLINGR: a private lesson by voice or video, with the same account. Plenty of first-timers start here.', href: F.hub.url('practice'), cta: 'Visit Practice' }; });
-F.nudge('allaccess', u => { if (E.allAccess(u)) return null; const seen = F.hub.read().seen, sites = ['flingr', 'practice', 'velvet'].filter(s => (seen[s] || {})[u.id]); if (sites.length < 2) return null; return { kind: 'family', key: 'aa', at: 0, priority: 4, eyebrow: 'All-Access', title: `You use ${sites.length} FLINGR sites`, body: `One membership for all three: ${U.money(E.aaPrice())} a month instead of ${U.money(E.aaList())}.`, href: '#/account/membership', cta: 'See All-Access' }; });
 
 /* ---------- splitting a booking with a partner ---------- */
 // The guest pays in full; the partner gets a link for half, and when they pay it lands in the guest's Wallet
@@ -10299,6 +10353,109 @@ F.bestNightsHtml = cityId => {
 A.bestNights = el => F.modal(F.bestNightsHtml(el.dataset.c || F.cityId()), { label: 'Best nights' });
 })();
 
+/* ---- 11w-health.js ---- */
+/* Shared by FLINGR, Velvet and Practice: one sexual health record for the FLINGR account, synced across the three sites.
+   Two ways to add to it:
+   1. Book a screening at a partner hospital (results arrive verified 24 to 48 hours after the appointment).
+   2. Add an independent test from any clinic, proved with the health record number and date of birth, or by uploading
+      the lab report (any file: the report is read and the form fills itself in; nothing leaves the browser).
+   Records: { id, source: 'partner' | 'independent', hospital | lab, at, panel, ok, verified, ref, hrn?, file?, site }. */
+(() => {
+'use strict';
+const H = F.health = {}, A = F.A, now = () => Date.now(), M = 6e4, D = 864e5, HR = 36e5;
+const SITE = (F.SITE && F.SITE.id) || 'flingr';
+F.HOSPITALS = F.HOSPITALS || {
+  la: [{ id: 'pcmc', addr: '8700 Crest Boulevard, Los Angeles, CA 90048', director: 'Dr Helen Okafor, MD', name: 'Pacific Crest Medical Center', acc: 'Joint Commission accredited · 900 beds' }, { id: 'crum', addr: '1250 Cedar Ridge Drive, Los Angeles, CA 90095', director: 'Dr Samuel Reyes, MD', name: 'Cedar Ridge University Hospital', acc: 'Joint Commission accredited · academic medical centre' }, { id: 'wbhs', addr: '400 Westbridge Avenue, Santa Monica, CA 90404', director: 'Dr Anita Patel, MD', name: 'Westbridge Health System', acc: 'Joint Commission accredited · 14 hospitals' }],
+  ny: [{ id: 'hpmc', addr: '622 West 168th Street, New York, NY 10032', director: 'Dr Martin Albrecht, MD', name: 'Hudson Presbyterian Medical Center', acc: 'Joint Commission accredited · 2,600 beds' }, { id: 'muh', addr: '550 First Avenue, New York, NY 10016', director: 'Dr Grace Liu, MD', name: 'Manhattan University Hospital', acc: 'Joint Commission accredited · academic medical centre' }, { id: 'ehn', addr: '1275 York Avenue, New York, NY 10065', director: 'Dr Daniel Moreno, MD', name: 'Empire Health Network', acc: 'Joint Commission accredited · 11 hospitals' }],
+  ldn: [{ id: 'sbuh', addr: 'Fleet Lane, London EC4A 2HR', director: 'Dr Eleanor Whitcombe, FRCPath', name: 'St Bride’s University Hospital', acc: 'NHS Foundation Trust · CQC rated Outstanding' }, { id: 'tri', addr: 'Embankment Road, London SE1 7EH', director: 'Dr James Adeyemi, FRCPath', name: 'Thames Royal Infirmary', acc: 'NHS Foundation Trust · CQC rated Outstanding' }, { id: 'khp', addr: 'Kingsway, London WC2B 6XF', director: 'Dr Priya Raman, FRCPath', name: 'Kingsway Health Partners', acc: 'CQC registered · 9 hospitals' }]
+};
+if (!F.hospital) F.hospital = id => Object.values(F.HOSPITALS).flat().find(x => x.id === id);
+H.LABS = F.LABS || { la: ['Silver Lake Health Partners', 'Westside Clinical Lab', 'Pacific Diagnostics'], ny: ['Hudson Sexual Health', 'Tribeca Medical Lab', 'Brooklyn Clinical'], ldn: ['Harley Street Diagnostics', 'Clerkenwell Health Lab', 'Thames Medical'] };
+H.PANEL = [['hiv', 'HIV'], ['syphilis', 'Syphilis'], ['chlamydia', 'Chlamydia'], ['gonorrhoea', 'Gonorrhoea'], ['hepb', 'Hep B'], ['hepc', 'Hep C'], ['herpes', 'Herpes']];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const user = () => F.E.user();
+const city = u => (u && u.city) || (F.cityId && F.cityId()) || 'la';
+const tzOf = u => F.E.city(city(u)).tz;
+const save = fn => F.store.commit(fn);
+const code = n => String(Math.floor(10 ** (n - 1) + Math.random() * 9 * 10 ** (n - 1)));
+
+H.records = u => ((u && u.health) || []).slice().sort((a, b) => b.at - a.at);
+H.name = r => r.hospital ? ((F.hospital(r.hospital) || {}).name || 'Partner hospital') : (r.lab || 'Independent clinic');
+H.kind = r => r.hospital ? 'Partner hospital' : 'Independent test';
+H.panel = r => r.panel || H.PANEL.map(p => p[0]);
+H.row = (r, u) => { const tz = tzOf(u), p = H.panel(r);
+  return `<div class="hrow"><div class="row between wrap-gap"><strong class="small">${esc(H.name(r))}</strong><span class="badge b-ok">${F.ic('shield', 11)} ${r.verified === false ? 'Self-reported' : 'Verified'}</span></div>
+  <div class="tiny muted mt4">${H.kind(r)} · tested ${U.fmt(r.at, tz, 'md')} · ${esc(r.ref || '')}${r.hrn ? ' · record ' + esc(r.hrn) : ''}${r.file ? ' · ' + esc(r.file) : ''}</div>
+  <div class="tiny mt8">${H.PANEL.map(([k, l]) => `<span class="hchip ${p.includes(k) ? 'on' : ''}">${l}</span>`).join('')}</div></div>`; };
+
+/* ---------- a partner hospital ---------- */
+H.appt = u => { const t = u && u.healthTest; if (!t) return ''; const hs = F.hospital(t.hospital) || {}, tz = tzOf(u), past = now() >= t.at;
+  return `<div class="card-s hrow"><span class="lbl">${past ? 'Sample taken' : 'Screening booked'}</span><strong class="small d-b mt8">${esc(hs.name)}</strong><p class="tiny muted mt4">${U.fmt(t.at, tz, 'dt')} · ${esc(hs.addr || '')} · ref ${esc(t.ref)}</p><p class="tiny mt8">${past ? 'Verified results by ' + U.fmt(t.ready, tz, 'dt') + '.' : 'Bring photo ID. Results come to your FLINGR account, usually within 48 hours.'}</p>${past ? '' : '<button class="btn-link tiny mt8" data-a="hBookCancel">Cancel appointment</button>'}</div>`; };
+const hb = () => F.ui.hb = F.ui.hb || {};
+A.hBook = () => { const u = user(); if (!u) return F.A.signin && F.A.signin(); const c = city(u), b = hb(); b.hospital = b.hospital || F.HOSPITALS[c][0].id; b.day = b.day || U.addDays(F.E.todayKey(c), 1); b.time = b.time || 10 * 60; F.modal(hbHtml(u), { label: 'Book a screening' }); };
+const hbHtml = u => { const c = city(u), tz = tzOf(u), b = hb(), today = F.E.todayKey(c), days = Array.from({ length: 10 }, (_, i) => U.addDays(today, i + 1));
+  return `<h2 class="h-disp h3">Book a screening</h2><p class="small muted mt8">At a partner hospital. A full panel (${H.PANEL.map(p => p[1]).join(', ')}); verified results come straight to your FLINGR account.</p>
+  <span class="lbl d-b mt24">Hospital</span><div class="stack-s mt8">${F.HOSPITALS[c].map(h => `<button type="button" class="fopt ${b.hospital === h.id ? 'on' : ''}" data-a="hbPick" data-k="hospital" data-v="${h.id}" aria-pressed="${b.hospital === h.id}"><span><strong>${esc(h.name)}</strong><small class="d-b muted">${esc(h.addr)}</small></span></button>`).join('')}</div>
+  <span class="lbl d-b mt24">Day</span><div class="row wrap-gap mt8">${days.map(k => `<button type="button" class="chip chip-sm ${b.day === k ? 'on' : ''}" data-a="hbPick" data-k="day" data-v="${k}">${U.keyFmt(k, 'dshort')}</button>`).join('')}</div>
+  <span class="lbl d-b mt24">Time</span><div class="row wrap-gap mt8">${[9, 10, 11, 12, 14, 15, 16, 17].map(h => `<button type="button" class="chip chip-sm ${b.time === h * 60 ? 'on' : ''}" data-a="hbPick" data-k="time" data-v="${h * 60}">${String(h > 12 ? h - 12 : h)}:00 ${h < 12 ? 'AM' : 'PM'}</button>`).join('')}</div>
+  <button class="btn btn-pri mt24" data-a="hbGo">Book for ${U.keyFmt(b.day, 'dshort')}, ${U.fmt(U.zoned(tz, b.day, b.time), tz, 'time')}</button>`; };
+A.hbPick = el => { const b = hb(); b[el.dataset.k] = el.dataset.k === 'time' ? +el.dataset.v : el.dataset.v; const m = F._modal && F._modal.m; if (m) { const y = m.scrollTop; m.innerHTML = m.innerHTML.split('<h2')[0] + hbHtml(user()); m.scrollTop = y; } };
+A.hbGo = () => { const u = user(), tz = tzOf(u), b = hb(), at = U.zoned(tz, b.day, b.time), ref = 'APT-' + code(5), ready = at + (24 + Math.floor(Math.random() * 24)) * HR;
+  save(() => { user().healthTest = { hospital: b.hospital, at, ready, ref, site: SITE }; });
+  F.ui.hb = null; F.closeModal(); F.toast('Booked. Results come to your account, usually within 48 hours.'); F.rerender(); };
+A.hBookCancel = async () => { if (!(await F.confirm({ title: 'Cancel this appointment?', body: 'You can book another at any time.', ok: 'Cancel appointment', danger: true }))) return; save(() => { user().healthTest = null; }); F.rerender(); };
+// results arrive on whichever site is open first; the record's id comes from the booking, so it is never added twice
+H.complete = (u, n) => { const t = u && u.healthTest; if (!t || n < t.ready) return false; const id = 'hr_' + t.ref;
+  u.health = u.health || []; if (!u.health.some(r => r.id === id)) u.health.push({ id, source: 'partner', hospital: t.hospital, at: t.at, panel: H.PANEL.map(p => p[0]), ok: true, verified: true, ref: 'LAB-' + code(6), site: t.site || SITE });
+  u.healthTest = null; F.E.notify(u.id, 'reminders', 'Your results are ready', `${(F.hospital(t.hospital) || {}).name}: verified, all clear.`, SITE === 'flingr' ? '#/account/preferences?s=health' : '#/account', n); return true; };
+if (F.ticks) F.ticks.push(n => { ((F.P && F.P.users) || []).forEach(u => H.complete(u, n)); });
+
+/* ---------- an independent test ---------- */
+const hi = () => F.ui.hi = F.ui.hi || { mode: 'hrn', step: 'enter' };
+A.hIndep = () => { const u = user(); if (!u) return F.A.signin && F.A.signin(); F.ui.hi = { mode: 'hrn', step: 'enter' }; F.modal(hiHtml(u), { label: 'Add an independent test' }); };
+const redraw = () => { const m = F._modal && F._modal.m; if (m && m.querySelector('.hi')) { m.innerHTML = m.innerHTML.split('<div class="hi')[0] + hiHtml(user()); } };
+const hiHtml = u => { const s = hi(), c = city(u), labs = H.LABS[c], tz = tzOf(u);
+  if (s.step === 'checking') return `<div class="hi center"><span class="spin"></span><p class="small mt16">${s.mode === 'hrn' ? 'Checking the record with ' + esc(s.lab) + '…' : 'Reading your report…'}</p></div>`;
+  if (s.step === 'review') { const r = s.rec;
+    return `<div class="hi"><h2 class="h-disp h3">Check and add</h2><p class="small muted mt8">${s.mode === 'hrn' ? `Found record ${esc(r.hrn)} at ${esc(r.lab)}.` : `Read from ${esc(r.file)}.`} Everything below came from the lab; change anything that’s wrong.</p>
+    <form class="stack mt24" data-f="hiAdd"><div class="field"><label for="hiL">Clinic or lab</label><select class="inp" id="hiL" name="lab">${Object.values(H.LABS).flat().map(l => `<option ${l === r.lab ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+    <div class="field"><label for="hiD">Date of the test</label><input class="inp" id="hiD" type="date" name="date" value="${U.dayKey(r.at, tz)}" max="${F.E.todayKey(c)}" required></div>
+    <fieldset><legend class="lbl">Tested for, all clear</legend><div class="row wrap-gap mt8">${H.PANEL.map(([k, l]) => `<label class="check"><input type="checkbox" name="p_${k}" ${r.panel.includes(k) ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div></fieldset>
+    <p class="tiny muted">Lab reference ${esc(r.ref)}. Only clear results can be added; if something came back positive, talk to your clinic first.</p>
+    <div class="row wrap-gap"><button class="btn btn-pri">Add to my record</button><button type="button" class="btn btn-ghost" data-a="hiBack">Back</button></div></form></div>`; }
+  return `<div class="hi"><h2 class="h-disp h3">Add an independent test</h2><p class="small muted mt8">A test from any clinic. We check it with the lab before it goes on your record, for FLINGR, Velvet and Practice.</p>
+  <div class="seg seg-sm mt24" role="group" aria-label="How">${[['hrn', 'Health record number'], ['file', 'Upload the report']].map(([v, l]) => `<button type="button" class="seg-b ${s.mode === v ? 'on' : ''}" data-a="hiMode" data-v="${v}" aria-pressed="${s.mode === v}">${l}</button>`).join('')}</div>
+  <form class="stack mt24" data-f="hiCheck">${s.mode === 'hrn' ? `<div class="field"><label for="hiR">Health record number</label><input class="inp mono" id="hiR" name="hrn" placeholder="HRN-123456" autocomplete="off" required><small class="tiny muted">On the letter or text from the clinic.</small></div>
+    <div class="field"><label for="hiB">Date of birth</label><input class="inp" id="hiB" type="date" name="dob" required></div>
+    <div class="field"><label for="hiC">Clinic or lab</label><select class="inp" id="hiC" name="lab">${labs.map(l => `<option>${esc(l)}</option>`).join('')}</select></div>`
+    : `<div class="field"><label for="hiF">Lab report</label><input class="inp" id="hiF" type="file" name="report" accept="application/pdf,image/*" required><small class="tiny muted">A PDF or a photo of the report. We read the clinic, the date and what was tested.</small></div><button type="button" class="btn btn-ghost btn-sm" data-a="hiInbox">${F.ic('msg', 14)} Attach from your inbox: ${esc(H.LABS[c][0])} report.pdf</button>`}
+  ${s.err ? `<p class="small err-t">${esc(s.err)}</p>` : ''}<button class="btn btn-pri">${s.mode === 'hrn' ? 'Check with the lab' : 'Read the report'}</button></form></div>`; };
+A.hiInbox = () => { const s = hi(), c = city(user()); s.fileName = H.LABS[c][0].replace(/\s+/g, '-') + '-report.pdf'; s.lab = H.LABS[c][0]; s.err = ''; s.step = 'checking'; redraw(); setTimeout(() => { s.rec = { lab: s.lab, at: now() - (2 + Math.floor(Math.random() * 12)) * D, panel: ['hiv', 'syphilis', 'chlamydia', 'gonorrhoea', 'hepb'], ref: 'LAB-' + code(6), hrn: null, file: s.fileName }; s.step = 'review'; redraw(); }, 1000); };
+A.hiMode = el => { const s = hi(); s.mode = el.dataset.v; s.err = ''; redraw(); };
+A.hiBack = () => { const s = hi(); s.step = 'enter'; redraw(); };
+F.Fm.hiCheck = (f, d) => { const s = hi(), u = user(), c = city(u);
+  if (s.mode === 'hrn') {
+    if (!/^[A-Za-z]{2,4}-?\d{5,}$/.test(String(d.hrn || '').trim())) { s.err = 'Record numbers look like HRN-123456.'; return redraw(); }
+    if (d.dob && u.dob && d.dob !== u.dob) { s.err = 'That date of birth doesn’t match the record.'; return redraw(); }
+    s.lab = d.lab;
+  } else { const file = f.querySelector('[name=report]').files[0]; if (!file) { s.err = 'Choose the report.'; return redraw(); } s.fileName = file.name; s.lab = H.LABS[c][Math.floor(Math.random() * 3)]; }
+  s.err = ''; s.step = 'checking'; redraw();
+  setTimeout(() => { const panel = s.mode === 'hrn' ? H.PANEL.map(p => p[0]) : ['hiv', 'syphilis', 'chlamydia', 'gonorrhoea'].concat(Math.random() < .5 ? ['hepb'] : []);
+    s.rec = { lab: s.lab, at: now() - (2 + Math.floor(Math.random() * 12)) * D, panel, ref: 'LAB-' + code(6), hrn: s.mode === 'hrn' ? String(d.hrn).trim().toUpperCase() : null, file: s.mode === 'file' ? s.fileName : null };
+    s.step = 'review'; redraw(); }, 1200); };
+F.Fm.hiAdd = (f, d) => { const s = hi(), u = user(), tz = tzOf(u), panel = H.PANEL.map(p => p[0]).filter(k => d['p_' + k]);
+  if (!panel.length) return F.toast('Tick what the test covered.', 'err');
+  const at = U.zoned(tz, d.date, 9 * 60);
+  save(() => { const x = user(); x.health = x.health || []; x.health.push({ id: 'hr_' + U.uid('i'), source: 'independent', lab: d.lab, at, panel, ok: true, verified: true, ref: s.rec.ref, hrn: s.rec.hrn || undefined, file: s.rec.file || undefined, site: SITE }); });
+  F.ui.hi = null; F.closeModal(); F.toast('Added to your health record, on FLINGR, Velvet and Practice.'); F.rerender(); };
+
+// the two ways, side by side (account pages on all three sites)
+H.options = u => `${H.appt(u)}<div class="g g2 mt16 hopts"><button class="card-s hopt" data-a="hBook" ${u && u.healthTest ? 'disabled' : ''}><strong class="small d-b">Book at a partner hospital</strong><span class="tiny muted d-b mt4">Full panel, verified results in 24–48 hours.</span></button><button class="card-s hopt" data-a="hIndep"><strong class="small d-b">Add an independent test</strong><span class="tiny muted d-b mt4">From any clinic: record number or upload the report.</span></button></div>`;
+H.card = u => { const rs = H.records(u); return `<div class="card" id="health"><div class="row between"><span class="lbl">Health record</span><span class="tiny muted">Shared by FLINGR, Velvet and Practice</span></div>
+  <div class="stack-s mt16">${rs.length ? rs.slice(0, 4).map(r => H.row(r, u)).join('') : '<p class="small muted">No tests on file yet.</p>'}</div>${H.options(u)}</div>`; };
+(() => { const s = document.createElement('style'); s.textContent = `.hrow{border:1px solid var(--ln);border-radius:10px;padding:12px 14px}.hchip{display:inline-block;margin:0 4px 4px 0;padding:2px 7px;border-radius:999px;border:1px solid var(--ln);opacity:.5}.hchip.on{opacity:1}.hopt{text-align:left;cursor:pointer;color:inherit;font:inherit;background:none}.hopt:disabled{opacity:.5;cursor:default}.hi .spin{display:inline-block}`; document.head.appendChild(s); })();
+})();
+
 /* ---- 11x-lang.js ---- */
 /* Shared by FLINGR, Velvet and Practice. Español and Français for the parts of the sites people use to get around:
    navigation, buttons, tabs, form labels, the footer, the age check and the cookie bar. Text is swapped only when it
@@ -10423,6 +10580,7 @@ const words = el => [el.getAttribute('autocomplete'), el.name, el.id, el.getAttr
 // the value for one field, or undefined to leave it alone
 const valueFor = (el, p, form) => {
   const w = words(el), t = (el.type || '').toLowerCase(), req = el.required || el.getAttribute('aria-required') === 'true';
+  if (/health record|\bhrn\b/.test(w)) return 'HRN-' + String(Math.floor(100000 + Math.random() * 900000));   // before card numbers: its example is HRN-123456
   if (/cc-csc|cvc|cvv|security code/.test(w)) return '123';   // before the one-time-code rule: its label says "code" too
   if (/one-time|otp|\bcode\b|verification|\bpin\b/.test(w) && !/post|zip|promo|gift|discount|referral/.test(w)) return;   // codes come from Messages
   if (/promo|discount|gift.?code|coupon|referral|search|\bq\b/.test(w)) return;
@@ -10799,6 +10957,7 @@ setTimeout(() => idle(FAM.publishIndex), 2500);
 const E = F.E;
 const boot = () => {
   const how = F.store.load();
+  if (F.acct && F.acct.sync()) F.store.save();   // changes made on Velvet or Practice since the last visit
   // sign out stale sessions (7 days without activity)
   if (F.S.session.userId && Date.now() - (F.S.session.lastActive || 0) > F.CONFIG.IDLE_MS) {
     F.store.commit(s => { s.session.userId = null; });
