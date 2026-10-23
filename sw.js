@@ -1,5 +1,5 @@
-/* FLINGR: offline copy, build 5d84eef5fe */
-const C = 'fam-flingr-5d84eef5fe';
+/* FLINGR: offline copy, build e5d97a3d21 */
+const C = 'fam-flingr-e5d97a3d21';
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(C).then(c => c.addAll(['./', './manifest.webmanifest', './icon-192.png'])).catch(() => {})); });
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('fam-flingr-') && k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', e => {
