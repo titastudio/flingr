@@ -468,6 +468,7 @@ input[type=date].inp,input[type=time].inp{color-scheme:dark}
 .track li::before{content:"";position:absolute;top:6px;left:12px;right:0;height:1px;background:var(--ln)}
 .track li:last-child::before{display:none}
 .track li.done{color:var(--fg)}.track li.done span{background:var(--fg);border-color:var(--fg)}.track li.done::before{background:var(--fg)}
+.track li.skip{color:var(--mut)}.track li.skip span{background:var(--bgc);border-color:var(--fg)}
 .track li.cur{color:var(--fg)}.track li.cur span{background:var(--cherry);border-color:var(--cherry);box-shadow:0 0 0 4px rgba(163,32,43,.25)}
 .mlist{border-top:1px solid var(--ln)}
 .mrow{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:center;padding:16px 0;border-bottom:1px solid var(--ln)}
@@ -1806,6 +1807,12 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
 .ah-msum{display:none}@media (max-width:1023px){.ah-msum{display:block}}
 .ev-when{white-space:nowrap}
 @media (max-width:640px){.ah-tier .row.between{flex-direction:column;align-items:flex-start;gap:4px}}
+
+.ah-part{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:16px;border:1px solid var(--ln2);border-radius:var(--r,10px);background:var(--bgc);color:var(--fg);text-decoration:none}.ah-part span{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.ah-part small{color:var(--mut);font-size:12px}.ah-part em{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;font-style:normal;color:var(--cherry)}.ah-part:hover{border-color:var(--fg)}
+.ah-hostbox .ah-hostrow{align-items:center}.ah-hostbox .ah-hostrow>div:not(.ah-hp){flex:1;min-width:0}
+.ah-mv{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--ln2);border-radius:10px;background:var(--bgc);color:var(--fg);cursor:pointer}.ah-mv span{display:flex;flex-direction:column;gap:2px}.ah-mv small{color:var(--mut);font-size:12px}.ah-mv:hover{border-color:var(--fg)}
+.ah-part .ah-part-m{color:var(--fg);opacity:.85;margin-top:4px;font-size:13px}
+@media (max-width:1023px){body:has(.ah-paybar) .totop,body:has(.m-cta) .totop{display:none}}
 
 /* ============ The crowd and tap-to-open explanations (05g-crowd.js, 07e-crowd.js) ============ */
 .hc-pulse{display:flex;align-items:center;gap:6px;margin:6px 0 8px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -4489,8 +4496,8 @@ E.paid = o => U.r2((o.payment && o.payment.deferred && !o.payment.captured ? 0 :
 
 /* ---------- order state machine ---------- */
 E.BLOCK = ['awaiting_payment', 'requested', 'confirmed', 'checked_in', 'in_progress'];
-E.T = { awaiting_payment: ['confirmed', 'requested', 'expired', 'cancelled'], requested: ['confirmed', 'cancelled', 'expired'], confirmed: ['checked_in', 'in_progress', 'cancelled'], checked_in: ['in_progress', 'cancelled'], in_progress: ['completed'], completed: [], cancelled: ['refunded'], refunded: [], expired: ['refunded'] };
-E.LABEL = { awaiting_payment: 'Awaiting payment', requested: 'Awaiting host', confirmed: 'Confirmed', checked_in: 'Checked in', in_progress: 'In progress', completed: 'Completed', cancelled: 'Cancelled', refunded: 'Refunded', expired: 'Expired' };
+E.T = { awaiting_payment: ['confirmed', 'requested', 'expired', 'cancelled'], requested: ['confirmed', 'cancelled', 'expired'], confirmed: ['checked_in', 'in_progress', 'cancelled', 'missed'], checked_in: ['in_progress', 'cancelled'], in_progress: ['completed'], completed: [], missed: [], cancelled: ['refunded'], refunded: [], expired: ['refunded'] };
+E.LABEL = { awaiting_payment: 'Awaiting payment', requested: 'Awaiting host', confirmed: 'Confirmed', checked_in: 'Checked in', in_progress: 'In progress', completed: 'Completed', missed: 'Missed', cancelled: 'Cancelled', refunded: 'Refunded', expired: 'Expired' };
 E.go = (o, to, note, at) => {
   if (!(E.T[o.status] || []).includes(to)) return false;
   o.status = to; (o.history = o.history || []).push({ s: to, at: at || now(), note: note || E.LABEL[to] });
@@ -4499,7 +4506,7 @@ E.go = (o, to, note, at) => {
 E.disp = o => {
   const n = now();
   if (o.status === 'confirmed') return n >= o.start - S().settings.checkinMin * 6e4 ? { label: 'Check-in open', tone: 'live' } : { label: 'Confirmed', tone: 'ok' };
-  return ({ awaiting_payment: { label: 'Awaiting payment', tone: 'warn' }, requested: { label: 'Awaiting host', tone: 'warn' }, checked_in: { label: 'Checked in', tone: 'live' }, in_progress: { label: 'In progress', tone: 'live' }, completed: { label: 'Completed', tone: 'mute' }, cancelled: { label: 'Cancelled', tone: 'err' }, refunded: { label: 'Refunded', tone: 'mute' }, expired: { label: 'Expired', tone: 'mute' } })[o.status] || { label: o.status, tone: 'mute' };
+  return ({ awaiting_payment: { label: 'Awaiting payment', tone: 'warn' }, requested: { label: 'Awaiting host', tone: 'warn' }, checked_in: { label: 'Checked in', tone: 'live' }, in_progress: { label: 'In progress', tone: 'live' }, completed: { label: 'Completed', tone: 'mute' }, missed: { label: 'Missed', tone: 'mute' }, cancelled: { label: 'Cancelled', tone: 'err' }, refunded: { label: 'Refunded', tone: 'mute' }, expired: { label: 'Expired', tone: 'mute' } })[o.status] || { label: o.status, tone: 'mute' };
 };
 
 /* ---------- availability ---------- */
@@ -4510,7 +4517,7 @@ E.resvIndex = () => {
   for (const h of S().holds) if (h.expiresAt > n) (idx[h.hostId] = idx[h.hostId] || []).push({ s: h.start, e: h.end, kind: 'held', id: h.id });
   return (memo.resv = idx);
 };
-E.extraOf = addons => Object.entries(addons || {}).reduce((s, [id, q]) => s + (q ? ((E.addon(id) || {}).extraMin || 0) : 0), 0);
+E.extraOf = addons => Object.entries(addons || {}).reduce((s, [id, q]) => s + (q ? ((E.addon(id) || {}).extraMin || 0) * (typeof q === 'number' ? q : 1) : 0), 0);   // an extra hour twice is two hours
 E.slots = (h, planId, key, extra = 0, exclude) => {
   const plan = E.plan(planId);
   if (!h || !plan || !h.plans.some(p => p.id === planId) || h.status !== 'active' || (h.blocked || []).includes(key)) return [];
@@ -5019,7 +5026,7 @@ E.tick = () => {
       if (!o.request.decided && n >= o.request.decideAt) { o.request.decided = n; const dec = E.decideRequest(o, n); const yes = dec === 'yes'; if (dec === 'counter') { const c = o.request.counter, h = E.host(o.hostId), tz = E.city(o.cityId).tz; o.messages.push({ from: 'host', text: `I can't do that time, but I'm free ${U.fmt(c.start, tz, 'dt')}. Would that work?`, at: n }); E.notify(o.customerId, 'bookings', h.first + ' suggested another time', `${U.fmt(c.start, tz, 'dt')} instead. Accept it or withdraw for a full refund.`, '#/account/booking/' + o.id, n, o.id); changed = true; } else if (yes) { E.go(o, 'confirmed', 'Accepted by ' + E.host(o.hostId).first); E.schedule(o, 'accepted'); } else { E.go(o, 'cancelled', 'Request declined by host'); o.cancel = { at: n, by: 'host', pct: 100, reason: 'Declined' }; E.notify(o.customerId, 'bookings', 'Request declined', `${E.host(o.hostId).first} can't make this time. You haven't been charged anything for it.`, '#/account/booking/' + o.id, n, o.id); E.refund(o, E.paid(o), 'original'); if (o.payment.deferred) o.payment.released = n; } changed = true; }
       else if (n >= o.request.expiresAt || n >= o.start) { E.go(o, 'expired', 'Request expired'); E.refund(o, E.paid(o), 'wallet'); changed = true; }
     }
-    if (['confirmed', 'checked_in'].includes(o.status) && n >= o.start) { if (o.payment.deferred && !o.payment.captured) E.capture(o); E.go(o, 'in_progress', 'Booking started', o.start); changed = true; }
+    if (['confirmed', 'checked_in'].includes(o.status) && n >= o.start && !(E.ahHold && E.ahHold(o, n))) { if (o.payment.deferred && !o.payment.captured) E.capture(o); E.go(o, 'in_progress', 'Booking started', o.start); changed = true; }
     if (o.status === 'in_progress' && n >= o.end) { E.go(o, 'completed', 'Booking completed', o.end); changed = true; }
     if (o.refund && o.refund.status === 'processing' && n >= o.refund.doneAt) { o.refund.status = 'done'; if (!E.go(o, 'refunded', 'Refund returned to ' + o.refund.label)) o.history.push({ s: o.status, at: n, note: 'Refund returned to ' + o.refund.label }); E.notify(o.customerId, 'bookings', 'Refund complete', `${U.money(o.refund.card, o.price.cur, true)} has been returned to your ${o.refund.label}.`, '#/account/booking/' + o.id, n, o.id); changed = true; }
     if (o.guestIn && !o.hostIn && n >= o.guestIn + 40e3 && ['checked_in', 'in_progress'].includes(o.status)) { o.hostIn = n; o.messages.push({ from: 'system', text: 'Your host has checked in.', at: n }); E.notify(o.customerId, 'bookings', 'Your host has checked in', 'You can begin now if you are both ready.', '#/account/booking/' + o.id, n, o.id); changed = true; }
@@ -6206,15 +6213,15 @@ const realOn = (c, key) => S().clubVisits.filter(v => v.clubId === c.id && v.key
 E.soloLeft = (c, key, pool, ms = now()) => {
   const x = E.clubNight(c, key); if (!x.open || !x.floor || x.noMen) return 0; const cap = c.solo || c.men, real = realOn(c, key), t = pool === 'm' ? 'man' : 'single';
   const sim = Math.round(cap * Math.min(1, soldFrac(c, x, ms) * (pool === 'm' ? 1.06 : .94) + (h100(c.id + key + pool) % 7 - 3) / 100));
-  return Math.max(0, cap - sim - real.filter(v => v.type === t).length - real.reduce((n, v) => n + v.plus.filter(p => p.type === t).length, 0));
+  return Math.max(0, cap - sim - real.filter(v => v.type === t && !v.withHost).length - real.reduce((n, v) => n + v.plus.filter(p => p.type === t).length, 0));
 };
-E.clubLeft = (c, key, type, ms = now()) => {
+E.clubLeft = (c, key, type, ms = now(), withHost = false) => {   // withHost: you and your host are a pair, so no solo place is needed
   const x = E.clubNight(c, key); if (!x.open) return 0; const pass = F.CLUB_PASS[type]; if (!pass) return 0;
   if (pass.floor && !x.floor) return 0;
-  if (pass.solo && x.noMen) return 0;
+  if (pass.solo && x.noMen && !withHost) return 0;
   const real = realOn(c, key), capOf = pass.floor ? c.cap.floor : c.cap.lounge, sold = Math.round(capOf * (x.special ? .97 : .6) * soldFrac(c, x, ms)) + real.reduce((t, v) => t + F.CLUB_PASS[v.type].people + v.plus.length, 0);
   const room = Math.max(0, capOf - sold); if (room < pass.people) return 0;
-  return pass.solo ? Math.min(room, E.soloLeft(c, key, pass.solo, ms)) : room;
+  return pass.solo && !withHost ? Math.min(room, E.soloLeft(c, key, pass.solo, ms)) : room;
 };
 E.boothsLeft = (c, key) => { const x = E.clubNight(c, key); if (!x.open) return 0; const real = S().clubVisits.filter(v => v.clubId === c.id && v.key === key && (v.booth || v.pkg) && ['confirmed', 'in'].includes(v.status)).length; const sim = Math.floor(c.booths * (x.wd === 6 || x.special ? .6 : .3) * soldFrac(c, x, now())); return Math.max(0, c.booths - sim - real); };
 E.vipMin = c => c.vipMin;
@@ -6293,7 +6300,7 @@ E.clubCheck = (u, cfg) => {
   if (now() >= x.closesAt - H) return 'The door closes soon for that night. Choose another night.';
   if (!pass) return 'Choose a pass.';
   if (pass.floor && !x.floor) return 'The Floor is closed that night. Choose the Lounge, or another night.';
-  if (pass.solo && x.noMen) return 'Tonight the Floor is for pairs. Come with someone, or choose the Lounge.';
+  if (pass.solo && x.noMen && !cfg.withHost) return 'Tonight the Floor is for pairs. Come with someone (a FLINGR host counts), or choose the Lounge.';
   if (S().clubVisits.some(v => v.customerId === u.id && v.clubId === c.id && v.key === cfg.key && ['waitlist', 'offered', 'confirmed', 'in'].includes(v.status))) return 'You’re already on the list for that night.';
   if ((cfg.booth || cfg.pkg) && !E.boothsLeft(c, cfg.key)) return 'Every VIP booth is taken that night.';
   if ((cfg.plus || []).length > 3) return 'Up to three guests per pass.';
@@ -6309,11 +6316,11 @@ const reminders = (v, c, x) => {
 };
 E.clubBook = (cfg, { methodId, useWallet = true, expectedTotal } = {}) => F.store.atomic(st => {
   const u = E.user(), n = now(), c = E.club(cfg.clubId), err = E.clubCheck(u, cfg); if (err) return { ok: false, reason: err };
-  const x = E.clubNight(c, cfg.key), pass = F.CLUB_PASS[cfg.type], left = E.clubLeft(c, cfg.key, cfg.type);
-  const base = { id: U.uid('ah'), no: 'AH-' + String(100000 + Math.floor(Math.random() * 899999)), customerId: u.id, clubId: c.id, cityId: c.cityId, key: cfg.key, opensAt: x.opensAt, closesAt: x.closesAt, type: cfg.type, partner: cfg.partner || '', plus: [], booth: !!(cfg.booth || cfg.pkg), pkg: cfg.pkg || null, pkgName: cfg.pkgName || '', createdAt: n, history: [], coat: 'C-' + String(1 + h100(u.id + cfg.key + 'coat') * 3).padStart(3, '0'), code: code(), tab: { lines: [], paid: null, unpaid: 0 }, signal: null, mask: { on: !!x.masks, alias: '' }, matches: [], couple: null, room: null, shows: [], reminds: [], guide: null, review: null, alerts: [] };
+  const x = E.clubNight(c, cfg.key), pass = F.CLUB_PASS[cfg.type], left = E.clubLeft(c, cfg.key, cfg.type, undefined, !!cfg.withHost);
+  const base = { id: U.uid('ah'), no: 'AH-' + String(100000 + Math.floor(Math.random() * 899999)), customerId: u.id, clubId: c.id, cityId: c.cityId, key: cfg.key, opensAt: x.opensAt, closesAt: x.closesAt, type: cfg.type, partner: cfg.partner || '', plus: [], booth: !!(cfg.booth || cfg.pkg), pkg: cfg.pkg || null, pkgName: cfg.pkgName || '', createdAt: n, history: [], coat: 'C-' + String(1 + h100(u.id + cfg.key + 'coat') * 3).padStart(3, '0'), code: code(), tab: { lines: [], paid: null, unpaid: 0 }, signal: null, withHost: cfg.withHost || null, mask: { on: !!x.masks, alias: '' }, matches: [], couple: null, room: null, shows: [], reminds: [], guide: null, review: null, alerts: [] };
   (cfg.plus || []).forEach(g => base.plus.push({ id: U.uid('g'), name: String(g.name).trim().slice(0, 40), type: pass.floor ? g.type || 'single' : 'lounge', code: code(), pass: false }));
   if (left <= 0) {
-    if (!pass.solo || x.noMen) return { ok: false, reason: 'That night is sold out.' };
+    if (!pass.solo || x.noMen || cfg.withHost) return { ok: false, reason: 'That night is sold out.' };
     const v = Object.assign(base, { status: 'waitlist', price: null, payment: null }); v.history.push({ at: n, note: 'Joined the waitlist' });
     st.clubVisits.push(v); E.notify(u.id, 'bookings', 'You’re on the waitlist', `${x.theme.name}, ${U.keyFmt(x.key, 'date')}. If a place opens we hold it for 30 minutes and tell you at once.`, '#/account/club/' + v.id, n, v.id);
     return { ok: true, visit: v, waitlist: true };
@@ -6621,26 +6628,31 @@ E.ahX = X;
 /* ---------- a FLINGR host at the club ---------- */
 // Three ways to bring a host: a drink at the Lounge then a room, the suite upstairs, or the Floor (by the hour)
 E.AH_WAYS = [
-  { id: 'lounge', name: 'A drink at the Lounge first', line: 'Thirty minutes at the bar together, on the guest list, then upstairs without going back outside.', venue: 'ahsuite', drink: true, ic: 'cup' },
-  { id: 'suite', name: 'The suite upstairs', line: 'A private suite above the club, reached from the Lounge. Security in the building all night.', venue: 'ahsuite', ic: 'door' },
-  { id: 'floor', name: 'The Floor, by the hour', line: 'Your host joins you on the Floor, with a private room for the hour and monitors on every door.', venue: 'ahfloor', plans: ['hour'], floor: true, ic: 'sparkle' }
+  { id: 'lounge', name: 'A drink at the Lounge first', short: 'a drink at the Lounge first', line: 'Thirty minutes at the bar together, on the guest list, then upstairs without going back outside.', venue: 'ahsuite', drink: true, ic: 'cup' },
+  { id: 'suite', name: 'The suite upstairs', short: 'the suite upstairs', line: 'A private suite above the club, reached from the Lounge. Security in the building all night.', venue: 'ahsuite', ic: 'door' },
+  { id: 'floor', name: 'The Floor, by the hour', short: 'on the Floor', line: 'Your host joins you on the Floor, with a private room for the hour and monitors on every door.', venue: 'ahfloor', plans: ['hour'], floor: true, ic: 'sparkle' }
 ];
 E.ahWay = id => E.AH_WAYS.find(w => w.id === id) || E.AH_WAYS[1];
-E.ahCtx = (h, s) => { const w = E.ahWay(s.way), venueId = w.drink && s.venueId && h.venues.includes(s.venueId) ? s.venueId : w.venue; return { hostId: h.id, planId: s.planId, venueId, start: s.start, key: s.key, t: s.t, addons: w.drink ? { drink: 1 } : {}, meet: w.drink ? 'lounge' : 'bar' }; };
+E.ahCtx = (h, s) => { const w = E.ahWay(s.way), venueId = w.drink && s.venueId && h.venues.includes(s.venueId) ? s.venueId : w.venue, addons = w.drink ? { drink: 1 } : {}; if (s.ext > 0) addons.ext60 = s.ext; return { hostId: h.id, planId: s.planId, venueId, start: s.start, key: s.key, t: s.t, addons, meet: w.drink ? 'lounge' : 'bar' }; };
+// how long the host stays, in hours: The Hour plus extra hours at their hourly rate, or The Night for eight; the Floor is
+// by the hour, up to four
+E.ahHours = (h, wayId) => { const w = E.ahWay(wayId), hr = h.plans.some(p => p.id === 'hour'), nt = h.plans.some(p => p.id === 'night') && !w.floor; return [1, 2, 3, 4, 5, 6, 7, 8].filter(n => w.floor ? hr && n <= 4 : n === 8 ? nt || hr : hr); };
+E.ahPlanFor = (h, wayId, hours) => { const w = E.ahWay(wayId); if (hours === 8 && !w.floor && h.plans.some(p => p.id === 'night')) return { planId: 'night', ext: 0 }; return { planId: 'hour', ext: Math.max(0, hours - 1) }; };
+E.ahHoursOf = s => s ? (s.hours || (s.planId === 'night' ? 8 : 1 + (s.ext || 0))) : 1;
 // the times a host can start on one club night, one way and one plan (a club night runs past midnight: two calendar days)
-E.ahSlots = (h, c, key, wayId, planId, { from = 0, limit = 99, venueId } = {}) => {
+E.ahSlots = (h, c, key, wayId, planId, { from = 0, limit = 99, venueId, ext = 0 } = {}) => {
   E.clubEnsure();
   const x = E.clubNight(c, key), w = E.ahWay(wayId); if (!h || !c || !x.open || h.status !== 'active' || h.cityId !== c.cityId) return [];
   const vid = w.drink && venueId && h.venues.includes(venueId) ? venueId : w.venue;
   if (!h.venues.includes(vid) || !h.plans.some(p => p.id === planId) || (w.plans && !w.plans.includes(planId))) return [];
   if (w.floor && (!x.floor || !E.floorOk(h))) return [];
   if (w.drink && h.flags && h.flags.noPublic) return [];
-  const extra = w.drink ? E.extraOf({ drink: 1 }) : 0, out = [], seen = new Set();
+  const extra = (w.drink ? E.extraOf({ drink: 1 }) : 0) + ext * 60, out = [], seen = new Set();
   for (const k of [key, U.addDays(key, 1)]) for (const s of E.slots(h, planId, k, extra)) {
     if (out.length >= limit) return out;
     if (s.status !== 'available' || seen.has(s.start) || s.start < from || s.start < x.opensAt || s.start > x.closesAt) continue;
     seen.add(s.start);
-    if (!E.validate(E.ahCtx(h, { way: wayId, planId, start: s.start, key: s.key, t: s.t, venueId: vid })).length) out.push({ start: s.start, key: s.key, t: s.t });
+    if (!E.validate(E.ahCtx(h, { way: wayId, planId, start: s.start, key: s.key, t: s.t, venueId: vid, ext })).length) out.push({ start: s.start, key: s.key, t: s.t });
   }
   return out;
 };
@@ -6692,14 +6704,14 @@ E.clubBookWithHost = async (cfg, sel, { methodId, useWallet = true, expectedClub
   const u = E.user(), h = sel && E.host(sel.hostId), c = E.club(cfg.clubId);
   if (!h) return E.clubBook(cfg, { methodId, useWallet, expectedTotal: expectedClub });
   if (!u) return { ok: false, reason: 'Sign in to get on the list.' };
-  const err = E.clubCheck(u, cfg); if (err) return { ok: false, reason: err };
-  if (E.clubLeft(c, cfg.key, cfg.type) <= 0) return { ok: false, reason: 'That pass is sold out that night, so a host can’t be added to it. Choose another pass or another night.' };
+  cfg = Object.assign({}, cfg, { withHost: h.id }); const err = E.clubCheck(u, cfg); if (err) return { ok: false, reason: err };
+  if (E.clubLeft(c, cfg.key, cfg.type, undefined, true) <= 0) return { ok: false, reason: 'That pass is sold out that night, so a host can’t be added to it. Choose another pass or another night.' };
   const hb = await bookHost(h, sel, { methodId, useWallet, expectedTotal: expectedHost }); if (!hb.ok) return hb;
   const r = await E.clubBook(cfg, { methodId, useWallet, expectedTotal: expectedClub });
   if (!r.ok || r.waitlist) { hb.drop(); if (r.waitlist) undoVisit(r.visit.id, 'Taken off the waitlist'); return r.ok ? { ok: false, reason: 'That pass has just sold out. Choose another pass or another night.' } : r; }
   const p = await hb.pay();
   if (!p.ok) { hb.drop(); undoVisit(r.visit.id, 'Cancelled: the host’s part didn’t go through'); return { ok: false, reason: p.reason + ' Your entry went back to your Wallet.' }; }
-  linkHost(r.visit.id, p.order.id);
+  linkHost(r.visit.id, p.order.id); if (E.ahOneNight) E.ahOneNight(r.visit.id, p.order.id);
   F.ev('club_host', r.visit.id, { host: h.id, plan: sel.planId, way: sel.way });
   return { ok: true, visit: E.clubVisit(r.visit.id), order: p.order };
 };
@@ -7042,6 +7054,97 @@ E.hostWeekVsSimilar = h => { const sim = S().hosts.filter(z => z.id !== h.id && 
 /* ---------- the waitlist remembers where you joined ---------- */
 const b0 = E.clubBook;
 E.clubBook = async (cfg, o) => { const r = await b0(cfg, o); if (r && r.ok && r.waitlist) F.store.commit(() => { const v = E.clubVisit(r.visit.id), c = v && E.club(v.clubId); if (v && c) v.wlPos = Math.max(2, E.ahWaiting(c, v.key, F.CLUB_PASS[v.type].solo || 'm')); }); return r; };
+})();
+
+/* ---- 05h-ahnight.js ---- */
+/* One night, one booking: an Afterhours pass with a FLINGR host booked into it behaves as a single night. You check in
+   once, at the club door, and your host's booking starts when you're through it (or is missed if you never arrive);
+   cancelling the night cancels both, with each part refunded on its own terms; the night can be moved to another club
+   night as a whole; and the host booking sends no reminders of its own, because the night's pass carries them.
+   The host booking stays a normal FLINGR booking underneath, so the host's calendar, Host Studio and payouts all work. */
+(() => {
+'use strict';
+const E = F.E, S = () => F.S, now = () => Date.now(), M = 6e4, H = 36e5;
+const GONE = ['cancelled', 'refunded', 'expired'];
+
+// the night a host booking belongs to, and the host bookings a night carries
+E.ahNightOf = o => { if (!o || !o.clubVisit) return null; const v = E.clubVisit(o.clubVisit); return v && !['cancelled', 'lapsed'].includes(v.status) ? v : null; };
+E.ahHostsOf = v => (v && v.hostOrders || []).map(id => E.order(id)).filter(o => o && !GONE.includes(o.status));
+// a host booking shown as part of its night (lists show the night once, with the host on it)
+const grpO = st => E.BLOCK.includes(st) ? 'up' : ['completed', 'missed'].includes(st) ? 'past' : 'gone', grpV = st => ['waitlist', 'offered', 'confirmed', 'in'].includes(st) ? 'up' : ['completed', 'missed'].includes(st) ? 'past' : 'gone';
+E.inNight = o => { if (!o || !o.clubVisit) return false; const v = E.clubVisit(o.clubVisit); return !!v && grpO(o.status) === grpV(v.status); };
+// how a host booking was set up at the club: the way, the plan and its extra hours
+E.ahSelOf = o => { const ext = ((o.addons || []).find(a => a.id === 'ext60') || {}).qty || 0, way = o.venueId === 'ahfloor' ? 'floor' : o.meet === 'lounge' ? 'lounge' : 'suite'; return { hostId: o.hostId, way, planId: o.planId, ext, hours: o.planId === 'night' ? 8 : 1 + ext }; };
+
+// a host booking waits at the club door: it doesn't start on its own while you haven't come in (05-engine.js asks this)
+E.ahHold = (o, n) => { const v = E.ahNightOf(o); return !!v && !['in', 'completed'].includes(v.status) && n < o.start + 45 * M; };
+const door = (v, n) => { let ch = false; E.ahHostsOf(v).forEach(o => { if (o.status === 'confirmed') { E.go(o, 'checked_in', 'Checked in at the Afterhours door'); o.guestIn = n; ch = true; } }); return ch; };
+
+// checking in at the door checks in your host booking too
+const in0 = E.clubCheckIn;
+E.clubCheckIn = (id, opts) => { const r = in0(id, opts); if (r && r.ok) F.store.commit(() => { const v = E.clubVisit(id); if (v) door(v, now()); }); return r; };
+
+// the clock: keep the two parts in step before the usual tick moves anything on
+const tick0 = E.tick;
+E.tick = () => {
+  const n = now(); let ch = false;
+  for (const o of S().orders) {
+    if (o.status !== 'confirmed' || !o.clubVisit) continue;
+    const v = E.clubVisit(o.clubVisit); if (!v) continue;
+    if (['in', 'completed'].includes(v.status)) { E.go(o, 'checked_in', 'Checked in at the Afterhours door', v.inAt || n); o.guestIn = v.inAt || n; ch = true; }
+    else if (['cancelled', 'lapsed'].includes(v.status) && n >= o.start) { E.go(o, 'missed', 'Your Afterhours night was cancelled'); E.unschedule(o); ch = true; }
+    else if (n >= o.start + 45 * M) { if (o.payment && o.payment.deferred && !o.payment.captured) E.capture(o); E.go(o, 'missed', 'You didn’t arrive at the club'); E.unschedule(o); E.notify(o.customerId, 'bookings', 'Missed', `You didn’t arrive at Afterhours, so your time with ${(E.host(o.hostId) || {}).first || 'your host'} was missed.`, '#/account/club/' + v.id, n, v.id); ch = true; }
+  }
+  if (ch) F.store.save();
+  return tick0();
+};
+
+// right after booking: one confirmation and one set of reminders, from the night (the host booking's are dropped)
+E.ahOneNight = (vid, oid) => F.store.commit(() => {
+  const v = E.clubVisit(vid), o = E.order(oid), n = now(); if (!v || !o) return;
+  const h = E.host(o.hostId), c = E.club(v.clubId), tz = E.clubTz(c), sel = E.ahSelOf(o), w = E.ahWay(sel.way);
+  S().notifications = S().notifications.filter(x => !(x.orderId === o.id && (!x.delivered || x.at >= n - 10e3)));
+  const conf = S().notifications.find(x => x.orderId === v.id && x.title === 'You’re on the list' && x.at >= n - 10e3);
+  if (conf) conf.body = `${c.short}, ${U.keyFmt(v.key, 'date')}: your pass and ${h ? h.first : 'your host'} (${U.plural(sel.hours, 'hour')}, ${w.short}, from ${U.fmt(o.start, tz, 'time')}). Reference ${v.no}.`;
+  if (o.start - 30 * M > n) E.notify(v.customerId, 'reminders', `${h ? h.first : 'Your host'} meets you at ${U.fmt(o.start - (w.drink ? 30 * M : 0), tz, 'time')}`, w.drink ? 'At the Lounge bar, after you’re through the door.' : sel.way === 'floor' ? 'Upstairs, after you’re through the door. Your room is ready for you both.' : 'In the suite upstairs, reached from the Lounge.', '#/account/club/' + v.id, o.start - 30 * M, v.id);
+});
+
+// cancelling: the night as a whole, or only the host (the pass stays)
+E.ahCancelPreview = v => { const hs = E.ahHostsOf(v).map(o => ({ o, pv: E.cancelPreview(o) })); return { pass: E.clubCancelPreview(v), hosts: hs }; };
+const cancel0 = E.clubCancel;
+E.clubCancel = id => {
+  const v = E.clubVisit(id), hs = v ? E.ahHostsOf(v) : [];
+  const r = cancel0(id); if (!r || !r.ok) return r;
+  let host = 0; hs.forEach(o => { const x = E.cancel(o.id, { dest: 'wallet', reason: 'Afterhours night cancelled' }); if (x && x.ok) host = U.r2(host + (x.refund || 0)); });
+  return Object.assign({}, r, { hostRefund: host });
+};
+E.ahCancelHost = oid => { const o = E.order(oid), v = E.ahNightOf(o); const r = E.cancel(oid, { dest: 'wallet', reason: 'Cancelled from your Afterhours night' }); if (r && r.ok && v) F.store.commit(() => { v.history.push({ at: now(), note: (E.host(o.hostId) || {}).first + ' cancelled, the pass stays' }); }); return r; };
+
+// moving the night: to another club night where the same host is free for the same way and length (more than 24 hours ahead)
+E.ahCanMove = v => !!v && v.status === 'confirmed' && now() < v.opensAt - 24 * H;
+E.ahMoveOptions = v => {
+  const o = E.ahHostsOf(v)[0], c = E.club(v.clubId); if (!E.ahCanMove(v)) return [];
+  const sel = o && E.ahSelOf(o), h = o && E.host(o.hostId), tz = E.clubTz(c), mins = o ? U.parts(tz, o.start).h * 60 + U.parts(tz, o.start).m : 0;
+  return E.clubNights(c, 21).filter(x => x.key !== v.key && x.opensAt > now() + 2 * H && (!F.CLUB_PASS[v.type].floor || x.floor) && E.clubLeft(c, x.key, v.type, undefined, !!o) > 0).map(x => {
+    if (!o) return { x, start: null };
+    const ss = E.ahSlots(h, c, x.key, sel.way, sel.planId, { ext: sel.ext }); if (!ss.length) return null;
+    const best = ss.slice().sort((a, b) => Math.abs((U.parts(tz, a.start).h * 60 + U.parts(tz, a.start).m + 720) % 1440 - (mins + 720) % 1440) - Math.abs((U.parts(tz, b.start).h * 60 + U.parts(tz, b.start).m + 720) % 1440 - (mins + 720) % 1440))[0];
+    return { x, start: best.start, s: best };
+  }).filter(Boolean).slice(0, 6);
+};
+E.ahMoveNight = async (vid, key, { methodId } = {}) => {
+  const v = E.clubVisit(vid); if (!E.ahCanMove(v)) return { ok: false, reason: 'Nights can be moved until 24 hours before doors open.' };
+  const opt = E.ahMoveOptions(v).find(z => z.x.key === key); if (!opt) return { ok: false, reason: 'That night isn’t free any more. Choose another.' };
+  const o = E.ahHostsOf(v)[0], cfg = { clubId: v.clubId, key, type: v.type, partner: v.partner, plus: v.plus.map(g => ({ name: g.name, type: g.type })) };
+  const r = o ? await E.clubBookWithHost(cfg, Object.assign(E.ahSelOf(o), { start: opt.s.start, key: opt.s.key, t: opt.s.t }), { methodId }) : await E.clubBook(cfg, { methodId });
+  if (!r.ok || r.waitlist) return r.ok ? { ok: false, reason: 'That night has just filled up. Choose another.' } : r;
+  E.clubCancel(v.id);
+  F.store.commit(() => { const nv = E.clubVisit(r.visit.id); if (nv) nv.history.push({ at: now(), note: 'Moved from ' + U.keyFmt(v.key, 'date') + ' · ' + v.no }); });
+  return { ok: true, visit: r.visit };
+};
+
+// booking the same again: the same way, length and weekday at the club, a week on (opens the club checkout, filled in)
+E.ahAgainHref = o => { const lk = E.orderClub(o); if (!lk) return null; const c = lk.c, sel = E.ahSelOf(o), from = U.addDays(lk.key, 7); const x = E.clubNights(c, 28).find(n => n.key >= from && (sel.way !== 'floor' || n.floor)) || E.clubNights(c, 7)[0]; if (!x) return null; return '#/afterhours/book' + U.q({ club: c.id, date: x.key, host: o.hostId, way: sel.way, hours: sel.hours }); };
 })();
 
 /* ---- 06-ui.js ---- */
@@ -9397,7 +9500,7 @@ F.Fm.filters = () => A.filtersApply();
 /* =============== HOST PROFILE =============== */
 const bkInit = h => {
   const b = F.ui.bk;
-  if (b && b.hostId === h.id) return b;
+  if (b && b.hostId === h.id) { if ((E.CLUB_VENUES || []).includes(b.venueId)) b.venueId = 'partner'; if (b.meet === 'lounge') b.meet = 'bar'; return b; }   // the club's venues are booked from Afterhours
   const q = F.route.q, planId = q.plan && h.plans.some(p => p.id === q.plan) ? q.plan : (h.plans.find(p => p.id === 'night') || h.plans[0]).id;
   const nx = E.next(h, planId), tz = E.city(h.cityId).tz;
   const key = q.date && q.date >= E.todayKey(h.cityId) ? q.date : nx ? U.dayKey(nx.start, tz) : E.todayKey(h.cityId);
@@ -9454,10 +9557,10 @@ const widgetHtml = h => {
   <div class="bk-sec"><div class="lbl">1. Plan</div><div class="plans">${h.plans.map(p => { const pl = E.plan(p.id); return `<button class="pl ${p.id === b.planId ? 'on' : ''}" data-a="bkPlan" data-p="${p.id}" aria-pressed="${p.id === b.planId}"><span class="pl-n">${pl.name}</span><span class="tiny muted">${U.dur(pl.dur)}</span><span class="mono small">${E.money(p.price, h.cityId)}</span></button>`; }).join('')}</div></div>
   <div class="bk-sec"><div class="row between"><div class="lbl">2. Date</div><div class="seg seg-sm" role="group" aria-label="Calendar view"><button class="seg-b ${b.view !== 'week' ? 'on' : ''}" data-a="bkView" data-v="month">Month</button><button class="seg-b ${b.view === 'week' ? 'on' : ''}" data-a="bkView" data-v="week">Week</button></div></div><div class="mt8">${b.view === 'week' ? weekHtml(h, b) : calHtml(h, b)}</div></div>
   <div class="bk-sec"><div class="lbl">3. Start time · ${U.keyFmt(b.key, 'date')}</div>${slotsHtml(h, b)}</div>
-  <div class="bk-sec"><label class="lbl" for="bkV">4. Venue</label><select id="bkV" class="inp" data-ch="bkVenue">${h.venues.map(id => { const v = E.venue(id), ve = b.start && E.clubVenueErr(h, Object.assign({}, ctx, { venueId: id })); return `<option value="${id}" ${b.venueId === id ? 'selected' : ''} ${ve && b.venueId !== id ? 'disabled' : ''}>${v.name}${v.price ? ' · +' + E.money(E.cp(city.id, v.price), city.id) : ''}${ve ? ' · ' + ve : ''}</option>`; }).join('')}</select>${(ve => ve ? `<p class="ferr mt8">${esc(ve)}. Choose another venue or time.</p>` : `<p class="tiny muted mt8">${esc(E.venue(b.venueId).desc)}</p>`)(b.start && E.clubVenueErr(h, ctx))}${F.ahWidgetNote ? F.ahWidgetNote(h, b) : ''}</div>
+  <div class="bk-sec"><label class="lbl" for="bkV">4. Venue</label><select id="bkV" class="inp" data-ch="bkVenue">${h.venues.filter(id => !(E.CLUB_VENUES || []).includes(id)).map(id => { const v = E.venue(id), ve = b.start && E.clubVenueErr(h, Object.assign({}, ctx, { venueId: id })); return `<option value="${id}" ${b.venueId === id ? 'selected' : ''} ${ve && b.venueId !== id ? 'disabled' : ''}>${v.name}${v.price ? ' · +' + E.money(E.cp(city.id, v.price), city.id) : ''}${ve ? ' · ' + ve : ''}</option>`; }).join('')}</select>${(ve => ve ? `<p class="ferr mt8">${esc(ve)}. Choose another venue or time.</p>` : `<p class="tiny muted mt8">${esc(E.venue(b.venueId).desc)}</p>`)(b.start && E.clubVenueErr(h, ctx))}</div>
   <details class="bk-sec bk-ex" ${b.exOpen || nSel ? 'open' : ''}><summary><span class="lbl">5. Extras ${nSel ? `<span class="count-i">${nSel}</span>` : '<span class="muted">(optional)</span>'}</span>${F.ic('plus', 14)}</summary><div class="addons mt8">${ad.map(a => { const st = E.addonState(ctx, a.id, !!b.addons[a.id]); const on = !!b.addons[a.id]; return `<label class="addon ${st.ok ? '' : 'dis'}"><input type="checkbox" data-ch="bkAddon" value="${a.id}" ${on ? 'checked' : ''} ${st.ok || on ? '' : 'disabled'}><span class="addon-b"><span class="addon-n">${esc(a.name)}${a.extraMin ? ` <span class="tiny muted">+${a.extraMin} min</span>` : ''}</span><span class="tiny muted">${st.ok ? (st.left <= 5 ? `<span class="warn-t">Only ${st.left} left that night</span>` : esc(a.cat)) : esc(st.reason)}</span></span><span class="mono small">${E.money(E.addonUnit(a, city.id, h.id, b.planId), city.id)}</span></label>${a.id === 'drink' && on ? F.meetPick(h, ctx, 'bkMeet') : ''}`; }).join('')}</div></details>
   <div class="bk-sum">${pr ? `<div class="bk-when">${F.ic('cal', 14)} ${U.fmt(b.start, city.tz, 'dt')} to ${U.fmt(b.start + (plan.dur + E.extraOf(b.addons)) * 6e4, city.tz, 'time')} ${U.tzAbbr(city.tz, b.start)}</div>${F.sumHtml(pr)}<p class="tiny muted mt8">${cut > Date.now() ? 'Free cancellation until ' + U.fmt(cut, city.tz, 'dt') + '.' : 'This booking is within 24 hours. See the refund policy.'}</p>` : '<p class="small muted">Choose a start time to see your total.</p>'}
-  <button class="btn btn-cherry btn-block btn-lg mt16" data-a="bkReserve" ${b.start ? '' : 'disabled'}>${F.ahWidgetGo && F.ahWidgetGo(h, b) ? 'Continue to Afterhours checkout' : req ? 'Request to book' : 'Reserve'}</button><p class="tiny muted center mt8">${req ? `${esc(h.first)} reviews each request, usually within ${h.responseMin} minutes. If they decline, you’re refunded in full.` : `You won’t be charged yet. Your time is held for ${F.S.settings.holdMin} minutes at <span class="nowrap">checkout.${F.xtip ? F.xtip('hold') : ''}</span>`}</p></div>`;
+  <button class="btn btn-cherry btn-block btn-lg mt16" data-a="bkReserve" ${b.start ? '' : 'disabled'}>${req ? 'Request to book' : 'Reserve'}</button><p class="tiny muted center mt8">${req ? `${esc(h.first)} reviews each request, usually within ${h.responseMin} minutes. If they decline, you’re refunded in full.` : `You won’t be charged yet. Your time is held for ${F.S.settings.holdMin} minutes at <span class="nowrap">checkout.${F.xtip ? F.xtip('hold') : ''}</span>`}</p>${F.ahTakeBtn ? F.ahTakeBtn(h, b) : ''}</div>`;
 };
 const redrawWidget = () => { const h = E.host(F.ui.bk.hostId), el = $('#bk'); if (el && h) { el.innerHTML = widgetHtml(h); } };
 // One host, four tabs (About, Photos, Availability, Reviews) next to the booking panel; on phones the panel opens as a
@@ -9550,7 +9653,6 @@ A.bkView = el => { const b = F.ui.bk; b.view = el.dataset.v; if (b.view === 'wee
 A.bkWeek = el => { const b = F.ui.bk; b.wk = U.addDays(b.wk || E.todayKey(curHost().cityId), +el.dataset.d); redrawWidget(); };
 A.waitlist = el => { const u = F.requireUser(); if (!u) return; F.store.commit(s => { s.notifyMe.push({ id: U.uid('nm'), userId: u.id, hostId: el.dataset.h, key: el.dataset.k, at: Date.now(), done: null }); }); F.toast('You’re on the waitlist. We’ll tell you the moment a time opens.'); redrawWidget(); };
 C.bkVenue = el => { F.ui.bk.venueId = el.value; redrawWidget(); };
-A.bkMeet = el => { F.ui.bk.meet = el.dataset.v; F.ui.bk.exOpen = true; redrawWidget(); };
 C.bkAddon = el => {
   const b = F.ui.bk, h = curHost(), id = el.value; b.exOpen = true;
   if (el.checked) { const st = E.addonState(bkCtx(h, b), id, false); if (!st.ok) { el.checked = false; return F.toast(st.reason + '.', 'err'); } b.addons[id] = 1; } else delete b.addons[id];
@@ -10304,19 +10406,24 @@ F.lineupHtml = (c, key, v) => {
   return `<div class="ah-lw ${l.dj.length && l.perf.length ? 'with-dj' : ''}"><div class="ah-line">${l.perf.map(({ p, sets }) => `<article class="ah-pf"><a href="#/afterhours/performer/${p.id}" class="ah-pf-m" tabindex="-1" aria-label="${esc(p.name)}">${F.pfPlate(p)}</a><div class="ah-pf-b"><h3 class="h-disp h4"><a href="#/afterhours/performer/${p.id}">${esc(p.name)}</a></h3><p class="tiny mono muted mt4">${F.CLUB_ACTS[p.act]}${p.priv ? ' · private shows' : ''}</p><ul class="ah-sets mt8">${sets.map(s => `<li><span class="mono small">${tm(s.at, c)}</span><span class="tiny muted">${stage[s.stage]}</span>${u && s.at - 10 * M > n ? `<button class="btn-link tiny" data-a="ahRemind" data-p="${p.id}" data-at="${s.at}" data-v="${v ? v.id : ''}" aria-pressed="${E.clubReminding(u, p.id, s.at)}">${E.clubReminding(u, p.id, s.at) ? F.ic('check', 11) + ' Reminding you' : F.ic('bell', 11) + ' Remind me'}</button><span class="tiny muted ah-rems">${E.pfReminders(p, key, s.at)} set</span>` : s.at <= n && s.at + s.min * M > n ? '<span class="badge b-live"><i class="dot live"></i>On now</span>' : ''}</li>`).join('')}</ul>${live ? `<button class="btn btn-ghost btn-sm mt16" data-a="ahTip" data-v="${v.id}" data-p="${p.id}">Tip ${esc(p.name.split(' ')[0])}</button>` : ''}</div></article>`).join('')}</div>
   ${l.dj.length ? `<div class="ah-djs">${l.dj.map(d => `<div class="ah-dj">${F.djPlate(d.d, 'r11 ah-dj-p')}<div><strong class="small">${esc(d.d.name)}</strong><span class="d-b tiny muted">${esc(d.d.style)} · ${tm(d.from, c)} to ${tm(d.to, c)}</span></div></div>`).join('')}</div>` : ''}</div>`;
 };
-F.clubRow = v => { const c = E.club(v.clubId), x = E.clubNight(c, v.key), tone = { confirmed: 'ok', in: 'live', waitlist: 'warn', offered: 'warn', completed: 'mute', missed: 'mute', cancelled: 'mute', lapsed: 'mute' }[v.status] || 'mute'; return `<a class="brow erow" href="#/account/club/${v.id}">${F.clubPlate(c, F.CLUB_PASS[v.type].floor ? 'floor' : 'lounge', 'r43 brow-p')}<div class="brow-b"><div class="row between"><strong class="h-disp h4">${esc(x.open ? x.theme.name : 'Afterhours')}</strong>${F.tone({ tone, label: E.CLUB_LABEL[v.status] })}</div><div class="small muted mt4">${esc(c.short)} · ${U.keyFmt(v.key, 'date')}, ${tm(v.opensAt, c)} · ${esc(F.CLUB_PASS[v.type].name)}${v.booth ? ' · VIP' : ''}</div><div class="tiny mono muted mt4">${v.no}</div></div></a>`; };
+F.clubRow = v => { const c = E.club(v.clubId), x = E.clubNight(c, v.key), tone = { confirmed: 'ok', in: 'live', waitlist: 'warn', offered: 'warn', completed: 'mute', missed: 'mute', cancelled: 'mute', lapsed: 'mute' }[v.status] || 'mute'; return `<a class="brow erow" href="#/account/club/${v.id}">${F.clubPlate(c, F.CLUB_PASS[v.type].floor ? 'floor' : 'lounge', 'r43 brow-p')}<div class="brow-b"><div class="row between"><strong class="h-disp h4">${esc(x.open ? x.theme.name : 'Afterhours')}</strong>${F.tone({ tone, label: E.CLUB_LABEL[v.status] })}</div><div class="small muted mt4">${esc(c.short)} · ${U.keyFmt(v.key, 'date')}, ${tm(v.opensAt, c)} · ${esc(F.CLUB_PASS[v.type].name)}${v.booth ? ' · VIP' : ''}</div>${(hs => hs.length ? `<div class="small mt4">${hs.map(o => { const sel = E.ahSelOf(o); return `with ${esc((E.host(o.hostId) || {}).first || 'your host')} · ${sel.planId === 'night' ? 'the night' : U.plural(sel.hours, 'hour')}${o.status === 'missed' ? ' · missed' : ''}`; }).join(', ')}</div>` : '')((v.hostOrders || []).map(id => E.order(id)).filter(o => o && !['cancelled', 'refunded', 'expired'].includes(o.status)))}<div class="tiny mono muted mt4">${v.no}</div></div></a>`; };
 F.clubRows = (u, f) => E.myClubVisits(u).filter({ upcoming: v => ['waitlist', 'offered', 'confirmed', 'in'].includes(v.status), past: v => ['completed', 'missed'].includes(v.status), cancelled: v => ['cancelled', 'lapsed'].includes(v.status) }[f] || (() => false)).sort((a, b) => f === 'upcoming' ? a.opensAt - b.opensAt : b.opensAt - a.opensAt);
 F.nextClub = u => F.clubRows(u, 'upcoming')[0] || null;
 // "A drink beforehand": where to meet, a quiet bar near the room or the Afterhours Lounge on club nights
+// where to meet for "A drink beforehand": a bar near the venue; the Afterhours Lounge is booked with your pass
 F.meetPick = (h, c, a) => {
-  if (!h || !E.clubOf(h.cityId)) return '';
-  const m = c.meet || 'bar', le = E.loungeMeetErr(h, c), club = E.clubOf(h.cityId);
-  return `<div class="meet" role="group" aria-label="Where to meet"><span class="tiny muted">Where to meet for the drink</span><div class="seg seg-sm mt8"><button type="button" class="seg-b ${m === 'bar' ? 'on' : ''}" data-a="${a}" data-v="bar" aria-pressed="${m === 'bar'}">A bar nearby</button><button type="button" class="seg-b ${m === 'lounge' ? 'on' : ''}" data-a="${a}" data-v="lounge" aria-pressed="${m === 'lounge'}" ${le && m !== 'lounge' ? 'disabled' : ''}>Afterhours Lounge</button></div>${le && c.start ? `<p class="tiny ${m === 'lounge' ? 'warn-t' : 'muted'} mt4">${esc(le)}.</p>` : m === 'lounge' ? `<p class="tiny muted mt4">${esc(club.short)}: you’re both on the guest list for the drink, and security is on the door.</p>` : ''}</div>`;
+  const club = h && E.clubOf(h.cityId); if (!club || !h.venues.some(v => E.CLUB_VENUES.includes(v))) return '';
+  return `<p class="tiny muted meet">At a quiet bar near your venue. Meeting at the Afterhours Lounge instead? <a class="u" href="#/afterhours/book${U.q({ club: club.id, host: h.id, way: 'lounge' })}">Book it with your pass</a>.</p>`;
 };
 
+
 // on a FLINGR booking that meets at the Lounge or uses the suite upstairs or the Floor
+// a host booking inside an Afterhours night: one banner that says where to meet, and links to the night
+F.ahPartBanner = (o, v) => { const c = E.club(v.clubId), x = E.clubNight(c, v.key), h = E.host(o.hostId), sel = E.ahSelOf(o), w = E.ahWay(sel.way), f = h ? esc(h.first) : 'your host';
+  const meet = w.drink ? `Meet ${f} at the Lounge bar at ${tm(o.start - 30 * M, c)}, then the suite upstairs.` : sel.way === 'floor' ? `${f} meets you upstairs on the Floor at ${tm(o.start, c)}, with a private room.` : `${f} meets you in the suite upstairs at ${tm(o.start, c)}.`;
+  return `<a class="ah-part" href="#/account/club/${v.id}">${F.ic('moon', 16)}<span><strong>Part of your Afterhours night</strong><small>${esc(c.short)} · ${U.keyFmt(v.key, 'date')}${x.open ? ' · ' + esc(x.theme.name) : ''} · ${v.no}</small><small class="ah-part-m">${meet}${x.open ? ' Dress code: ' + esc(x.theme.dress.toLowerCase()) + '.' : ''}</small></span><em>Open</em></a>`; };
 F.orderClubCard = o => {
-  const lk = E.orderClub(o); if (!lk) return ''; const c = lk.c, h = E.host(o.hostId), x = E.clubNight(c, lk.key);
+  const lk = E.orderClub(o); if (!lk || (E.ahNightOf && E.ahNightOf(o))) return ''; const c = lk.c, h = E.host(o.hostId), x = E.clubNight(c, lk.key);
   const lines = [];
   if (o.meet === 'lounge') lines.push(`Meet ${h ? esc(h.first) : 'your host'} at the Lounge bar at ${tm(o.start - 30 * M, c)}. You’re both on the guest list for the drink.`);
   if (o.venueId === 'ahsuite') lines.push('Then the suite upstairs, reached from the Lounge without going back outside.');
@@ -10378,7 +10485,7 @@ const ahInit = q => {
   }
   const b = F.ui.ah, x = E.clubNight(E.club(b.clubId), b.key);
   // arriving with a host (from a host's page, the club's host list or "Bring a host"), or with a host booking already made
-  if (q.host && b.hq !== q.host + (q.start || '')) { b.hq = q.host + (q.start || ''); F.ui.ahH = true; if (/^FL-/.test(q.host) && E.host(q.host)) { b.host = { hostId: q.host, way: E.AH_WAYS.some(w => w.id === q.way) ? q.way : null, planId: q.plan || 'hour', start: +q.start || null, venueId: q.venue || null }; if (b.host.way === 'floor' && x.open && x.floor && !F.CLUB_PASS[b.type].floor) b.type = F.ahFloorType(E.user(), x); } }
+  if (q.host && b.hq !== q.host + (q.start || '')) { b.hq = q.host + (q.start || ''); F.ui.ahH = true; if (/^FL-/.test(q.host) && E.host(q.host)) { b.host = { hostId: q.host, way: E.AH_WAYS.some(w => w.id === q.way) ? q.way : null, hours: +q.hours || (q.plan === 'night' ? 8 : 1), start: +q.start || null, venueId: q.venue || null }; if (b.host.way === 'floor' && x.open && x.floor && !F.CLUB_PASS[b.type].floor) b.type = F.ahFloorType(E.user(), x, true); } }
   if (q.order && b.oq !== q.order) { b.oq = q.order; const o = E.order(q.order), u = E.user(), lk = o && E.orderClub(o); if (o && u && o.customerId === u.id && lk && lk.c.id === b.clubId && lk.key === b.key) { b.linkOrder = o.id; b.host = null; if (o.venueId === 'ahfloor' && x.open && x.floor && !F.CLUB_PASS[b.type].floor) b.type = F.ahFloorType(u, x); } }
   if (x.open && F.CLUB_PASS[b.type].floor && !x.floor) b.type = F.CLUB_PASS[b.type].pair ? 'lounge2' : 'lounge';
   return b;
@@ -10388,12 +10495,12 @@ P.clubbook = {
     const u = E.user(); if (!u) return { title: 'Get on the list', html: F.signedOut('Sign in to get on the list', 'Afterhours is for verified FLINGR accounts. One sign-in, one Wallet.', r.full) };
     const b = ahInit(r.q), c = E.club(b.clubId), x = E.clubNight(c, b.key), nights = E.clubNights(c, 14), tier = E.clubTier(u), sg = E.clubSigned(u), pass = F.CLUB_PASS[b.type];
     if (!x.open) return { title: 'Get on the list', html: `<section class="sec"><div class="wrap narrow center">${F.empty('Closed that night', 'Choose another night.', `<a class="btn btn-bone mt24" href="#/afterhours/book?club=${c.id}">See the next nights</a>`)}</div></section>` };
-    const q = E.clubQuote(u, F.ahCfg(b)), left = E.clubLeft(c, b.key, b.type), hp = F.ahHostPart(b, c, x, u), wait = !!pass.solo && !left && !x.noMen && !hp.h, err = E.clubCheck(u, b) || (hp.h && pass.solo && !left && !x.noMen ? 'Floor places for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own are taken that night, so a host can’t be added. Come as a pair, or choose another night.' : '') || hp.err;
+    const withH = !!(b.host && b.host.hostId), q = E.clubQuote(u, F.ahCfg(b)), left = E.clubLeft(c, b.key, b.type, undefined, withH), hp = F.ahHostPart(b, c, x, u), wait = !!pass.solo && !left && !x.noMen && !hp.h, err = E.clubCheck(u, b) || (hp.h && pass.solo && !left && !x.noMen ? 'Floor places for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own are taken that night, so a host can’t be added. Come as a pair, or choose another night.' : '') || hp.err;
     const tot = U.r2(q.total + (hp.calc ? hp.calc.total : 0));
     if (!b.method) { const m = E.defaultMethod(u); b.method = m ? m.id : null; }
     const walletAvail = E.walletIn(u, c.cityId), willWallet = b.useWallet ? Math.min(walletAvail, tot) : 0, rest = U.r2(tot - willWallet), boothsLeft = E.boothsLeft(c, b.key);
     const lvl = pass.floor ? 'floor' : 'lounge', two = pass.people > 1, as = b.as || (b.type === 'man' ? 'm' : E.soloPool(u));
-    const lvlCard = k => { const t = E.passType(k, two, as), pp = E.passPrice(u, c, x, t), off = k === 'floor' && !x.floor, lf = E.clubLeft(c, b.key, t); return `<label class="rcard ah-lvl ${off ? 'dis' : ''}"><input type="radio" name="ahLvl" value="${k}" data-ch="ahLvl" ${lvl === k ? 'checked' : ''} ${off ? 'disabled' : ''}><span><strong class="small">${k === 'floor' ? 'Floor' : 'Lounge'}</strong><small class="muted">${off ? 'The Floor is closed that night' : k === 'floor' ? 'The Lounge, plus the Floor upstairs' : 'The bar, the DJ, the shows'}${!off && !lf && !(k === 'floor' && !two) ? ' · sold out' : ''}</small><span class="mono small">${pp.amt ? E.clubMoney(c, pp.amt) : 'Free'}${pp.note ? ` <span class="tiny muted">${esc(pp.note)}</span>` : ''}</span></span></label>`; };
+    const lvlCard = k => { const t = E.passType(k, two, as), pp = E.passPrice(u, c, x, t), off = k === 'floor' && !x.floor, lf = E.clubLeft(c, b.key, t, undefined, withH); return `<label class="rcard ah-lvl ${off ? 'dis' : ''}"><input type="radio" name="ahLvl" value="${k}" data-ch="ahLvl" ${lvl === k ? 'checked' : ''} ${off ? 'disabled' : ''}><span><strong class="small">${k === 'floor' ? 'Floor' : 'Lounge'}</strong><small class="muted">${off ? 'The Floor is closed that night' : k === 'floor' ? 'The Lounge, plus the Floor upstairs' : 'The bar, the DJ, the shows'}${!off && !lf && !(k === 'floor' && !two) ? ' · sold out' : ''}</small><span class="mono small">${pp.amt ? E.clubMoney(c, pp.amt) : 'Free'}${pp.note ? ` <span class="tiny muted">${esc(pp.note)}</span>` : ''}</span></span></label>`; };
     const reqs = [[u.verified, 'Identity verified', u.verified ? '' : '<button type="button" class="btn btn-bone btn-sm" data-a="verifyId">Verify now</button>']];
     if (pass.floor) reqs.push([E.healthOk(u), 'A screening from the last 90 days', E.healthOk(u) ? '' : '<a class="btn btn-ghost btn-sm" href="#/account/preferences">Book a screening</a>'], [sg.rules && sg.brief, 'House rules signed', sg.rules && sg.brief ? '' : '<button type="button" class="btn btn-ghost btn-sm" data-a="ahRules">Read and sign</button>']);
     return { title: 'Get on the list', html: `<section class="sec-sm"><div class="wrap"><a class="btn-link tiny" href="#/afterhours?city=${c.id}">${F.ic('back', 12)} Afterhours ${esc(c.short)}</a><h1 class="h-cond h2 mt16">Get on <span class="it">the list</span></h1>
@@ -10403,7 +10510,7 @@ P.clubbook = {
     <div class="mt24">${F.nightHead(c, x, { link: false })}${F.ahCrowdLine(c, x.key)}</div></section>
   <section class="card"><div class="row between wrap-gap"><div class="lbl">2. Your pass</div>${x.floor ? `<span class="tiny muted ah-xt">The Lounge ${F.xtip('lounge')} · the Floor ${F.xtip('floor')}</span>` : `<span class="tiny muted ah-xt">The Lounge ${F.xtip('lounge')}</span>`}</div><div class="rgrid ah-types ah-lvls mt16">${['lounge', 'floor'].map(lvlCard).join('')}</div>
     <div class="ah-who mt16"><span class="tiny muted">Who’s coming?</span><div class="seg seg-sm" role="group" aria-label="Who’s coming"><button type="button" class="seg-b ${two ? '' : 'on'}" data-a="ahWho" data-w="1" aria-pressed="${!two}">Just me</button><button type="button" class="seg-b ${two ? 'on' : ''}" data-a="ahWho" data-w="2" aria-pressed="${two}">The two of us</button></div></div>
-    ${lvl === 'floor' && !two ? x.noMen ? `<div class="notice small mt16">${F.ic('alert', 16)}<span>Tonight the Floor is for pairs. Come with someone, or choose the Lounge.</span></div>` : `<div class="ah-as mt16"><span class="tiny muted">You’re coming as ${F.xtip('solo')}</span><div class="row wrap-gap mt8">${[['w', 'A woman'], ['nb', 'Non-binary'], ['m', 'A man']].map(([k, l]) => `<button type="button" class="chip ${as === k ? 'on' : ''}" data-a="ahAs" data-s="${k}" aria-pressed="${as === k}">${l}</button>`).join('')}</div><p class="tiny ${left ? 'muted' : 'warn-t'} mt8">${left ? (left <= 3 ? 'Last ' + left : left) + ' Floor places left for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own.' : 'Floor places for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own are taken. Join the waitlist: nothing is charged.'}</p></div>` : ''}
+    ${lvl === 'floor' && !two && withH ? `<p class="tiny muted mt16">${F.ic('check', 11)} With a FLINGR host you’re a pair at the door: no solo place needed, and Pairs Night is open to you. Hosts never pay entry.</p>` : lvl === 'floor' && !two ? x.noMen ? `<div class="notice small mt16">${F.ic('alert', 16)}<span>Tonight the Floor is for pairs. Come with someone, or choose the Lounge.</span></div>` : `<div class="ah-as mt16"><span class="tiny muted">You’re coming as ${F.xtip('solo')}</span><div class="row wrap-gap mt8">${[['w', 'A woman'], ['nb', 'Non-binary'], ['m', 'A man']].map(([k, l]) => `<button type="button" class="chip ${as === k ? 'on' : ''}" data-a="ahAs" data-s="${k}" aria-pressed="${as === k}">${l}</button>`).join('')}</div><p class="tiny ${left ? 'muted' : 'warn-t'} mt8">${left ? (left <= 3 ? 'Last ' + left : left) + ' Floor places left for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own.' : 'Floor places for ' + F.CLUB_SOLO[pass.solo] + ' coming on their own are taken. Join the waitlist: nothing is charged.'}</p></div>` : ''}
     ${!x.floor ? '' : x.noMen && !(lvl === 'floor' && !two) ? '<p class="tiny muted mt8">Pairs Night: the Floor is for pairs, the Lounge for everyone.</p>' : ''}
     ${two ? `<div class="field mt16"><label for="ahPt">Who’s coming with you? <span class="muted">(first name, for the door list)</span></label><input class="inp" id="ahPt" data-c="ahPartner" value="${esc(b.partner)}" maxlength="30" autocomplete="off"></div>` : ''}
     ${tier ? `<p class="tiny muted mt16">${F.ic('check', 11)} ${tier === 'full' ? 'Full member' : 'Lounge member'} prices.</p>` : `<p class="tiny muted mt16">Members get in free. <a class="u" href="#/afterhours/membership">About membership</a></p>`}</section>
@@ -10441,7 +10548,7 @@ const passNow = b => { const p = F.CLUB_PASS[b.type]; return { lvl: p.floor ? 'f
 C.ahLvl = el => { const b = ah(), n = passNow(b); passSet(b, E.passType(el.value, n.two, n.as)); };
 A.ahWho = el => { const b = ah(), n = passNow(b); passSet(b, E.passType(n.lvl, el.dataset.w === '2', n.as)); };
 A.ahAs = el => { const b = ah(); b.as = el.dataset.s; passSet(b, E.passType('floor', false, b.as)); };
-F.ahFloorType = (u, x) => x && x.noMen ? 'couple' : E.soloPool(u) === 'm' ? 'man' : 'single';
+F.ahFloorType = (u, x, withH) => x && x.noMen && !withH ? 'couple' : E.soloPool(u) === 'm' ? 'man' : 'single';
 C.ahPartner = el => { ah().partner = el.value; };
 C.ahCake = el => { ah().pkgName = el.value; };
 C.ahPkg = el => { ah().pkg = el.value; F.rerender(); };
@@ -10548,8 +10655,11 @@ const passHtml = (u, v, c, x) => {
 const reqHtml = (u, v, c, x) => { if (!F.CLUB_PASS[v.type].floor) return ''; const sg = E.clubSigned(u), h = E.healthOk(u); if (h && sg.rules && sg.brief) return ''; return sec('req', 'Before the Floor', `<div class="stack-s">${[[h, 'A screening from the last 90 days', h ? '' : '<a class="btn btn-ghost btn-sm" href="#/account/preferences">Book a screening</a>'], [sg.rules && sg.brief, 'House rules signed', sg.rules && sg.brief ? '' : '<button class="btn btn-ghost btn-sm" data-a="ahRules">Read and sign</button>']].map(([ok, l, a]) => `<div class="ah-req ${ok ? 'ok' : ''}">${F.ic(ok ? 'check' : 'alert', 16)}<span class="small">${l}</span>${a}</div>`).join('')}</div><p class="tiny muted mt16">Without a screening the door can still let you into the Lounge, with the difference back in your Wallet.</p>`); };
 const guestsHtml = (v, c, x) => { const fl = F.CLUB_PASS[v.type].floor, u = E.user(); return sec('guests', 'Guests', `${v.plus.length ? `<div class="stack-s">${v.plus.map(g => `<div class="kv small"><span>${esc(g.name)} <span class="muted">· ${g.type === 'lounge' ? 'Lounge' : 'Floor'}${g.pass ? ' · guest pass' : ''}</span><small class="d-b mono muted">Entry code ${g.code} <button class="btn-link tiny" data-a="famShare" data-t="Afterhours" data-x="${esc(`Your Afterhours door code: ${g.code}. ${c.name}, ${U.keyFmt(v.key, 'date')}, doors ${tm(v.opensAt, c)}. Bring your ID.`)}">Send it</button></small>${F.ahV.share(v, g)}</span><button class="btn-link tiny" data-a="ahPlusDel" data-v="${v.id}" data-g="${g.id}">Remove</button></div>`).join('')}</div>` : '<p class="small muted">No guests yet. Each guest gets their own entry code.</p>'}
   ${v.plus.length < 3 ? `<form class="row wrap-gap mt16 ah-addg" data-f="ahPlus" data-v="${v.id}" novalidate><label class="sr" for="ahPn">Guest’s name</label><input class="inp" id="ahPn" name="name" placeholder="Guest’s name" maxlength="40" autocomplete="off">${fl ? `<label class="sr" for="ahPy">Guest pass</label><select class="inp" id="ahPy" name="type">${x.noMen ? '' : '<option value="single">Floor · a woman or non-binary</option><option value="man">Floor · a man</option>'}<option value="lounge">Lounge only</option></select>` : ''}<button class="btn btn-ghost btn-sm">Add guest</button></form><p class="tiny muted mt8">${E.guestPassesLeft(u) ? U.plural(E.guestPassesLeft(u), 'guest pass') + ' left this month; after that, guests pay their own entry.' : 'Guests pay their own entry, charged now.'}</p>` : ''}`); };
-const hostsHtml = (orders, c) => orders.length ? sec('host', 'Your host tonight', `<div class="stack-s">${orders.map(o => { const h = E.host(o.hostId); return `<a class="ah-hostrow" href="#/account/booking/${o.id}">${F.hostPlate(h, 1, 'r11 ah-hp')}<div><strong class="small">${esc(h.name)}</strong><span class="d-b tiny muted">${E.plan(o.planId).name} · ${U.fmt(o.start, E.clubTz(c), 'time')} · ${o.meet === 'lounge' ? 'meeting at the Lounge bar 30 minutes before' : esc(E.venue(o.venueId).name)}</span></div></a>`; }).join('')}</div><p class="tiny muted mt16">Your host is with you only. When your booking ends, security sees them out.</p>`) : '';
-const cancelHtml = (v, c) => { const pv = E.clubCancelPreview(v); return sec('cancel', 'Cancelling', `<p class="small">${pv.full ? `Cancel before ${U.fmt(v.opensAt - 24 * H, E.clubTz(c), 'dt')} and ${v.payment && v.payment.paid ? E.clubMoney(c, v.payment.paid, true) + ' goes back to your FLINGR Wallet' : 'nothing is charged'}.` : 'Doors open within 24 hours, so entry and any booth deposit aren’t refunded.'}</p><button class="btn btn-ghost btn-sm mt16" data-a="ahCancel" data-v="${v.id}">Cancel this night</button>`); };
+const hostsHtml = (orders, c, past) => orders.length ? sec('host', orders.length > 1 ? 'Your hosts' : past ? 'Your host' : 'Your host tonight', `<div class="stack-s">${orders.map(o => { const h = E.host(o.hostId), sel = E.ahSelOf(o), w = E.ahWay(sel.way), tz = E.clubTz(c), t = E.disp(o); return `<div class="ah-hostbox"><a class="ah-hostrow" href="#/account/booking/${o.id}">${F.hostPlate(h, 1, 'r11 ah-hp')}<div><strong class="small">${esc(h.name)}</strong><span class="d-b tiny muted">${sel.planId === 'night' ? 'The night' : U.plural(sel.hours, 'hour')} · ${esc(w.name)} · ${U.fmt(o.start, tz, 'time')}–${U.fmt(o.end, tz, 'time')}</span>${past ? '' : `<span class="d-b tiny muted">${w.drink ? 'Meets you at the Lounge bar at ' + U.fmt(o.start - 30 * M, tz, 'time') : sel.way === 'floor' ? 'Meets you upstairs on the Floor' : 'Meets you in the suite upstairs'}</span>`}</div>${F.tone(t)}</a>${past ? '' : `<div class="row wrap-gap tiny mt8"><a class="btn-link" href="#/account/booking/${o.id}?tab=messages">Message ${esc(h.first)}</a><a class="btn-link" href="#/account/booking/${o.id}?tab=match">Match sheet</a><a class="btn-link" href="#/account/booking/${o.id}?tab=safety">Safety</a></div>`}</div>`; }).join('')}</div>${past ? '' : '<p class="tiny muted mt16">One check-in at the door covers your host too. Their time starts once you’re through it. When it ends, security sees them out.</p>'}`) : '';
+const cancelHtml = (v, c) => { const pv = E.ahCancelPreview(v), hs = pv.hosts, hostBack = U.r2(hs.reduce((a, z) => a + (z.pv.refund || 0), 0)), tz = E.clubTz(c);
+  const passLine = pv.pass.full ? `Before ${U.fmt(v.opensAt - 24 * H, tz, 'dt')}, ${v.payment && v.payment.paid ? 'your entry (' + E.clubMoney(c, v.payment.paid, true) + ') comes back' : 'the pass costs nothing to cancel'}.` : 'Doors open within 24 hours, so entry and any booth deposit aren’t refunded.';
+  const hostLine = hs.length ? ` ${hs.map(z => `${esc((E.host(z.o.hostId) || {}).first)}: ${z.pv.refund ? E.money(z.pv.refund, z.o.cityId, true) + ' back' : 'not refunded'}`).join('; ')}.` : '';
+  return sec('cancel', E.ahCanMove(v) ? 'Change or cancel' : 'Cancelling', `<p class="small">${passLine}${hostLine}${hostBack || (pv.pass.refund) ? ' Refunds go to your FLINGR Wallet.' : ''}</p><div class="row wrap-gap mt16">${E.ahCanMove(v) ? `<button class="btn btn-bone btn-sm" data-a="ahMove" data-v="${v.id}">Move to another night</button>` : ''}<button class="btn btn-ghost btn-sm" data-a="ahCancel" data-v="${v.id}">${hs.length ? 'Cancel the whole night' : 'Cancel this night'}</button>${hs.map(z => `<button class="btn-link tiny" data-a="ahCancelHost" data-v="${v.id}" data-o="${z.o.id}">Cancel only ${esc((E.host(z.o.hostId) || {}).first)}</button>`).join('')}</div>${E.ahCanMove(v) ? `<p class="tiny muted mt8">${hs.length ? 'Moving keeps your host, the way you meet and the length, on a night they’re free.' : 'Moving keeps your pass and guests.'} Free until ${U.fmt(v.opensAt - 24 * H, tz, 'dt')}.</p>` : ''}`); };
 const coupleHtml = v => { const cr = v.couple; return `${cr && cr.rules.length ? `<ul class="ah-pts">${cr.rules.map(z => `<li>${F.ic('check', 13)}<span class="small">${esc(z)}</span></li>`).join('')}</ul><p class="tiny muted mt8">${now() >= cr.partnerAt ? 'Signed by you both' : 'Waiting for your partner to sign on their phone'}.</p>` : '<p class="small muted">Agree your rules before you go upstairs. You both see them, and both get a check-in every hour.</p>'}
   <form class="mt16" data-f="ahCouple" data-v="${v.id}"><div class="row wrap-gap">${F.CLUB_COUPLE_RULES.map((z, i) => `<label class="chipcheck"><input type="checkbox" name="r${i}" value="${esc(z)}" ${cr && cr.rules.includes(z) ? 'checked' : ''}><span>${esc(z)}</span></label>`).join('')}</div><button class="btn btn-ghost btn-sm mt16">${cr ? 'Update our rules' : 'Agree our rules'}</button></form>
   ${v.status === 'in' && cr ? `<div class="row wrap-gap mt24"><span class="small">Hourly check-in:</span><button class="btn btn-bone btn-sm" data-a="ahCheck" data-v="${v.id}" data-ok="1">All good</button><button class="btn btn-ghost btn-sm" data-a="ahCheck" data-v="${v.id}" data-ok="">We need to talk</button></div>${cr.checks.length ? `<p class="tiny muted mt8">Last check-in ${U.rel(cr.checks[cr.checks.length - 1].at)}: ${cr.checks[cr.checks.length - 1].ok ? 'all good' : 'a quiet corner was kept for you'}.</p>` : ''}` : ''}`; };
@@ -10592,8 +10702,9 @@ const afterHtml = (u, v, c, x) => {
     out += sec('after', 'The morning after', `<p class="ah-hand">${esc(F.CLUB_AFTER[U.hash(v.id) % F.CLUB_AFTER.length])}</p><p class="tiny muted mt8">${esc(c.short)} team</p>`);
     out += v.review ? sec('rev', 'Your review', `<p class="small">${F.stars(v.review.stars)} ${esc(v.review.text)}</p>`) : sec('rev', 'How was it?', `<form class="stack" data-f="ahReview" data-v="${v.id}" novalidate>${stars('ahS', 5, 'The night')}${E.lineup(c, v.key).perf.filter(z => z.sets.some(s => s.at < (v.outAt || v.closesAt) && s.at + s.min * M > v.inAt)).map(z => stars('pf_' + z.p.id.replace(/-/g, '_'), (v.pfRate || {})[z.p.id] || 5, z.p.name)).join('')}<div class="field"><label for="ahRt">A few words <span class="muted">(optional; shown without your name)</span></label><textarea class="inp" id="ahRt" name="text" rows="3" maxlength="600"></textarea></div><button class="btn btn-bone">Send review</button></form>`);
     out += sec('rep', 'Tell security something', `<p class="small muted">Private. Only the security team reads it, and they reply here within a day.</p><form class="stack mt16" data-f="ahReport" data-v="${v.id}" novalidate><div class="field"><label for="ahRw">Who <span class="muted">(alias, wristband, what they wore)</span></label><input class="inp" id="ahRw" name="who" maxlength="60" autocomplete="off"></div><div class="field"><label for="ahRx">What happened</label><textarea class="inp" id="ahRx" name="text" rows="3" maxlength="600"></textarea></div><button class="btn btn-ghost btn-sm">Send to security</button></form>`);
-  } else out += sec('sum', 'This night', `<p class="small">${{ missed: 'You didn’t check in that night. Entry isn’t refunded after doors open.', cancelled: 'Cancelled. ' + (v.history.slice(-1)[0] || {}).note, lapsed: 'No place opened up. Nothing was charged.', completed: 'Completed.' }[v.status] || ''}</p>`);
-  return out + F.ahV.after(u, v, c) + `<a class="btn btn-bone" href="#/afterhours/book?club=${c.id}">Book another night</a>`;
+  } else out += sec('sum', 'This night', `<p class="small">${{ missed: (v.hostOrders || []).some(id => (E.order(id) || {}).status === 'missed') ? 'You didn’t check in that night, so the pass and your host’s time were missed. Neither is refunded after doors open.' : 'You didn’t check in that night. Entry isn’t refunded after doors open.', cancelled: 'Cancelled. ' + (v.history.slice(-1)[0] || {}).note, lapsed: 'No place opened up. Nothing was charged.', completed: 'Completed.' }[v.status] || ''}</p>`);
+  const hs = (v.hostOrders || []).map(id => E.order(id)).filter(o => o && ['completed', 'missed', 'checked_in', 'in_progress'].includes(o.status)), again = hs.length && E.ahAgainHref(hs[0]);
+  return out + hostsHtml(hs, c, true) + F.ahV.after(u, v, c) + `<div class="row wrap-gap">${again ? `<a class="btn btn-bone" href="${again}">Same again with ${esc((E.host(hs[0].hostId) || {}).first)}</a><a class="btn btn-ghost" href="#/afterhours/book?club=${c.id}">Another night</a>` : `<a class="btn btn-bone" href="#/afterhours/book?club=${c.id}">Book another night</a>`}</div>`;
 };
 
 /* ---------- actions on your night ---------- */
@@ -10608,7 +10719,17 @@ F.Fm.ahIn = (f, d) => {
   F.toast(r.reason, 'err');
 };
 A.ahLounge = el => { const r = E.clubCheckIn(el.dataset.v, { downgrade: true }); F.closeModal(); if (r.ok) { F.toast('Welcome in. The Lounge is yours tonight.'); F.rerender(); } else F.toast(r.reason, 'err'); };
-A.ahCancel = async el => { const v = vOf(el); if (!v) return; const pv = E.clubCancelPreview(v), c = E.club(v.clubId); if (!(await F.confirm({ title: v.status === 'waitlist' ? 'Leave the waitlist?' : 'Cancel this night?', body: v.status === 'waitlist' || v.status === 'offered' ? 'Nothing has been charged.' : pv.refund ? E.clubMoney(c, pv.refund, true) + ' goes back to your FLINGR Wallet.' : 'Nothing is refunded this close to the night.', ok: v.status === 'waitlist' ? 'Leave' : 'Cancel night', cancel: 'Keep it', danger: true }))) return; const r = E.clubCancel(v.id); F.toast(r.refund ? 'Cancelled. ' + E.clubMoney(c, r.refund, true) + ' is in your Wallet.' : 'Cancelled.'); F.rerender(); };
+A.ahCancel = async el => { const v = vOf(el); if (!v) return; const c = E.club(v.clubId), pv = E.ahCancelPreview(v), waiting = v.status === 'waitlist' || v.status === 'offered';
+  const back = U.r2((pv.pass.refund || 0) + pv.hosts.reduce((a, z) => a + (z.pv.refund || 0), 0)), names = pv.hosts.map(z => (E.host(z.o.hostId) || {}).first).join(' and ');
+  if (!(await F.confirm({ title: v.status === 'waitlist' ? 'Leave the waitlist?' : pv.hosts.length ? 'Cancel the whole night?' : 'Cancel this night?', body: waiting ? 'Nothing has been charged.' : `${pv.hosts.length ? 'Your pass and your time with ' + names + ' are both cancelled. ' : ''}${back ? E.clubMoney(c, back, true) + ' goes back to your FLINGR Wallet.' : 'Nothing is refunded this close to the night.'}`, ok: v.status === 'waitlist' ? 'Leave' : 'Cancel night', cancel: 'Keep it', danger: true }))) return;
+  const r = E.clubCancel(v.id); if (!r || !r.ok) return F.toast((r && r.reason) || 'Couldn’t cancel.', 'err'); const tot = U.r2((r.refund || 0) + (r.hostRefund || 0)); F.toast(tot ? 'Cancelled. ' + E.clubMoney(c, tot, true) + ' is in your Wallet.' : 'Cancelled.'); F.chromeCounts && F.chromeCounts(); F.rerender(); };
+A.ahCancelHost = async el => { const o = E.order(el.dataset.o), h = o && E.host(o.hostId); if (!o) return; const pv = E.cancelPreview(o);
+  if (!(await F.confirm({ title: `Cancel only ${h.first}?`, body: `Your pass stays. ${pv.refund ? E.money(pv.refund, o.cityId, true) + ' goes back to your FLINGR Wallet.' : 'This close to the night, the booking isn’t refunded.'}`, ok: `Cancel ${h.first}`, cancel: 'Keep both', danger: true }))) return;
+  const r = E.ahCancelHost(o.id); if (!r || !r.ok) return F.toast((r && r.reason) || 'Couldn’t cancel.', 'err'); F.toast(`${h.first} is cancelled. Your pass stays.`); F.chromeCounts && F.chromeCounts(); F.rerender(); };
+A.ahMove = el => { const v = vOf(el); if (!v) return; const c = E.club(v.clubId), opts = E.ahMoveOptions(v), o = E.ahHostsOf(v)[0], h = o && E.host(o.hostId);
+  F.modal(`<h2 class="h-disp h3">Move to another night</h2><p class="small muted mt8">${h ? `Nights in the next three weeks when ${esc(h.first)} is free for the same ${esc(U.plural(E.ahSelOf(o).hours, 'hour'))}.` : 'Open nights in the next three weeks.'} The price is worked out for the new night; any difference is charged or refunded to your Wallet.</p>
+  ${opts.length ? `<div class="stack-s mt24">${opts.map(z => `<button class="ah-mv" data-a="ahMoveGo" data-v="${v.id}" data-k="${z.x.key}"><span><strong>${U.keyFmt(z.x.key, 'wdl')}</strong><small>${esc(z.x.theme.name)}${z.start ? ' · ' + esc(h.first) + ' from ' + U.fmt(z.start, E.clubTz(c), 'time') : ''}</small></span>${F.ic('arrow', 14)}</button>`).join('')}</div>` : `<p class="notice small mt24">${F.ic('alert', 16)}<span>${h ? esc(h.first) + ' has no matching night in the next three weeks.' : 'No open nights in the next three weeks.'} You can still cancel and book again.</span></p>`}`, { label: 'Move your night' }); };
+A.ahMoveGo = async el => { const v = vOf(el); if (!v) return; F.busy(el, true, 'Moving'); const r = await E.ahMoveNight(v.id, el.dataset.k); F.busy(el, false); if (!r.ok) return F.toast(r.reason, 'err'); F.closeModal(); F.toast('Moved. Your new pass is ready.'); F.nav('/account/club/' + r.visit.id); };
 A.ahAccept = async el => { const v = vOf(el); F.busy(el, true, 'One moment'); await U.sleep(400); const r = await E.clubAcceptOffer(v.id); F.busy(el, false); if (!r.ok) return F.toast(r.reason, 'err'); F.toast('You’re on the list.'); F.rerender(); };
 F.Fm.ahPlus = async (f, d) => { const r = await E.clubAddGuest(f.dataset.v, d.name, d.type); if (!r.ok) { if (!String(d.name || '').trim()) return F.fieldErr(f, 'name', r.reason); return F.toast(r.reason, 'err'); } F.toast(r.amt ? 'Guest added and charged.' : 'Guest added with a guest pass.'); F.rerender(); };
 A.ahPlusDel = el => { if (E.clubDropGuest(el.dataset.v, el.dataset.g)) { F.toast('Guest removed. Their entry stays on your Wallet history.'); F.rerender(); } };
@@ -10676,9 +10797,14 @@ const pickFix = (st, c, key, from) => {
   const s = st.host; if (!s) return null; const h = E.host(s.hostId); if (!h) { st.host = null; return null; }
   const opts = E.ahOptions(h, c, key, from, s.venueId); if (!opts.length) { st.host = null; st.hostGone = h.first; return null; }
   const w = opts.find(o => o.way === s.way) || opts[0]; s.way = w.way;
-  const p = w.plans.find(z => z.planId === s.planId) || w.plans.find(z => z.planId === 'hour') || w.plans[0]; s.planId = p.planId;
-  const sl = p.slots.find(z => z.start === s.start) || p.slots[0]; Object.assign(s, { start: sl.start, key: sl.key, t: sl.t });
-  return { h, opts, w, p };
+  // how long: the hours asked for, or the longest shorter stay that still fits that night
+  const hrs = E.ahHours(h, w.way), want = hrs.includes(E.ahHoursOf(s)) ? E.ahHoursOf(s) : hrs.includes(1) ? 1 : hrs[0];
+  let pl = null, slots = [], hours = want;
+  for (const n of [want].concat(hrs.filter(z => z < want).reverse(), hrs.filter(z => z > want))) { const q = E.ahPlanFor(h, w.way, n), ss = E.ahSlots(h, c, key, w.way, q.planId, { from, venueId: s.venueId, ext: q.ext }); if (ss.length) { pl = q; slots = ss; hours = n; break; } }
+  if (!pl) { const p0 = w.plans[0]; pl = { planId: p0.planId, ext: 0 }; slots = p0.slots; hours = p0.planId === 'night' ? 8 : 1; }
+  s.shorter = hours !== want ? want : null; Object.assign(s, { hours, planId: pl.planId, ext: pl.ext });
+  const sl = slots.find(z => z.start === s.start) || slots[0]; Object.assign(s, { start: sl.start, key: sl.key, t: sl.t });
+  return { h, opts, w, p: { planId: pl.planId, slots }, hours, hrs: hrs.filter(n => n <= 8) };
 };
 const WHO = [['', 'Everyone'], ['w', 'Women'], ['m', 'Men'], ['nb', 'Non-binary'], ['group', 'Groups']];
 F.ahPicker = (st, c, key, { sc, from = 0 }) => {
@@ -10695,9 +10821,10 @@ F.ahPicker = (st, c, key, { sc, from = 0 }) => {
   ${sel ? `<div class="ah-hsel mt24">
     <div class="row between wrap-gap"><span class="small"><strong>${esc(sel.h.name)}</strong> <span class="muted">· ${sel.h.instant === false ? 'Request to book: they answer within minutes' : 'Instant: confirmed at once'}</span></span><span class="row nowrap ah-hsel-a"><a class="btn-link tiny" href="#/host/${sel.h.id}">Profile</a><button type="button" class="btn-link tiny" data-a="ahhClear" data-p="${sc}">Remove</button></span></div>
     <div class="lbl mt24">How you’ll meet</div><div class="rgrid ah-types mt8">${sel.opts.map(o => { const w = E.ahWay(o.way); return `<label class="rcard"><input type="radio" name="${nm}" value="${o.way}" data-ch="ahhWay" data-p="${sc}" ${o.way === sel.w.way ? 'checked' : ''}><span><strong class="small">${F.ic(w.ic, 13)} ${esc(w.name)}</strong><small class="muted">${esc(w.line)}</small></span></label>`; }).join('')}</div>
-    <div class="lbl mt24">How long ${esc(sel.h.first)} stays</div><div class="plans ah-plans mt8" role="group" aria-label="Plan">${sel.w.plans.map(z => { const pl = E.plan(z.planId); return `<button type="button" class="pl ${z.planId === sel.p.planId ? 'on' : ''}" data-a="ahhPlan" data-p="${sc}" data-v="${z.planId}" aria-pressed="${z.planId === sel.p.planId}"><span class="pl-n">${esc(pl.name)}</span><span class="tiny muted">${U.dur(pl.dur)}</span><span class="mono small">${E.money(E.hp(sel.h, z.planId, z.slots[0].start), cityId)}</span></button>`; }).join('')}</div>
+    <div class="lbl mt24">How long ${esc(sel.h.first)} stays</div><div class="row wrap-gap mt8 ah-hrs" role="group" aria-label="Hours">${sel.hrs.map(n => `<button type="button" class="chip ${n === sel.hours ? 'on' : ''}" data-a="ahhHours" data-p="${sc}" data-v="${n}" aria-pressed="${n === sel.hours}">${n === 8 && E.ahPlanFor(sel.h, sel.w.way, 8).planId === 'night' ? 'The night' : U.plural(n, 'hour')}</button>`).join('')}</div>
+    <p class="tiny muted mt8">${sel.p.planId === 'night' ? 'The Night: eight hours, at ' + esc(sel.h.first) + '’s Night price.' : sel.hours > 1 ? 'The Hour, plus ' + U.plural(sel.hours - 1, 'extra hour') + ' at ' + esc(sel.h.first) + '’s hourly rate.' : 'The Hour, at ' + esc(sel.h.first) + '’s hourly rate.'}${st.host.shorter ? ` ${esc(sel.h.first)} isn’t free for ${U.plural(st.host.shorter, 'hour')} that night, so this is the longest that fits.` : ''}</p>
     <div class="lbl mt24">${esc(sel.h.first)} starts at</div><div class="row wrap-gap mt8">${sel.p.slots.slice(0, 14).map(s => `<button type="button" class="chip ${s.start === st.host.start ? 'on' : ''}" data-a="ahhStart" data-p="${sc}" data-t="${s.start}" aria-pressed="${s.start === st.host.start}">${tm(s.start, c)}</button>`).join('')}</div>
-    <p class="tiny muted mt16">${sel.w.drink ? `Meet at the Lounge bar at ${tm(st.host.start - 30 * M, c)}; you’re both on the guest list. ` : ''}${E.plan(sel.p.planId).name} ends ${tm(st.host.start + (E.plan(sel.p.planId).dur + (sel.w.drink ? 30 : 0)) * M, c)}. Security sees ${esc(sel.h.first)} out when it ends.</p></div>` : ''}`;
+    <p class="tiny muted mt16">${sel.w.drink ? `Meet at the Lounge bar at ${tm(st.host.start - 30 * M, c)}; you’re both on the guest list. ` : ''}${esc(sel.h.first)} stays until ${tm(st.host.start + (E.plan(sel.p.planId).dur + (st.host.ext || 0) * 60 + (sel.w.drink ? 30 : 0)) * M, c)}. Security sees ${esc(sel.h.first)} out when it ends.</p></div>` : ''}`;
 };
 // the host's part for "Get on the list": the picker, the price and anything that stops it
 F.ahHostPart = (b, c, x, u) => {
@@ -10706,13 +10833,13 @@ F.ahHostPart = (b, c, x, u) => {
   if (h && sel.w.floor && !F.CLUB_PASS[b.type].floor) err = `With ${h.first} on the Floor, choose a Floor pass.`;
   if (h && !err) { const e = E.validate(E.ahCtx(h, st.host)); if (e.length) err = e[0]; }
   const lo = b.linkOrder && E.order(b.linkOrder), lh = lo && E.host(lo.hostId);
-  const head = lo ? `${esc(lh ? lh.first : 'Your host')} · booked` : h ? `${esc(h.first)} · ${esc(E.plan(st.host.planId).name)}, ${tm(st.host.start, c)}` : 'Bring someone';
+  const head = lo ? `${esc(lh ? lh.first : 'Your host')} · booked` : h ? `${esc(h.first)} · ${U.plural(E.ahHoursOf(st.host), 'hour')}, ${tm(st.host.start, c)}` : 'Bring someone';
   const body = lo ? `<div class="ah-hostrow">${lh ? F.hostPlate(lh, 1, 'r11 ah-hp') : ''}<div><strong class="small">${esc(E.plan(lo.planId).name)} with ${esc(lh ? lh.name : 'your host')}</strong><span class="d-b tiny muted">${tm(lo.start, c)} · ${esc(E.venue(lo.venueId).name)} · ${lo.no} · already paid</span></div></div><p class="tiny muted mt8">Your host booking joins this pass, so everything for the night is in one place.</p><button type="button" class="btn-link tiny mt8" data-a="ahhUnlink">Don’t link it</button>`
     : `<p class="small muted">Add a host for the night. Your entry and their plan are paid together.</p><div class="mt16">${F.ahPicker(st, c, b.key, { sc: 'book' })}</div>`;
   const html = `<details class="card ah-opt" ${st.host || lo || F.ui.ahH ? 'open' : ''} data-d="ahH" id="ah-host"><summary><span class="lbl">3. A FLINGR host <span class="muted">(optional)</span></span><span class="tiny muted">${head}</span>${F.ic('plus', 14)}</summary><div class="mt16">${body}</div></details>`;
   return { html, h, sel, calc, err };
 };
-const hostLine = (c, hp, b) => hp && hp.calc ? `<div class="kv"><span>${esc(E.plan(b.host.planId).name)} with ${esc(hp.h.name)}<small class="d-b muted">${esc(E.ahWay(b.host.way).name)} · ${tm(b.host.start, c)} · fees and tax included</small></span><span>${E.money(hp.calc.total, c.cityId, true)}</span></div>` : '';
+const hostLine = (c, hp, b) => hp && hp.calc ? `<div class="kv"><span>${esc(hp.h.name)} · ${E.ahHoursOf(b.host) === 8 && b.host.planId === 'night' ? 'the night' : U.plural(E.ahHoursOf(b.host), 'hour')}<small class="d-b muted">${esc(E.ahWay(b.host.way).name)} · ${tm(b.host.start, c)} · fees and tax included</small></span><span>${E.money(hp.calc.total, c.cityId, true)}</span></div>` : '';
 F.ahHostLine = hostLine;
 
 /* ---------- extras, the booth plan, gift codes and free nights ---------- */
@@ -10729,7 +10856,7 @@ F.ahPayExtras = (b, u) => {
 };
 F.ahSplitToggle = (b, q) => b.plus.length && q.lines.some(l => l.k === 'plus' && (l.amt > 0 || l.share)) ? `<label class="tgl-row mt16"><span><strong class="small">Each guest pays their own entry</strong><small class="d-b muted">They get a link to pay. If someone hasn’t paid two hours before doors, their entry goes on yours.</small></span><input type="checkbox" class="tgl" data-ch="ahSplit" ${b.split ? 'checked' : ''}></label>` : '';
 // what "Get on the list" sends to the engine
-F.ahCfg = b => { const g = b.gift && E.ahGift(b.gift); return { clubId: b.clubId, key: b.key, type: b.type, plus: b.plus, booth: b.booth, pkg: b.pkg, pkgName: b.pkgName, partner: b.partner, extras: (b.extras || []).filter(id => E.ahExtraOk(id, b)), boothNo: b.booth ? b.boothNo || null : null, split: !!b.split, gift: g && E.ahGiftCovers(g, b.type) ? g.code : '', stamp: !!b.stamp }; };
+F.ahCfg = b => { const g = b.gift && E.ahGift(b.gift); return { withHost: b.host && b.host.hostId ? b.host.hostId : null, clubId: b.clubId, key: b.key, type: b.type, plus: b.plus, booth: b.booth, pkg: b.pkg, pkgName: b.pkgName, partner: b.partner, extras: (b.extras || []).filter(id => E.ahExtraOk(id, b)), boothNo: b.booth ? b.boothNo || null : null, split: !!b.split, gift: g && E.ahGiftCovers(g, b.type) ? g.code : '', stamp: !!b.stamp }; };
 
 /* ---------- the club page ---------- */
 F.ahLiveChip = c => { const b = E.clubBusy(c); return `<div class="ah-live mt24">${b.open ? `<span class="badge b-live"><i class="dot live"></i>Open now · ${esc(b.label)}</span>` : `<span class="badge">${F.ic('clock', 11)} ${esc(b.label)}</span>`}${b.open && b.floor ? `<span class="badge">The Floor ${b.floor.pct}% full</span>` : ''}</div>`; };
@@ -10814,16 +10941,12 @@ F.ahHostAcc = (h, acc) => {
   const nx = E.ahNextFor(h, 10), ways = E.AH_WAYS.filter(w => h.venues.includes(w.venue) && !(w.floor && !E.floorOk(h)) && !(w.drink && h.flags && h.flags.noPublic));
   return acc('hp-ah', `At Afterhours <span class="muted small">· ${esc(c.short)}${h.ahTonight === E.clubNightKey(c) ? ' · at the Lounge tonight' : ''}</span>`, `<p class="small muted">${esc(h.first)} comes to the club only with the guest who booked them. You pay your entry and ${esc(h.first)}’s plan together.</p><div class="stack-s mt16">${ways.map(w => `<div class="ah-way">${F.ic(w.ic, 16)}<div><strong class="small">${esc(w.name)}</strong><p class="tiny muted mt4">${esc(w.line)}</p></div></div>`).join('')}</div>${nx ? `<p class="small mt16">Next free at the club: <strong>${nx.x.key === E.clubNightKey(c) ? 'tonight' : nx.x.key === U.addDays(E.clubNightKey(c), 1) ? 'tomorrow' : U.keyFmt(nx.x.key, 'wdl')}</strong>, ${esc(nx.x.theme.name)}, from ${tm(nx.s.start, c)}.</p><a class="btn btn-bone btn-sm mt16" href="#/afterhours/book?club=${c.id}&date=${nx.x.key}&host=${h.id}">Book ${esc(h.first)} at Afterhours</a>` : '<p class="small muted mt16">No free time at the club in the next ten days.</p>'}`);
 };
-// a booking at the club's venues (or a drink at the Lounge) goes through the Afterhours checkout, where the entry is chosen
-F.ahWidgetGo = (h, b) => {
-  if (!h || !b || !b.start) return null; const c = E.clubOf(h.cityId); if (!c) return null;
-  const lounge = !!(b.addons && b.addons.drink && b.meet === 'lounge'); if (!lounge && !E.CLUB_VENUES.includes(b.venueId)) return null;
-  const key = E.clubNightKey(c, b.start - 30 * M), x = E.clubNight(c, key); if (!x.open) return null;
-  return { c, key, x, way: b.venueId === 'ahfloor' ? 'floor' : lounge ? 'lounge' : 'suite' };
+// the host's booking panel takes you to the club with them: one checkout for the entry and the host, filled in
+F.ahTakeBtn = (h, b) => {
+  const c = E.clubOf(h.cityId); if (!c || h.status !== 'active' || !h.venues.some(v => E.CLUB_VENUES.includes(v))) return '';
+  const x = b && b.key && E.clubNight(c, b.key).open && E.clubNight(c, b.key).closesAt > now() + H ? E.clubNight(c, b.key) : (E.ahNextFor(h, 10) || {}).x; if (!x) return '';
+  return `<a class="btn btn-ghost btn-block mt8 ah-take" href="#/afterhours/book${U.q({ club: c.id, date: x.key, host: h.id })}">${F.ic('moon', 14)} Take ${esc(h.first)} to Afterhours</a><p class="tiny muted center mt4">${esc(x.theme.name)}, ${U.keyFmt(x.key, 'date')}: your entry and ${esc(h.first)}’s time in one checkout.</p>`;
 };
-F.ahWidgetNote = (h, b) => { const go = F.ahWidgetGo(h, b); if (!go) return ''; const u = E.user(), lp = E.passPrice(u, go.c, go.x, 'lounge'), fp = go.x.floor ? E.passPrice(u, go.c, go.x, F.ahFloorType(u, go.x)) : null; return `<div class="notice small ah-wn">${F.ic('sparkle', 16)}<span><strong>Afterhours · ${esc(go.x.theme.name)}</strong>, ${U.keyFmt(go.key, 'date')}. Your entry is added at the Afterhours checkout: the Lounge ${lp.amt ? money(go.c, lp.amt) : 'free for you'}${fp && go.way === 'floor' ? ', a Floor pass ' + (fp.amt ? 'from ' + money(go.c, fp.amt) : 'free for you') : ''}. </span></div>`; };
-const r0 = A.bkReserve;
-A.bkReserve = el => { const b = F.ui.bk, h = b && E.host(b.hostId), go = F.ahWidgetGo(h, b); if (!go) return r0(el); F.nav('/afterhours/book' + U.q({ club: go.c.id, date: go.key, host: h.id, way: go.way, plan: b.planId, start: b.start, venue: b.venueId })); };
 // on a FLINGR booking at the club: the pass for that night, or a way to get one
 F.ahOrderEntry = o => { const lk = E.orderClub(o); if (!lk || ['cancelled', 'refunded', 'expired'].includes(o.status) || o.customerId !== (E.user() || {}).id) return ''; const v = E.ahVisitFor(o); if (v) return `<a class="btn btn-ghost btn-sm mt16" href="#/account/club/${v.id}">Your night: pass and tab</a>`; return lk.c && E.clubNight(lk.c, lk.key).open && now() < E.clubNight(lk.c, lk.key).closesAt - H ? `<a class="btn btn-bone btn-sm mt16" href="#/afterhours/book?club=${lk.c.id}&date=${lk.key}&order=${o.id}">Get your entry for the night</a>` : ''; };
 
@@ -10907,10 +11030,10 @@ const scOf = el => el.dataset.p || 'book';
 const redraw = () => F.rerender();
 A.ahhWho = el => { const st = pickState(scOf(el)); st.hw = el.dataset.w; st.hmore = false; redraw(); };
 A.ahhMore = el => { pickState(scOf(el)).hmore = true; redraw(); };
-A.ahhPick = el => { const sc = scOf(el), st = pickState(sc); st.hostGone = null; if (st.host && st.host.hostId === el.dataset.h) return; st.host = { hostId: el.dataset.h, way: st.host ? st.host.way : null, planId: st.host ? st.host.planId : 'hour', start: null }; if (sc === 'book') F.ui.ahH = true; redraw(); };
+A.ahhPick = el => { const sc = scOf(el), st = pickState(sc); st.hostGone = null; if (st.host && st.host.hostId === el.dataset.h) return; st.host = { hostId: el.dataset.h, way: st.host ? st.host.way : null, hours: st.host ? st.host.hours : 1, start: null }; if (sc === 'book') F.ui.ahH = true; redraw(); };
 A.ahhClear = el => { const st = pickState(scOf(el)); st.host = null; redraw(); };
-C.ahhWay = el => { const sc = scOf(el), st = pickState(sc); if (!st.host) return; st.host.way = el.value; st.host.start = null; if (el.value !== 'lounge') st.host.venueId = null; if (sc === 'book' && E.ahWay(el.value).floor && !F.CLUB_PASS[st.type].floor) { const x = E.clubNight(E.club(st.clubId), st.key); st.type = F.ahFloorType(E.user(), x); F.toast('Changed to a Floor pass: the Floor needs one.'); } redraw(); };
-A.ahhPlan = el => { const st = pickState(scOf(el)); if (!st.host) return; st.host.planId = el.dataset.v; st.host.start = null; redraw(); };
+C.ahhWay = el => { const sc = scOf(el), st = pickState(sc); if (!st.host) return; st.host.way = el.value; st.host.start = null; if (el.value !== 'lounge') st.host.venueId = null; if (sc === 'book' && E.ahWay(el.value).floor && !F.CLUB_PASS[st.type].floor) { const x = E.clubNight(E.club(st.clubId), st.key); st.type = F.ahFloorType(E.user(), x, true); } redraw(); };
+A.ahhHours = el => { const st = pickState(scOf(el)); if (!st.host) return; st.host.hours = +el.dataset.v; st.host.shorter = null; redraw(); };
 A.ahhStart = el => { const st = pickState(scOf(el)); if (!st.host) return; st.host.start = +el.dataset.t; redraw(); };
 A.ahhUnlink = () => { const b = F.ui.ah; if (b) { b.linkOrder = null; redraw(); } };
 C.ahExtra = el => { const b = F.ui.ah; let ex = (b.extras || []).filter(x => x !== el.value); if (el.checked) { const e = F.AH_EXTRA[el.value]; if (e.grp) ex = ex.filter(x => (F.AH_EXTRA[x] || {}).grp !== e.grp); ex.push(el.value); } b.extras = ex; F.ui.ahE = true; redraw(); };
@@ -11435,7 +11558,6 @@ F.Fm.coDetails = (f, d, e, quiet) => {
 // the containers carry data-c / data-ch; the field that changed is the event's target
 C.coDraft = (el, e) => { const co = F.ui.co, t = (e && e.target) || el; if (co && t.name) co.draft[t.name] = t.value; };
 C.coAgreeD = (el, e) => { const co = F.ui.co, t = (e && e.target) || el; if (co && t.name) co.agree[t.name] = t.checked; };
-A.coMeet = el => { F.store.commit(s => { if (s.cart) s.cart.meet = el.dataset.v; }); F.ui.co && (F.ui.co.sig = E.cartSig(F.S.cart)); F.rerender(); };
 A.coExAll = () => { F.ui.coExAll = true; F.rerender(); };
 C.coAddon = async el => {
   const id = el.value, on = el.checked;
@@ -11592,7 +11714,7 @@ M.preferences = r => { if (r.q.s) { const el = document.getElementById(r.q.s); i
 
 /* ---------- overview ---------- */
 V[''] = u => {
-  const os = E.myOrders(u), up = os.filter(o => E.BLOCK.includes(o.status)).sort((a, b) => a.start - b.start);
+  const os = E.myOrders(u).filter(o => !E.inNight(o)), up = os.filter(o => E.BLOCK.includes(o.status)).sort((a, b) => a.start - b.start);
   const nx = up[0], ne = F.nextEscape(u), nc = F.nextClub(u), notes = F.S.notifications.filter(n => n.userId === u.id && n.delivered && !n.hidden).sort((a, b) => b.at - a.at).slice(0, 4);
   const saved = u.saved.map(id => E.host(id)).filter(Boolean).slice(0, 4);
   return { title: 'Overview', h: 'Good ' + ((hr => hr < 5 ? 'evening' : hr < 12 ? 'morning' : hr < 18 ? 'afternoon' : 'evening')(U.parts(F.city().tz, Date.now()).h)) + ', <span class="it">' + esc(u.name.split(' ')[0]) + '</span>', html: `
@@ -11613,8 +11735,8 @@ ${(x => x ? `<div class="stack-l mt48">${x}</div>` : '')([F.digestCard(u), F.nud
 /* ---------- bookings ---------- */
 V.preferences = u => ({ title: 'Preferences & health', h: 'Preferences <span class="it">&</span> health', html: F.prefsPage(u) });
 V.bookings = (u, s, r) => {
-  const f = r.q.f || 'upcoming', os = E.myOrders(u);
-  const groups = { upcoming: os.filter(o => E.BLOCK.includes(o.status)).sort((a, b) => a.start - b.start), past: os.filter(o => o.status === 'completed'), cancelled: os.filter(o => ['cancelled', 'refunded', 'expired'].includes(o.status)) };
+  const f = r.q.f || 'upcoming', os = E.myOrders(u).filter(o => !E.inNight(o));
+  const groups = { upcoming: os.filter(o => E.BLOCK.includes(o.status)).sort((a, b) => a.start - b.start), past: os.filter(o => ['completed', 'missed'].includes(o.status)), cancelled: os.filter(o => ['cancelled', 'refunded', 'expired'].includes(o.status)) };
   const list = groups[f] || [], esc = F.escapeRows(u, f), club = F.clubRows(u, f), count = k => groups[k].length + F.escapeRows(u, k).length + F.clubRows(u, k).length;
   return { title: 'Bookings', html: `<div class="row wrap-gap">${[['upcoming', 'Upcoming'], ['past', 'Past'], ['cancelled', 'Cancelled & refunded']].map(x => `<a class="chip ${f === x[0] ? 'on' : ''}" href="#/account/bookings?f=${x[0]}">${x[1]} (${count(x[0])})</a>`).join('')}</div>
 ${club.length ? `<div class="lbl mt32">Afterhours</div><div class="stack mt16">${club.map(F.clubRow).join('')}</div>` : ''}
@@ -11626,12 +11748,13 @@ ${esc.length ? `<div class="lbl mt32">Escapes</div><div class="stack mt16">${esc
 const stepsFor = o => {
   const base = [['confirmed', 'Confirmed'], ['checked_in', 'Checked in'], ['in_progress', 'In progress'], ['completed', 'Completed']];
   if (['cancelled', 'refunded'].includes(o.status)) return [['confirmed', 'Confirmed'], ['cancelled', 'Cancelled'], ['refunded', 'Refunded']];
+  if (o.status === 'missed') return [['confirmed', 'Confirmed'], ['missed', 'Missed']];
   return base;
 };
 V.booking = (u, id) => {
   const o = E.order(id);
   if (!o || o.customerId !== u.id) return { title: 'Booking', html: F.empty('Booking not found', 'It may belong to another account.', '<a class="btn btn-ghost mt24" href="#/account/bookings">All bookings</a>') };
-  const h = E.host(o.hostId), city = E.city(o.cityId), tz = city.tz, plan = E.plan(o.planId), t = E.disp(o), n = Date.now();
+  const h = E.host(o.hostId), city = E.city(o.cityId), tz = city.tz, plan = E.plan(o.planId), t = E.disp(o), n = Date.now(), night = E.BLOCK.includes(o.status) && E.ahNightOf && E.ahNightOf(o), clubLk = E.orderClub(o);
   const st = F.S.settings, steps = stepsFor(o), reached = new Set(o.history.map(x => x.s));
   const curIdx = steps.findIndex(s => s[0] === o.status);
   const venueReveal = n >= o.start - 2 * 36e5 || ['checked_in', 'in_progress', 'completed'].includes(o.status);
@@ -11655,19 +11778,21 @@ V.booking = (u, id) => {
   if (o.status === 'requested' && o.request && o.request.counter) actions = `<div class="notice small">${F.ic('msg', 16)}<span><strong>${esc(h.first)} suggested another time:</strong> ${U.fmt(o.request.counter.start, tz, 'dt')} ${U.tzAbbr(tz, o.request.counter.start)}. Same price, same plan.</span></div><button class="btn btn-cherry btn-block" data-a="ctrYes" data-o="${o.id}">Accept new time</button><button class="btn btn-ghost btn-block" data-a="ctrNo" data-o="${o.id}">Withdraw for a full refund</button>`;
   else if (o.status === 'requested') actions = `<div class="notice small">${F.ic('clock', 16)}<span>Waiting for ${esc(h.first)} to accept. Most reply within ${h.responseMin} minutes. If there’s no reply by ${U.fmt(o.request ? o.request.expiresAt || o.request.decideAt : o.start, tz, 'time')}, the request lapses and you’re refunded in full.</span></div><button class="btn btn-ghost btn-block" data-a="bkCancel" data-o="${o.id}">Withdraw request</button>`;
   const pin = ['confirmed', 'checked_in'].includes(o.status) && n >= o.start - 2 * 36e5 ? `<div class="pin-card"><span class="lbl">Check-in code</span><strong class="mono">${E.checkinCode(o).replace(/(\d{3})(\d{3})/, '$1 $2')}</strong><span class="tiny muted">Give this at the front desk of ${esc(o.hotel.name)}.</span>${o.safe ? `<span class="tiny muted">Safe word: <strong class="mono">${esc(o.safe)}</strong></span>` : ''}</div>` : '';
-  if (o.status === 'confirmed') actions = pin + `${canCheckin ? `<button class="btn btn-cherry btn-block" data-a="bkCheckin" data-o="${o.id}">${F.ic('door', 16)} Check in${df ? ' and pay' : ''}</button>` : `<div class="notice small">${F.ic('clock', 16)}<span>Check-in opens ${U.fmt(o.start - st.checkinMin * 6e4, tz, 'dt')}.</span></div>`}
+  if (o.status === 'confirmed' && night) actions = `<a class="btn btn-bone btn-block" href="#/account/club/${night.id}">Your pass and the door</a><p class="tiny muted">You check in once, at the club door, and ${esc(h.first)}’s time starts when you’re through it. Move or cancel the whole night from your pass.</p>${extrasAvail.length ? `<button class="btn btn-ghost btn-block" data-a="bkExtras" data-o="${o.id}">Add extras</button>` : ''}`;
+  else if (o.status === 'confirmed') actions = pin + `${canCheckin ? `<button class="btn btn-cherry btn-block" data-a="bkCheckin" data-o="${o.id}">${F.ic('door', 16)} Check in${df ? ' and pay' : ''}</button>` : `<div class="notice small">${F.ic('clock', 16)}<span>Check-in opens ${U.fmt(o.start - st.checkinMin * 6e4, tz, 'dt')}.</span></div>`}
     <button class="btn btn-ghost btn-block" data-a="bkResched" data-o="${o.id}" ${rp.allowed ? '' : 'disabled'}>Reschedule</button>${!rp.allowed ? `<p class="tiny muted">${esc(rp.reason)}</p>` : ''}
     ${extrasAvail.length ? `<button class="btn btn-ghost btn-block" data-a="bkExtras" data-o="${o.id}">Add extras</button>` : ''}
     <button class="btn-link tiny center-self" data-a="bkCancel" data-o="${o.id}">Cancel booking</button>`;
   if (o.status === 'checked_in') actions = pin + `<div class="notice small">${F.ic('check', 16)}<span>You checked in ${U.rel(o.guestIn)}. ${o.hostIn ? esc(h.first) + ' has checked in too.' : 'Waiting for ' + esc(h.first) + ' to check in.'}</span></div>${o.hostIn ? `<button class="btn btn-cherry btn-block" data-a="bkBegin" data-o="${o.id}">Begin now</button><p class="tiny muted">Starting early moves your end time to ${U.fmt(n + (o.end - o.start), tz, 'time')}.</p>` : ''}<button class="btn btn-ghost btn-block" data-a="bkCancel" data-o="${o.id}">Cancel booking</button>`;
   if (o.status === 'in_progress') actions = `<div class="notice small live">${F.ic('clock', 16)}<span>In progress until ${U.fmt(o.end, tz, 'time')}.</span></div>${hasMorning ? `<a class="btn btn-bone btn-block" href="#/account/booking/${o.id}?tab=morning">Open the Morning Menu</a>` : ''}${E.canExtend(o) ? `<button class="btn btn-ghost btn-block" data-a="bkExtend" data-o="${o.id}">Add an hour · ${E.money(E.extendPrice(o), o.cityId)}</button>` : ''}<button class="btn btn-ghost btn-block" data-a="bkEnd" data-o="${o.id}">End booking</button>`;
-  if (o.status === 'completed') actions = `${morning ? `<a class="btn btn-bone btn-block" href="#/account/booking/${o.id}?tab=morning">Order from the Morning Menu</a>` : ''}<button class="btn btn-bone btn-block" data-a="bookSame" data-o="${o.id}">Book the same again</button><a class="btn-link tiny center-self" href="#/host/${h.id}?plan=${o.planId}&date=${U.dayKey(o.start + 7 * 864e5, tz)}">Choose another time with ${esc(h.first)}</a><p class="tiny muted">Same plan, venue and extras, at the next free time on the same weekday.</p>`;
+  if (o.status === 'completed') actions = `${morning ? `<a class="btn btn-bone btn-block" href="#/account/booking/${o.id}?tab=morning">Order from the Morning Menu</a>` : ''}<a class="btn btn-ghost btn-block" href="#/host/${h.id}">${esc(h.first)}’s profile</a>${o.clubVisit ? `<a class="btn-link tiny center-self" href="#/account/club/${o.clubVisit}">Your Afterhours night</a>` : ''}`;
+  if (o.status === 'missed') actions = `<div class="notice small">${F.ic('alert', 16)}<span>${night || o.clubVisit ? 'You didn’t arrive at the club' : 'You didn’t arrive'}, so this booking was missed. ${esc(h.first)} is paid for the time, as with any missed booking.</span></div>${o.clubVisit ? `<a class="btn btn-ghost btn-block" href="#/account/club/${o.clubVisit}">Your Afterhours night</a>` : ''}<a class="btn-link tiny center-self" href="#/contact">Something went wrong? Tell us</a>`;
   if (canNoShow) actions += `<button class="btn btn-ghost btn-block" data-a="hostNoShow" data-o="${o.id}">${F.ic('alert', 14)} My host didn’t arrive</button>`;
   if (nsRep) actions += `<div class="notice small">${F.ic(nsRep.status === 'Resolved' ? 'check' : 'clock', 16)}<span>No-show report ${nsRep.no}: ${esc(nsRep.status)}.</span></div>`;
 
   const T = {};
   const alts = o.status !== 'completed' && o.cancel && o.cancel.by === 'host' && o.start > n ? E.freeAt(o, 3) : [];
-  T.details = () => `${F.undoBar(o)}${F.nextStep(o)}${o.status === 'confirmed' ? F.noteCard(o) : ''}${live ? F.liveCard(o) : ''}${F.rebookCard(o)}${F.bookAgainCard ? F.bookAgainCard(o) : ''}${F.orderClubCard(o)}${F.orderEveningCard(o)}${o.gift ? `<div class="notice small">${F.ic('gift', 16)}<span>Booked as a gift for <strong>${esc(o.gift.name)}</strong>${o.gift.email ? ' (' + esc(o.gift.email) + ')' : ''}.${o.gift.message ? ' “' + esc(o.gift.message) + '”' : ''}</span></div>` : ''}
+  T.details = () => `${night ? F.ahPartBanner(o, night) : ''}${F.undoBar(o)}${night ? '' : F.nextStep(o)}${o.status === 'confirmed' ? F.noteCard(o) : ''}${live ? F.liveCard(o) : ''}${F.rebookCard(o)}${F.bookAgainCard ? F.bookAgainCard(o) : ''}${F.orderClubCard(o)}${F.orderEveningCard(o)}${o.gift ? `<div class="notice small">${F.ic('gift', 16)}<span>Booked as a gift for <strong>${esc(o.gift.name)}</strong>${o.gift.email ? ' (' + esc(o.gift.email) + ')' : ''}.${o.gift.message ? ' “' + esc(o.gift.message) + '”' : ''}</span></div>` : ''}
   ${o.seriesOf || (o.series && o.series.length) ? `<div class="card small"><h2 class="lbl">Weekly series</h2><div class="stack mt8">${[o.seriesOf || o.id].concat((E.order(o.seriesOf || o.id) || {}).series || []).map(id => E.order(id)).filter(Boolean).map(x => `<a class="kv u" href="#/account/booking/${x.id}"><span>${U.fmt(x.start, tz, 'dt')}${x.id === o.id ? ' <span class="muted">· this booking</span>' : ''}</span><span>${F.tone(E.disp(x))}</span></a>`).join('')}</div></div>` : ''}
   ${alts.length ? `<div class="card"><h2 class="h-disp h4">Free at the same time</h2><p class="small muted mt8">${esc(h.first)} had to cancel. These hosts are free within an hour of your original time.</p><div class="g g3 mt16">${alts.map(x => F.hostCard(x, { plan: o.planId })).join('')}</div></div>` : ''}
   ${o.status === 'completed' && !o.tip ? `<div class="card"><h2 class="h-disp h4">Leave a tip</h2><p class="small muted mt8">Optional, and 100% goes to ${esc(h.first)}.</p><div class="row wrap-gap mt16">${[10, 15, 20].map(p => { const amt = Math.round(o.price.lines[0].amount * p / 100); return `<button class="btn btn-ghost btn-sm" data-a="bkTip" data-o="${o.id}" data-v="${amt}">${p}% · ${U.money(amt, o.price.cur)}</button>`; }).join('')}</div></div>` : o.tip ? `<div class="notice small">${F.ic('heart', 16)}<span>You tipped ${U.money(o.tip, o.price.cur, true)}. Thank you.</span></div>` : ''}
@@ -11706,15 +11831,15 @@ V.booking = (u, id) => {
   return { title: o.no, h: plan.name + ' <span class="it">with</span> ' + esc(h.first), html: `
 <div class="row between mb32"><a class="btn-link tiny" href="#/account/bookings">${F.ic('back', 12)} All bookings</a><div class="row">${F.tone(t)}<span class="mono tiny muted">${o.no}</span></div></div>
 ${live ? `<div class="safety-bar"><span>${F.ic('shield', 16)} Your booking is live. If anything feels wrong, we are here.</span><button class="btn btn-cherry btn-sm" data-a="safety" data-o="${o.id}">Safety</button></div>` : ''}
-<div class="card bk-sum"><ol class="track">${steps.map((s, i) => `<li class="${reached.has(s[0]) && i < curIdx ? 'done' : i === curIdx ? 'cur' : reached.has(s[0]) ? 'done' : ''}"><span></span>${s[1]}</li>`).join('')}</ol>
+<div class="card bk-sum"><ol class="track">${steps.map((s, i) => { const passed = i < curIdx, skip = passed && !reached.has(s[0]); return `<li class="${i === curIdx ? 'cur' : passed ? (skip ? 'done skip' : 'done') : reached.has(s[0]) ? 'done' : ''}"><span></span>${skip && s[0] === 'checked_in' ? 'No check-in' : s[1]}</li>`; }).join('')}</ol>
   <div class="g g3 small mt32"><div><div class="lbl">When</div><p class="mt8">${U.fmt(o.start, tz, 'dateLong')}<br>${U.fmt(o.start, tz, 'time')} to ${U.fmt(o.end, tz, 'time')} ${U.tzAbbr(tz, o.start)}</p></div>
-  <div><div class="lbl">Where</div><p class="mt8">${E.venue(o.venueId).name}<br>${venueReveal ? `<strong>${esc(o.hotel.name)}</strong><br><span class="muted">${esc(o.hotel.addr)}</span><br><span class="tiny">Check in under ${o.no}</span>` : '<span class="muted">Address shared ' + U.fmt(o.start - 2 * 36e5, tz, 'dt') + '</span>'}</p></div>
+  <div><div class="lbl">Where</div><p class="mt8">${clubLk ? `<strong>${esc(clubLk.c.name)}</strong> · ${o.venueId === 'ahfloor' ? 'the Floor' : o.meet === 'lounge' ? 'the Lounge, then ' + esc(E.venue(o.venueId).name.replace(/^Afterhours · /, '').toLowerCase()) : 'the suite upstairs'}<br><span class="muted">${esc(clubLk.c.area)}</span>${night ? `<br><span class="tiny">The door and your code are on <a class="u" href="#/account/club/${night.id}">your pass</a></span>` : ''}` : `${E.venue(o.venueId).name}<br>${venueReveal ? `<strong>${esc(o.hotel.name)}</strong><br><span class="muted">${esc(o.hotel.addr)}</span><br><span class="tiny">Check in under ${o.no}</span>` : '<span class="muted">Address shared ' + U.fmt(o.start - 2 * 36e5, tz, 'dt') + '</span>'}`}</p></div>
   <div><div class="lbl">Host</div><a class="row nowrap mt8" href="#/host/${h.id}">${F.hostPlate(h, 1, 'r11 tiny-p')}<span>${esc(h.name)}<small class="d-b muted">${esc(h.hood)}</small></span></a></div></div></div>
 <nav class="bk-tabs mt32" role="tablist" aria-label="Booking sections">${tabs.map(x => `<a role="tab" aria-selected="${tab === x[0]}" class="${tab === x[0] ? 'on' : ''}" href="#/account/booking/${o.id}?tab=${x[0]}">${x[1]}</a>`).join('')}</nav>
 <div class="bd mt24">
 <div class="stack-l">${body}</div>
 <div class="stack bd-side">
-  <div class="card stack">${actions || '<p class="small muted">No actions available.</p>'}</div>${F.myCards(o)}
+  <div class="card stack">${actions || '<p class="small muted">No actions available.</p>'}</div>${night ? '' : F.myCards(o)}
   ${['confirmed', 'requested'].includes(o.status) ? `<button class="btn-link tiny" data-a="ics" data-o="${o.id}">${F.ic('cal', 12)} Add to calendar</button>` : ''}
 </div></div>` };
 };
@@ -12052,20 +12177,13 @@ V.record = u => {
 };
 
 /* ---------- Book again ---------- */
-// the same host, plan and start time, on the next free day that matches (same weekday first)
-E.bookAgainSlot = o => { const h = E.host(o.hostId); if (!h || h.status !== 'active' || !h.plans.some(p => p.id === o.planId)) return null; const today = E.todayKey(h.cityId); for (let d = 0; d < 28; d++) { const k = U.addDays(today, d); if (d < 21 && U.wd(k) !== U.wd(o.key)) continue; const s = E.slots(h, o.planId, k).find(x => x.status === 'available' && (x.t === o.t || d >= 21)); if (s) return s; } return null; };
 F.bookAgainCard = o => {
-  if (o.status !== 'completed' || o.customerId !== (E.user() || {}).id || (o.rebook && o.rebook.start > now())) return '';
-  const h = E.host(o.hostId), s = h && E.bookAgainSlot(o); if (!h) return '';
-  return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${s ? `${esc(E.plan(o.planId).name)} with ${esc(h.first)}, ${F.availLabel(s.start, h.cityId)}.` : `${esc(h.first)} has no matching time in the next four weeks.`}</p><div class="row wrap-gap mt16">${s ? `<button class="btn btn-bone btn-sm" data-a="bookAgain" data-o="${o.id}" data-s="${s.start}">Book this time</button>` : ''}<a class="btn-link tiny" href="#/host/${h.id}?plan=${o.planId}">Other times</a></div></div>`;
-};
-A.bookAgain = async el => {
-  const o = E.order(el.dataset.o), h = o && E.host(o.hostId), s = o && E.bookAgainSlot(o); if (!o || !h || !s) return F.toast('That time has just gone. Choose another on the host’s page.', 'err');
-  if (F.S.cart && !(await F.confirm({ title: 'Replace what’s in your bag?', body: 'Your bag holds one booking at a time.', ok: 'Replace' }))) return;
-  const venueId = h.venues.includes(o.venueId) && !(E.CLUB_VENUES || []).includes(o.venueId) ? o.venueId : h.venues.find(v => !(E.CLUB_VENUES || []).includes(v)) || 'partner';
-  F.store.commit(st => { E.dropHold(st); st.cart = { hostId: h.id, planId: o.planId, key: s.key, t: s.t, start: s.start, venueId, meet: 'bar', addons: {}, promo: null, seenPlanPrice: E.hp(h, o.planId, s.start), addedAt: now(), holdId: null, guest: null, prefs: null }; });
-  const hd = await E.hold(); if (!hd.ok) { F.store.commit(st => { st.cart = null; }); return F.toast(hd.reason, 'err'); }
-  F.chromeCounts && F.chromeCounts(); F.nav('/checkout');
+  if (!['completed', 'missed'].includes(o.status) || o.customerId !== (E.user() || {}).id || (o.rebook && o.rebook.start > now())) return '';
+  const h = E.host(o.hostId); if (!h) return '';
+  const club = E.orderClub && E.orderClub(o), ah = club && E.ahAgainHref(o);
+  if (club) { const sel = E.ahSelOf(o); return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${ah ? `Afterhours ${esc(club.c.short)} with ${esc(h.first)}, ${sel.planId === 'night' ? 'the night' : U.plural(sel.hours, 'hour')}, ${E.ahWay(sel.way).short}, a week on. Pass and host in one checkout.` : `${esc(club.c.short)} has no open night in the next four weeks.`}</p><div class="row wrap-gap mt16">${ah ? `<a class="btn btn-bone btn-sm" href="${ah}">Book the same night</a>` : ''}<a class="btn-link tiny" href="#/host/${h.id}">Other times</a></div></div>`; }
+  const s = E.sameSlot(o);
+  return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${s ? `${esc(E.plan(o.planId).name)} with ${esc(h.first)}, ${F.availLabel(s.start, h.cityId)}. Same venue and extras.` : `${esc(h.first)} has no matching time in the next four weeks.`}</p><div class="row wrap-gap mt16">${s ? `<button class="btn btn-bone btn-sm" data-a="bookSame" data-o="${o.id}">Book this time</button>` : ''}<a class="btn-link tiny" href="#/host/${h.id}?plan=${o.planId}">Other times</a></div></div>`;
 };
 
 /* ---------- reviews: what guests mention most ---------- */
@@ -12101,7 +12219,7 @@ P.studio = {
     const os = F.S.orders.filter(o => o.hostId === h.id && o.customerId !== 'other');
     const up = F.S.orders.filter(o => o.hostId === h.id && E.BLOCK.includes(o.status) && o.end > n).sort((a, b) => a.start - b.start);
     const reqs = up.filter(o => o.status === 'requested');
-    const done = os.filter(o => o.status === 'completed');
+    const done = os.filter(o => ['completed', 'missed'].includes(o.status));
     const paid = done.concat(F.S.orders.filter(o => o.hostId === h.id && o.customerId === 'other' && o.status === 'completed').map(o => ({ end: o.end, tip: 0, price: { subtotal: E.hp(h, o.planId, o.start) + (o.addons || []).reduce((t, x) => t + (x.amount || 0), 0), discount: 0 } }))).concat(E.hostEscapeLines(h).map(x => ({ end: x.end, tip: 0, price: { subtotal: x.gross, discount: 0 } })));
     const net = o => U.r2((o.price.subtotal - o.price.discount) * .8);
     const mStart = U.zoned(tz, U.dayKey(n, tz).slice(0, 8) + '01', 0);
@@ -12591,7 +12709,7 @@ H.tripLink = (site, t, path = '/') => URLS[site] + '#' + path + (path.indexOf('?
 // FLINGR bookings and stays that fall inside a trip join it on their own
 const legsTick = () => {
   const u = E.user(); if (!u) return; const ts = H.trips(u.id); if (!ts.length) return;
-  const legs = E.myOrders(u).filter(o => E.BLOCK.includes(o.status) || o.status === 'completed').map(o => { const h = E.host(o.hostId); return { kind: 'booking', ref: o.id, title: `${E.plan(o.planId).name} with ${h ? h.name : 'your host'}`, at: o.start, href: H.abs('#/account/booking/' + o.id), city: o.cityId }; })
+  const legs = E.myOrders(u).filter(o => E.BLOCK.includes(o.status) || o.status === 'completed').map(o => { const h = E.host(o.hostId); const nv = o.clubVisit && E.clubVisit(o.clubVisit); return { kind: 'booking', ref: o.id, title: nv ? `Afterhours with ${h ? h.first : 'your host'}` : `${E.plan(o.planId).name} with ${h ? h.name : 'your host'}`, at: o.start, href: H.abs(nv ? '#/account/club/' + nv.id : '#/account/booking/' + o.id), city: o.cityId }; })
     .concat(E.myEscapes(u).filter(o => !['cancelled', 'refunded'].includes(o.status)).map(o => { const p = E.place(o.placeId); return { kind: 'escape', ref: o.id, title: 'Escape · ' + (p ? p.name : ''), at: o.start, href: H.abs('#/account/escape/' + o.id), city: p && p.cityId }; }));
   H.write(h => { h.trips.filter(t => t.uid === u.id).forEach(t => { legs.forEach(l => { if (l.at >= t.from && l.at <= t.to && !(t.legs || []).some(x => x.site === SITE && x.ref === l.ref)) { t.legs = (t.legs || []).concat({ site: SITE, kind: l.kind, ref: l.ref, title: l.title, at: l.at, href: l.href }); t.legs.sort((a, b) => a.at - b.at); } }); t.legs = (t.legs || []).filter(x => x.site !== SITE || legs.some(l => l.ref === x.ref)); }); });
 };
@@ -13172,9 +13290,10 @@ E.sameSlot = o => {
 };
 A.bookSame = async el => {
   const o = E.order(el.dataset.o), h = o && E.host(o.hostId); if (!h) return;
+  if (E.orderClub && E.orderClub(o)) { const ah = E.ahAgainHref(o); return ah ? F.nav(ah.slice(1)) : F.toast('No open club night in the next four weeks.', 'err'); }
   const s = E.sameSlot(o); if (!s) { F.toast(`${h.first} has no free time in the next four weeks. Turn on alerts for saved hosts to hear first.`, 'err'); return; }
   const addons = {}; (o.addons || []).forEach(a => { if (a && a.id) addons[a.id] = a.qty || 1; });
-  F.ui.bk = { hostId: h.id, planId: o.planId, key: s.key, month: s.key.slice(0, 7), start: s.start, t: s.t, venueId: h.venues.includes(o.venueId) ? o.venueId : h.venues[0], addons, showAll: false };
+  F.ui.bk = { hostId: h.id, planId: o.planId, key: s.key, month: s.key.slice(0, 7), start: s.start, t: s.t, venueId: h.venues.includes(o.venueId) && !(E.CLUB_VENUES || []).includes(o.venueId) ? o.venueId : h.venues.find(v => !(E.CLUB_VENUES || []).includes(v)) || 'partner', addons, showAll: false };
   await A.bkReserve();
   F.toast(`${E.plan(o.planId).name} with ${esc(h.first)}, ${U.fmt(s.start, E.city(h.cityId).tz, 'dt')}. Same extras. Check out when you’re ready.`);
 };
