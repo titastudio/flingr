@@ -1222,7 +1222,6 @@ body[data-page=escape] .m-cta .btn{white-space:nowrap}
 .cal-d.ecal-held{color:var(--mut);text-decoration:line-through;text-decoration-color:rgba(237,232,221,.35)}
 .mvopt{width:100%;text-align:left;border:1px solid var(--ln);padding:14px 16px;transition:border-color .2s}.mvopt:hover{border-color:var(--fg)}
 
-.set-jump{display:none}@media (max-width:640px){.set-jump{display:flex;margin-bottom:20px}.settings>[id]{scroll-margin-top:calc(var(--hdr) + 16px)}}
 
 /* house sheet: printed form, one column per person */
 .hsp{--hc:34px;--hv:54px}
@@ -1461,7 +1460,6 @@ body.locked .ck{visibility:hidden}   /* the cookie bar stays out of the way of a
 @media (max-width:760px){.phero-sm{padding:32px 0 24px}.phero-sm .phero-t{font-size:clamp(36px,10vw,56px)}}
 
 /* ---------- Escapes: compact cards and a list/map toggle ---------- */
-.show-ph{display:none}
 .emap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:var(--s6);align-items:start}
 .emap .hmap-svg{width:100%;height:auto}
 .emap-o circle{fill:var(--bone)}.emap-o text{font:2.2px var(--f-mono);fill:var(--bone);text-anchor:middle;letter-spacing:.08em;text-transform:uppercase}
@@ -1469,7 +1467,6 @@ body.locked .ck{visibility:hidden}   /* the cookie bar stays out of the way of a
 .emap-pt.on circle{fill:var(--bone)}.emap-pt text{font:2.6px var(--f-body);fill:var(--mut);text-anchor:middle}.emap-pt{cursor:pointer}
 @media (max-width:760px){.emap{grid-template-columns:1fr}}
 @media (max-width:640px){
-  .more-ph,.egrid .ecard.more-ph{display:none}.show-ph{display:flex}
   .egrid{grid-template-columns:1fr;gap:10px}
   .egrid .ecard{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;border:1px solid var(--ln);background:var(--card);padding:8px;align-items:start}
   .egrid .ecard-m .plate{aspect-ratio:1}.egrid .ecard-tl{display:none}.egrid .ecard-bl{left:4px;right:4px;bottom:4px}.egrid .ecard-bl .chip{font-size:8.5px;padding:3px 6px;min-height:0}
@@ -1578,6 +1575,41 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
 .kb-k{display:flex;gap:6px;min-width:96px}
 .kb-link{display:none}
 @media (hover:hover) and (pointer:fine) and (min-width:1024px){.kb-link{display:inline}}
+/* chapters with a host */
+.chap{border:1px solid var(--ln);border-radius:12px;padding:16px}
+.chap.chap-in{border:0;border-top:1px solid var(--ln);border-radius:0;padding:16px 0 0}
+.chap-dots{display:inline-flex;gap:6px}
+.chap-dots i{width:8px;height:8px;border-radius:50%;background:var(--ln)}
+.chap-dots i.on{background:var(--cherry,#A3202B)}
+.chap-l{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13px}
+.chap-l li{display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.chap-l li svg{flex:none;margin-top:3px}
+/* Book tonight on a host card */
+.chip-book{cursor:pointer;border:0;font:inherit}
+.chip-book:hover,.chip-book:focus-visible{background:var(--bone,#EDE8DD);color:#120708}
+/* list view on phones: one compact row per host */
+@media (max-width:640px){
+  .hlist{display:grid;gap:12px}
+  .hrow{grid-template-columns:84px minmax(0,1fr);gap:12px 14px;padding:12px;align-items:start}
+  .hrow .hcard-t{font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .hrow .hrow-b>.row.small{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;margin-top:6px}
+  .hrow .hrow-b>.row.small>span:nth-child(3),.hrow .hrow-b>.row.small>span:nth-child(4){display:none}
+  .hrow .hrow-b>.row.mt16{margin-top:8px;flex-wrap:wrap;gap:6px}
+  .hrow .hrow-b>.row.mt16 .chip{font-size:10px;padding:2px 8px;min-height:0}
+  .hrow .hrow-b>.row.mt16 .chip:nth-child(n+3){display:none}
+  .hrow-s{gap:8px 10px}.hrow-s .btn.mt16,.hrow-s .mt8{margin-top:0}
+}
+@media (max-width:640px){
+  .hlist .hrow .hrow-b .row.mt16>.chip{font-size:9.5px;height:26px;line-height:24px;padding:0 9px;letter-spacing:.06em}
+  .hlist .hrow-s{flex-wrap:wrap;justify-content:flex-start}
+  .hlist .hrow-s>:first-child{margin-right:auto}
+  .hlist .hrow-s .btn{height:44px;min-height:44px;padding:0 14px;font-size:10px}
+}
+@media (max-width:640px){.hlist .hrow-s .cmp-b{width:44px;padding:0;justify-content:center;font-size:0;gap:0;flex:none}.hlist .hrow-s .cmp-b svg{width:14px;height:14px}}
+.egrid .ecard.more-all{display:none}
+/* a tab row scrolled to show the current tab fades on the left, so it reads as more tabs, not a cut-off word */
+@media (max-width:1023px){.subnav.sc-l,.spy-in.sc-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px);mask-image:linear-gradient(90deg,transparent,#000 28px)}}
+@media (max-width:640px){.subnav a{padding-left:11px;padding-right:11px}}
 
 /* ============ FLINGR Afterhours (07c-pages-club.js, 11i-club-ops.js) ============ */
 .ah-hero{position:relative;min-height:min(78vh,720px);display:flex;align-items:flex-end;padding:120px 0 64px;overflow:hidden;isolation:isolate}
@@ -1767,8 +1799,6 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
 .ah-star.on,.ah-star:hover{color:var(--blush)}
 .ah-gs{padding:10px 0;border-top:1px solid var(--ln)}
 .ah-gs:first-child{border-top:0;padding-top:0}
-.ah-gcard{background:linear-gradient(160deg,rgba(163,32,43,.28),rgba(18,7,8,.2));border-color:rgba(163,32,43,.5)}
-.ah-wn{margin-top:12px}
 .ah-st{border-color:rgba(163,32,43,.5)}
 .ah-st .tgl-row{gap:16px;flex:none}
 .ah-paybar{display:none}
@@ -1782,7 +1812,6 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
   .ah-tl>li{grid-template-columns:70px 1fr;gap:10px}
   .ah-bths{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-.ah-plans{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
 /* the pass in three small choices: Lounge or Floor, one or two, and the balanced pool for the Floor on your own */
 .ah-lvls{grid-template-columns:repeat(2,minmax(0,1fr))}
 .ah-who{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -2347,7 +2376,7 @@ C.journal = [
     ] },
   { slug: 'introducing-escapes', cat: 'Escapes', title: 'Introducing Escapes', read: 4, ago: 1, excerpt: 'Thirty places chosen for two people, or a few more, to disappear for a night or a week. How we picked them and how a stay works.',
     body: [
-      ['p', 'For three years FLINGR has arranged evenings. Escapes is what happens when the evening doesn’t want to end: a whole place, booked for you, with the kit laid out, the staff briefed and, if you like, a host who travels with you.'],
+      ['p', 'For three years FLINGR has arranged evenings. Escapes are for when one evening isn’t enough. You book a whole place, with the kit laid out and the staff briefed. A host can travel with you if you like.'],
       ['h', 'How we chose thirty'],
       ['p', 'We started with more than two hundred villas, boats, cabins and private floors. Every one was visited. We kept the places where privacy is built in rather than promised, where the bed is the best thing in the room, and where the staff already know how to be invisible. Anything that felt like a hotel event, a party venue or a photo set was cut.'],
       ['h', 'What a stay includes'],
@@ -2391,9 +2420,9 @@ C.journal = [
       ['h', 'Yes, no or ask me'],
       ['p', 'Each line gets one of three answers. Yes means you want it. No means you sit that one out. Ask me means you might, and would like to be asked first.'],
       ['h', 'How the house decides'],
-      ['p', 'A line is on for the house once two people want it, because two people are all it takes. Anyone who said no simply isn’t part of it. When the only way a line could happen is with someone who said ask me, the sheet shows it as ask, and you can send that person a private question from your stay page. They answer yes or no, and nobody else sees who asked.'],
+      ['p', 'A line is on for the house once two people want it, because two people are all it takes. Anyone who said no simply isn’t part of it. If a line needs someone who said “ask me”, the sheet shows it as ask. You can send that person a private question from your stay page. They answer yes or no, and nobody else sees who asked.'],
       ['h', 'What never changes'],
-      ['p', 'The house rules set the outer edge, and four things always apply: a safe word that stops everything, a consent card signed on arrival, no filming without every signature, and no drugs. Anyone can change their own answers at any time, including during the stay.']
+      ['p', 'The house rules set the limits. Four things always apply: a safe word that stops everything, a consent card signed on arrival, no filming without every signature, and no drugs. Anyone can change their own answers at any time, including during the stay.']
     ] },
   { slug: 'the-case-for-the-slow-morning', cat: 'Guides', title: 'The case for the slow morning', read: 3, ago: 21, excerpt: 'Why our most-reviewed plan starts at breakfast, and how to book one well.',
     body: [
@@ -2481,7 +2510,7 @@ C.faq = [
   ['Booking', 'How does check-in work?', 'Check-in opens one hour before your start time in your booking page. Once you and your host have both checked in, you can begin early if you are both ready.'],
   ['Payments & refunds', 'What does the service fee cover?', 'Verification, 24/7 support, payment protection and insurance for partner venues. It is 8% of your booking, minimum $8 or £6. Reserve members pay no service fee.'],
   ['Payments & refunds', 'How will the charge appear on my statement?', 'As FLG*SERVICES followed by the city. Nothing on your statement mentions hosts or bookings.'],
-  ['Payments & refunds', 'What is the cancellation policy?', 'Full refund more than 24 hours before start, 50% between 24 and 4 hours, and no refund within 4 hours, unless you added Flexible rescheduling or are a Reserve member.'],
+  ['Payments & refunds', 'What is the cancellation policy?', 'Full refund more than 24 hours before start. 50% between 24 and 4 hours. No refund within 4 hours, unless you added Flexible rescheduling or are a Reserve member.'],
   ['Payments & refunds', 'How long do refunds take?', 'Refunds to your FLINGR Wallet are instant. Card refunds usually take three to five business days.'],
   ['Payments & refunds', 'Can I use more than one promo code?', 'One code per booking. Automatic bundles, such as the Morning bundle, combine with most codes unless a code says otherwise.'],
   ['Payments & refunds', 'How do gift cards work?', 'Gift cards are added to your FLINGR Wallet when redeemed and never expire. They can be used for bookings, extras and the Morning Menu.'],
@@ -2869,7 +2898,7 @@ F.PROFILES = {
     bio: "We're Jun and Leo, Shoreditch flatmates with matching chains and a shared talent for turning a quiet evening into an event. Leo is the big, protective one; Jun is the cheeky one hiding behind his phone. We're relaxed, playful and very attentive, and we love a guest who wants twice the charm and none of the pressure.",
     alts: ["Jun and Leo, one in a white knit taking a mirror selfie, one behind him in a cap", "Tattooed hand with a swallow and stacked bracelets", "Hand with rings and a square watch holding a cigarette", "London street corner with a lit pub at night"] },
   'FL-2004': { tagline: "Five of us. Ready when you are.", interests: ["Live music", "Cocktails", "Fashion", "Travel"],
-    bio: "We're Ava, Nell, Rosa, Tia and Jade, and yes, we really do go everywhere together. Sequins, sheer tops and heels we can actually dance in. Book us for the night and you get your own private party: a West Hollywood bar crawl, a booth with your name on it and five people taking very good care of you. Birthdays, celebrations or just because.",
+    bio: "We're Ava, Nell, Rosa, Tia and Jade, and yes, we really do go everywhere together. Sequins, sheer tops and heels we can actually dance in. Book us for the night and you get your own private party. A West Hollywood bar crawl, a booth with your name on it and five people taking good care of you. Birthdays, celebrations or just because.",
     alts: ["Ava, Nell, Rosa, Tia and Jade in party outfits in a lift", "Hand with red nails and a glowing wristband at a concert", "Hands with gold rings holding a margarita against black lace", "Billboards over the Sunset Strip at night"] }
 };
 // Group listings, each from its own group photo. The Night only.
@@ -4705,7 +4734,7 @@ E.capture = (o, amount) => {
   const u = E.userById(o.customerId), p = o.payment; if (!p.deferred || p.captured) return true;
   amount = amount == null ? o.price.total : amount;
   const m = u.methods.find(x => x.id === p.methodId) || E.defaultMethod(u);
-  if (!m || m.decline) { p.failed = now(); E.notify(u.id, 'bookings', 'Payment needs attention', `We couldn't charge your ${E.methodLabel(m)} for ${o.no}. Update your payment method in Settings.`, '#/account/settings', now(), o.id); return false; }
+  if (!m || m.decline) { p.failed = now(); E.notify(u.id, 'bookings', 'Payment needs attention', `We couldn't charge your ${E.methodLabel(m)} for ${o.no}. Update your payment method in Settings.`, '#/account/settings?s=pay', now(), o.id); return false; }
   p.captured = now(); p.card = U.r2(amount); p.label = E.methodLabel(m); o.history.push({ s: o.status, at: now(), note: `Charged ${U.money(amount, o.price.cur, true)} to ${p.label}` });
   E.mail(u.id, 'email', 'Payment received · ' + o.no, `We charged ${U.money(amount, o.price.cur, true)} to your ${p.label} for booking ${o.no}.`);
   return true;
@@ -4768,7 +4797,7 @@ E.pay = ({ methodId, useWallet, expectedTotal, sig, deferred }) => F.store.atomi
     messages: [], buddy: null, review: null, aftercare: null, hotel: (E.CLUB_VENUES && E.CLUB_VENUES.includes(c.venueId) && E.clubHotel(h.cityId, c.venueId)) || U.pick(Math.random, city.hotels)
   };
   if (payment._commit) { payment._commit('Booking ' + o.no); delete payment._commit; }
-  if (h.instant === false) {
+  if (h.instant === false && !(E.chapterN && E.chapterN(u, h) >= 5)) {
     E.go(o, 'requested', 'Request sent to ' + h.first, n + 1);
     o.request = { sentAt: n, expiresAt: n + 2 * 36e5, decideAt: n + (40 + Math.floor(Math.random() * 50)) * 1000 };
   } else E.go(o, 'confirmed', 'Booking confirmed', n + 1);
@@ -4908,7 +4937,7 @@ E.reschedPreview = (o, newStart) => {
   if (o.status !== 'confirmed') return { allowed: false, reason: 'Only confirmed bookings can be rescheduled.' };
   const minH = o.flexible ? 2 : 4;
   if (hrs < minH) return { allowed: false, reason: `Bookings can be rescheduled up to ${minH} hours before they start.` };
-  const free = hrs >= 24 || o.flexible || (u && u.reserve);
+  const free = hrs >= 24 || o.flexible || (u && u.reserve) || (E.chapterN && E.chapterN(u, E.host(o.hostId)) >= 4);
   const fee = free ? 0 : E.cp(o.cityId, st.rescheduleFeeUsd);
   const planLine = o.price.lines.find(l => l.kind === 'plan');
   const diff = newStart ? U.r2(E.hp(E.host(o.hostId), o.planId, newStart) - planLine.unit) : 0;
@@ -5084,7 +5113,7 @@ E.tick = () => {
   for (const u of st.users) {
     if (u.reserve) {
       if (u.reserve.cancelAt && n >= u.reserve.cancelAt) { u.reserve = null; E.notify(u.id, 'offers', 'Reserve has ended', 'Your membership has ended. You can rejoin at any time.', '#/account/membership', n); changed = true; }
-      else if (!u.reserve.cancelAt && n >= u.reserve.renews) { const m = E.defaultMethod(u); if (m && !m.decline) { u.reserve.renews += 30 * 864e5; u.reserve.history = (u.reserve.history || []).concat({ at: n, usd: st.settings.reserveUsd, method: E.methodLabel(m) }); E.mail(u.id, 'email', 'FLINGR Reserve renewed', `We charged ${U.money(st.settings.reserveUsd)} to your ${E.methodLabel(m)}. Next renewal ${U.fmt(u.reserve.renews, 'UTC', 'md')}.`); } else { u.reserve = null; E.notify(u.id, 'offers', 'Reserve payment failed', 'We could not renew your membership. Update your payment method to rejoin.', '#/account/settings', n); } changed = true; }
+      else if (!u.reserve.cancelAt && n >= u.reserve.renews) { const m = E.defaultMethod(u); if (m && !m.decline) { u.reserve.renews += 30 * 864e5; u.reserve.history = (u.reserve.history || []).concat({ at: n, usd: st.settings.reserveUsd, method: E.methodLabel(m) }); E.mail(u.id, 'email', 'FLINGR Reserve renewed', `We charged ${U.money(st.settings.reserveUsd)} to your ${E.methodLabel(m)}. Next renewal ${U.fmt(u.reserve.renews, 'UTC', 'md')}.`); } else { u.reserve = null; E.notify(u.id, 'offers', 'Reserve payment failed', 'We could not renew your membership. Update your payment method to rejoin.', '#/account/settings?s=pay', n); } changed = true; }
     }
     for (const tr of (u.trips || [])) if (!tr.reminded && n >= tr.fromAt - 3 * 864e5 && n < tr.fromAt) { tr.reminded = n; E.notify(u.id, 'reminders', 'Your trip is coming up', `You arrive in ${E.city(tr.cityId).name} soon. Hosts are booking up.`, (String(tr.id).indexOf('trp_') === 0 ? '#/trip?id=' + tr.id : '#/trip?city=' + tr.cityId + '&from=' + tr.from + '&to=' + tr.to), n); changed = true; }
     for (const inv of (u.referral && u.referral.invites) || []) {
@@ -5783,7 +5812,7 @@ E.escapeBook = (cfg, { methodId, useWallet = true, plan = 'full', expectedTotal,
   if (cfg.promo && !pr.promo) return { ok: false, code: 'promo', reason: pr.promoError };
   const dueNow = plan === 'split' && pr.canSplit ? pr.splitNow : pr.grand;
   if (expectedTotal != null && Math.abs(dueNow - expectedTotal) > 0.009) return { ok: false, code: 'price', reason: `Your total has changed to ${U.money(dueNow, pr.cur, true)}. Please review and confirm again.` };
-  if (E.overLimit(u, E.toUsd(p.cityId, dueNow))) return { ok: false, reason: 'This booking would go over your monthly limit. You can change it in Settings → Billing.' };
+  if (E.overLimit(u, E.toUsd(p.cityId, dueNow))) return { ok: false, reason: 'This booking would go over your monthly limit. You can change it in Settings → Payment.' };
   const ch = E.charge(u, p.cityId, dueNow, { methodId, useWallet }); if (!ch.ok) return Object.assign({ ok: false }, ch);
   const hostIds = cfg.arrangement === 'none' ? [] : (cfg.hostIds || []).slice(0, p.maxHosts);
   const o = {
@@ -6337,7 +6366,7 @@ E.clubBook = (cfg, { methodId, useWallet = true, expectedTotal } = {}) => F.stor
   }
   const q = E.clubQuote(u, cfg); if (expectedTotal != null && Math.abs(q.total - expectedTotal) > .009) return { ok: false, reason: `The total is now ${U.money(q.total, q.cur, true)}. Please check it and pay again.` };
   let pay = { label: 'Nothing to pay', wallet: 0, card: 0, paid: 0, ref: null };
-  if (q.total > 0) { if (E.overLimit && E.overLimit(u, E.toUsd(c.cityId, q.total))) return { ok: false, reason: 'This would go over your monthly limit. You can change it in Settings → Billing.' }; const ch = E.charge(u, c.cityId, q.total, { methodId, useWallet }); if (!ch.ok) return Object.assign({ ok: false }, ch); ch.commit('Afterhours ' + base.no); pay = { label: ch.label, wallet: ch.wallet, card: ch.card, paid: q.total, ref: 'ch_' + U.code(14).toLowerCase(), methodId: ch.methodId }; }
+  if (q.total > 0) { if (E.overLimit && E.overLimit(u, E.toUsd(c.cityId, q.total))) return { ok: false, reason: 'This would go over your monthly limit. You can change it in Settings → Payment.' }; const ch = E.charge(u, c.cityId, q.total, { methodId, useWallet }); if (!ch.ok) return Object.assign({ ok: false }, ch); ch.commit('Afterhours ' + base.no); pay = { label: ch.label, wallet: ch.wallet, card: ch.card, paid: q.total, ref: 'ch_' + U.code(14).toLowerCase(), methodId: ch.methodId }; }
   const v = Object.assign(base, { status: 'confirmed', price: { lines: q.lines, total: q.total, cur: q.cur }, payment: pay });
   q.lines.filter(l => l.k === 'plus').forEach((l, i) => { if (v.plus[i]) v.plus[i].pass = !!l.pass; });
   usePasses(u, q.lines.filter(l => l.pass).length);
@@ -6526,6 +6555,10 @@ E.clubReview = (id, stars, text, shows) => F.store.commit(() => {
 E.CLUB_VENUES = ['ahsuite', 'ahfloor'];
 E.floorOk = h => !!h && !(h.flags && h.flags.noPublic) && !!h.sheet && (h.gender === 'group' ? h.sheet.watch !== 'n' : h.sheet.pda === 'y');
 E.orderClub = o => { if (!o || !(o.meet === 'lounge' || E.CLUB_VENUES.includes(o.venueId))) return null; const c = E.clubOf(o.cityId); return c ? { c, key: E.clubNightKey(c, o.start - 30 * M) } : null; };
+// a host booked at the club ends by closing time: the Floor when the Floor closes, the suite when the Lounge closes.
+// Meeting somewhere else afterwards is a separate, ordinary host booking.
+const lenMin = c => (E.plan(c.planId) || {}).dur + (Array.isArray(c.addons) ? c.addons.reduce((t, a) => t + (a.extraMin || ((E.addon(a.id) || {}).extraMin || 0)) * (a.qty || 1), 0) : E.extraOf(c.addons));
+E.clubEndOf = (h, c) => { if (!h || !E.CLUB_VENUES.includes(c.venueId)) return 0; const club = E.clubOf(h.cityId); if (!club || !c.start) return 0; const x = E.clubNight(club, E.clubNightKey(club, c.start)); return !x.open ? 0 : c.venueId === 'ahfloor' ? (x.floorEnd || x.closesAt) : x.closesAt; };
 E.clubVenueErr = (h, c) => {
   if (!E.CLUB_VENUES.includes(c.venueId)) return '';
   const club = E.clubOf(h.cityId); if (!club) return 'There is no Afterhours in this city.';
@@ -6538,6 +6571,7 @@ E.clubVenueErr = (h, c) => {
     if (!x.floor) return 'The Floor is closed that night';
     if (c.start < x.floorAt || c.start > x.floorEnd - H) return 'The Floor is open ' + U.fmt(x.floorAt, tz, 'time') + ' to ' + U.fmt(x.floorEnd, tz, 'time');
   } else if (c.start < x.opensAt || c.start > x.closesAt - H) return 'The suite upstairs is from ' + U.fmt(x.opensAt, tz, 'time') + ', starting before ' + U.fmt(x.closesAt - H, tz, 'time');
+  const endBy = E.clubEndOf(h, c); if (endBy && c.start + lenMin(c) * M > endBy) return (c.venueId === 'ahfloor' ? 'The Floor' : 'Afterhours') + ' closes at ' + U.fmt(endBy, tz, 'time') + '. Choose a shorter time or an earlier start';
   return '';
 };
 E.loungeMeetErr = (h, c) => {
@@ -6549,6 +6583,18 @@ E.loungeMeetErr = (h, c) => {
   return '';
 };
 E.clubHotel = (cityId, venueId) => { const c = E.clubOf(cityId); return c ? { name: c.name + (venueId === 'ahfloor' ? ' · The Floor' : ' · the suite upstairs'), addr: c.area } : null; };
+// the same closing time for anything that moves or lengthens a club booking later
+E.clubSlotOk = (o, start) => !o || !E.CLUB_VENUES.includes(o.venueId) || !E.clubVenueErr(E.host(o.hostId), { venueId: o.venueId, planId: o.planId, start, addons: o.addons });
+const as0 = E.addonState;
+E.addonState = (c, id, selected) => {
+  const r = as0(c, id, selected), a = E.addon(id); if (!a || !a.extraMin || !E.CLUB_VENUES.includes(c.venueId) || !c.start) return r;
+  const h = E.host(c.hostId), endBy = E.clubEndOf(h, c), more = Object.assign({}, c.addons || {}); if (!selected) more[id] = (more[id] || 0) + 1;
+  return endBy && c.start + lenMin(Object.assign({}, c, { addons: more })) * M > endBy ? Object.assign({}, r, { ok: false, reason: 'Afterhours closes at ' + U.fmt(endBy, E.city(h.cityId).tz, 'time') }) : r;
+};
+const ce0 = E.canExtend;
+E.canExtend = o => !!ce0(o) && (!E.CLUB_VENUES.includes(o.venueId) || !E.clubEndOf(E.host(o.hostId), o) || o.end + H <= E.clubEndOf(E.host(o.hostId), o));
+const rp0 = E.reschedPreview;
+E.reschedPreview = (o, newStart) => { const r = rp0(o, newStart); if (r.allowed && newStart && !E.clubSlotOk(o, newStart)) return { allowed: false, reason: 'Afterhours closes before that booking would end. Choose an earlier time.' }; return r; };
 const v0 = E.validate;
 E.validate = (c, ex = {}) => {
   const errs = v0(c, ex), h = E.host(c.hostId); if (!h) return errs;
@@ -6643,17 +6689,20 @@ E.AH_WAYS = [
   { id: 'floor', name: 'The Floor, by the hour', short: 'on the Floor', line: 'Your host joins you on the Floor, with a private room for the hour and monitors on every door.', venue: 'ahfloor', plans: ['hour'], floor: true, ic: 'sparkle' }
 ];
 E.ahWay = id => E.AH_WAYS.find(w => w.id === id) || E.AH_WAYS[1];
-E.ahCtx = (h, s) => { const w = E.ahWay(s.way), venueId = w.drink && s.venueId && h.venues.includes(s.venueId) ? s.venueId : w.venue, addons = w.drink ? { drink: 1 } : {}; if (s.ext > 0) addons.ext60 = s.ext; return { hostId: h.id, planId: s.planId, venueId, start: s.start, key: s.key, t: s.t, addons, meet: w.drink ? 'lounge' : 'bar' }; };
+E.ahCtx = (h, s) => { const w = E.ahWay(s.way), venueId = w.drink && s.venueId && E.CLUB_VENUES.includes(s.venueId) && h.venues.includes(s.venueId) ? s.venueId : w.venue, addons = w.drink ? { drink: 1 } : {}; if (s.ext > 0) addons.ext60 = s.ext; return { hostId: h.id, planId: s.planId, venueId, start: s.start, key: s.key, t: s.t, addons, meet: w.drink ? 'lounge' : 'bar' }; };
 // how long the host stays, in hours: The Hour plus extra hours at their hourly rate, or The Night for eight; the Floor is
 // by the hour, up to four
-E.ahHours = (h, wayId) => { const w = E.ahWay(wayId), hr = h.plans.some(p => p.id === 'hour'), nt = h.plans.some(p => p.id === 'night') && !w.floor; return [1, 2, 3, 4, 5, 6, 7, 8].filter(n => w.floor ? hr && n <= 4 : n === 8 ? nt || hr : hr); };
+E.ahHours = (h, wayId, x) => { const w = E.ahWay(wayId), hr = h.plans.some(p => p.id === 'hour'), nt = h.plans.some(p => p.id === 'night') && !w.floor;
+  // with a club night given, only the stays that can end by closing time
+  const room = x && x.open ? ((w.floor ? (x.floorEnd || x.closesAt) - (x.floorAt || x.opensAt) : x.closesAt - x.opensAt) - (w.drink ? 60 * M : 0)) / H : 99;
+  return [1, 2, 3, 4, 5, 6, 7, 8].filter(n => (w.floor ? hr && n <= 4 : n === 8 ? nt || hr : hr) && n <= room); };
 E.ahPlanFor = (h, wayId, hours) => { const w = E.ahWay(wayId); if (hours === 8 && !w.floor && h.plans.some(p => p.id === 'night')) return { planId: 'night', ext: 0 }; return { planId: 'hour', ext: Math.max(0, hours - 1) }; };
 E.ahHoursOf = s => s ? (s.hours || (s.planId === 'night' ? 8 : 1 + (s.ext || 0))) : 1;
 // the times a host can start on one club night, one way and one plan (a club night runs past midnight: two calendar days)
 E.ahSlots = (h, c, key, wayId, planId, { from = 0, limit = 99, venueId, ext = 0 } = {}) => {
   E.clubEnsure();
   const x = E.clubNight(c, key), w = E.ahWay(wayId); if (!h || !c || !x.open || h.status !== 'active' || h.cityId !== c.cityId) return [];
-  const vid = w.drink && venueId && h.venues.includes(venueId) ? venueId : w.venue;
+  const vid = w.drink && venueId && E.CLUB_VENUES.includes(venueId) && h.venues.includes(venueId) ? venueId : w.venue;
   if (!h.venues.includes(vid) || !h.plans.some(p => p.id === planId) || (w.plans && !w.plans.includes(planId))) return [];
   if (w.floor && (!x.floor || !E.floorOk(h))) return [];
   if (w.drink && h.flags && h.flags.noPublic) return [];
@@ -6661,8 +6710,8 @@ E.ahSlots = (h, c, key, wayId, planId, { from = 0, limit = 99, venueId, ext = 0 
   for (const k of [key, U.addDays(key, 1)]) for (const s of E.slots(h, planId, k, extra)) {
     if (out.length >= limit) return out;
     // you're through the door first (drinks at the Lounge need the bar open half an hour), the Floor from when it opens,
-    // and it ends in time: the Floor when the Floor closes, the suite by three hours after the Lounge closes
-    const len = ((E.plan(planId) || {}).dur + ext * 60) * M, minAt = w.drink ? x.opensAt + 30 * M : w.floor ? (x.floorAt || x.opensAt) : x.opensAt, maxEnd = w.floor ? (x.floorEnd || x.closesAt) : x.closesAt + 3 * H;
+    // and it ends by closing time: the Floor when the Floor closes, the suite when the Lounge closes
+    const len = ((E.plan(planId) || {}).dur + extra) * M, minAt = w.drink ? x.opensAt + 30 * M : w.floor ? (x.floorAt || x.opensAt) : x.opensAt, maxEnd = w.floor ? (x.floorEnd || x.closesAt) : x.closesAt;
     if (s.status !== 'available' || seen.has(s.start) || s.start < from || s.start < minAt || s.start + len > maxEnd || s.start > x.closesAt - H) continue;
     seen.add(s.start);
     if (!E.validate(E.ahCtx(h, { way: wayId, planId, start: s.start, key: s.key, t: s.t, venueId: vid, ext })).length) out.push({ start: s.start, key: s.key, t: s.t });
@@ -7236,14 +7285,15 @@ F.availLabel = (ms, cityId) => {
   const tz = E.city(cityId).tz, k = U.dayKey(ms, tz), today = E.todayKey(cityId), t = U.fmt(ms, tz, 'time');
   const hr = U.parts(tz, ms).h, nowH = U.parts(tz, Date.now()).h;
   if (k === today) return (hr >= 17 ? 'Tonight' : nowH < 5 && hr < 5 ? 'Late tonight' : 'Today') + ' · ' + t;
-  if (k === U.addDays(today, 1)) return 'Tomorrow · ' + t;
+  if (k === U.addDays(today, 1)) return (hr < 6 ? 'Tonight' : 'Tomorrow') + ' · ' + t;   // 1am after midnight still belongs to tonight
   return U.fmt(ms, tz, 'wd') + ' ' + U.fmt(ms, tz, 'dshort') + ' · ' + t;
 };
 F.signedOut = (title, body, next) => `<section class="sec"><div class="wrap narrow center">${F.empty(title, body, `<button class="btn btn-bone mt24" data-a="signin" data-next="${esc(next || '')}">Sign in</button><p class="small muted mt16">New to FLINGR? <button class="btn-link" data-a="signup" data-next="${esc(next || '')}">Create an account</button></p>`)}</div></section>`;
 F.hostCard = (h, o = {}) => {
   const u = E.user(), saved = !!(u && u.saved.includes(h.id)), nx = E.next(h, o.plan), city = E.city(h.cityId);
   const price = o.plan ? E.hp(h, o.plan) : E.from(h);
-  const avail = h.status !== 'active' ? '<span class="chip chip-solid"><i class="dot mute"></i>Not taking bookings</span>' : nx ? `<span class="chip chip-solid"><i class="dot ok"></i>${F.availLabel(nx.start, h.cityId)}</span>` : '<span class="chip chip-solid"><i class="dot mute"></i>Fully booked</span>';
+  const al = nx && F.availLabel(nx.start, h.cityId), quick = o.quick && h.status === 'active' && nx && /^(Tonight|Late tonight|Today) /.test(al);   // free tonight: the chip books it (then one tap to pay)
+  const avail = h.status !== 'active' ? '<span class="chip chip-solid"><i class="dot mute"></i>Not taking bookings</span>' : quick ? `<button class="chip chip-solid chip-book" data-a="bookTonight" data-h="${h.id}" aria-label="Book ${esc(h.first)}, ${esc(al)}"><i class="dot ok"></i>Book · ${al.replace(/^(Tonight|Late tonight|Today) · /, '')}</button>` : nx ? `<span class="chip chip-solid"><i class="dot ok"></i>${al}</span>` : '<span class="chip chip-solid"><i class="dot mute"></i>Fully booked</span>';
   const tag = h.tier === 'Signature' ? '<span class="hcard-tag chip chip-solid">Signature</span>' : (E.isNew(h) ? '<span class="hcard-tag chip chip-solid">New</span>' : '');
   const mc = F.matchChip(h);
   if (o.list) return `<article class="hrow rv"><a href="#/host/${h.id}" class="hrow-m">${F.hostPlate(h, 1, 'r34')}</a><div class="hrow-b"><div class="row between"><h3 class="h-disp hcard-n"><a href="#/host/${h.id}">${esc(h.name)}</a> <span class="muted">${F.ageLabel(h)}</span></h3><button class="ibtn fav ${saved ? 'on' : ''}" data-a="save" data-h="${h.id}" aria-pressed="${saved}" aria-label="Save ${esc(h.name)}">${F.ic(saved ? 'heartf' : 'heart')}</button></div><p class="hcard-t">${esc(h.tagline)}</p>${F.hostPulse ? F.hostPulse(h) : ''}<div class="row wrap-gap small muted mono"><span>${F.ic('pin', 12)} ${esc(h.hood)}, ${city.abbr}</span><span>${h.rating ? F.ic('star', 11) + ' ' + h.rating.toFixed(2) + ' (' + h.reviewCount + ')' : 'New'}</span><span>${h.languages.join(', ')}</span><span>${h.ver.video ? 'Video verified' : 'ID verified'}</span>${mc}</div><div class="row mt16">${h.plans.map(p => `<span class="chip">${E.plan(p.id).name} · ${E.money(p.price, h.cityId)}</span>`).join('')}</div></div><div class="hrow-s">${avail}<a class="btn btn-ghost btn-sm mt16" href="#/host/${h.id}">View profile</a>${F.cmpBtn(h.id, 'mt8')}</div></article>`;
@@ -7284,6 +7334,12 @@ F.scrollPut = (root, snap) => {
   if (snap && Object.keys(snap).length) root.querySelectorAll('*').forEach(e => { const k = sKey(e); n[k] = (n[k] || 0) + 1; const v = snap[k + '#' + n[k]]; if (v) { e.scrollLeft = v[0]; e.scrollTop = v[1]; done.add(e); } });
   root.querySelectorAll('.hscroll, .chip-scroll, .ah-nights, .days, .chiprow, .scroll-x, .ev-hosts, .bk-dates, .dates').forEach(r => { if (done.has(r) || r.scrollWidth <= r.clientWidth + 4) return; let on = r.querySelector('.on, [aria-pressed="true"], [aria-selected="true"], input:checked'); if (!on) return; if (on.tagName === 'INPUT') on = on.closest('label') || on; const a = on.getBoundingClientRect(), b = r.getBoundingClientRect(); if (a.right > b.right - 4 || a.left < b.left) r.scrollLeft += a.left - b.left - (r.clientWidth - a.width) / 2; });
 };
+// a row of tabs wider than the screen: left alone while the current tab fits; otherwise scrolled just enough to show it
+// whole, starting on a tab edge, with a fade on the left once scrolled (the same as Practice and Velvet)
+F.tabInView = n => { const on = n.querySelector('a.on'), tabs = [...n.querySelectorAll('a')]; n.classList.remove('sc-l'); if (!on || n.scrollWidth <= n.clientWidth) return;
+  const x0 = n.getBoundingClientRect().left - n.scrollLeft, L = el => el.getBoundingClientRect().left - x0, R = el => L(el) + el.offsetWidth, room = n.clientWidth - 32;
+  if (R(on) <= n.clientWidth) { n.scrollLeft = 0; return; }   // already whole on screen: the first tab stays whole too
+  const want = R(on) - room, start = tabs.find(t => L(t) >= want - 1) || on; n.scrollLeft = Math.min(L(start), L(on)); n.classList.toggle('sc-l', n.scrollLeft > 0); };
 F.render = (scroll = true) => {
   F.timers.forEach(clearInterval); F.timers = [];
   const prev = F.route, y0 = window.scrollY;
@@ -7307,7 +7363,7 @@ F.render = (scroll = true) => {
   if (scroll) { if (sameView) window.scrollTo(0, y0); else if (samePage) { const nav = $('.subnav-w, .subnav, .bk-tabs', main), top = nav ? nav.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 72) - 12 : y0; window.scrollTo(0, Math.max(0, Math.min(y0, top))); } else window.scrollTo(0, 0); }
   F.closeMenus(); F.chrome();
   try { P.mount && P.mount(r); } catch (e) { console.error(e); }
-  $$('.subnav').forEach(n => { const on = n.querySelector('a.on'); if (on && n.scrollWidth > n.clientWidth) n.scrollLeft = Math.max(0, on.offsetLeft - n.clientWidth / 2 + on.offsetWidth / 2); });   // keep the current tab in view on phones
+  $$('.subnav, .spy-in').forEach(F.tabInView);   // keep the current tab in view on phones, whole, without cutting the first one
   F.reveal(); F.loadImages(); F.bagBar(); F.cmpBar(); F.hsDots();
   F.S.session.lastActive = Date.now();
 };
@@ -7418,7 +7474,7 @@ F.footer = () => {
       <div class="row mt24"><button class="appb" data-a="getApp" data-p="iOS">${F.ic('phone', 16)}<span><small>Download on</small>iOS</span></button><button class="appb" data-a="getApp" data-p="Android">${F.ic('phone', 16)}<span><small>Get it on</small>Android</span></button></div></div>
     <div><h4 class="eyebrow">Book</h4><a href="#/hosts">All hosts</a><a href="#/escapes">Escapes</a><a href="#/afterhours">Afterhours</a><a href="#/how-it-works">Plans & pricing</a><a href="#/morning">Morning Menu</a><a href="#/trip">Plan a trip</a><a href="#/evening">One Evening</a><a href="#/gift-cards">Gift cards</a><a href="#/account/membership">Reserve and All-Access</a></div>
     <div><h4 class="eyebrow">Trust</h4><a href="#/safety">Safety & Trust</a><a href="#/legal/guidelines">Community Guidelines</a><a href="#/help">Help Center</a><a href="#/contact">Contact</a><p class="tiny muted mt16">24/7 support<br><button class="btn-link tiny" data-a="call" data-k="safety" data-c="${c.id}">${c.phone}</button></p></div>
-    <div><h4 class="eyebrow">Company</h4><a href="#/about">About</a><a href="#/journal">Journal</a><a href="#/about#press">Press</a><a href="#/about#careers">Careers</a><a href="#/become-a-host">Become a host</a><a href="#/host-studio">Host Studio</a>${F.FAMILY.map(x => `<a href="${x.url}">${x.name} by FLINGR</a>`).join('')}</div>
+    <div><h4 class="eyebrow">Company</h4><a href="#/about">About</a><a href="#/journal">Journal</a><a href="#/about?s=press">Press</a><a href="#/about?s=careers">Careers</a><a href="#/become-a-host">Become a host</a><a href="#/host-studio">Host Studio</a>${F.FAMILY.map(x => `<a href="${x.url}">${x.name} by FLINGR</a>`).join('')}</div>
   </div>
   <div class="ftr-b"><span>© ${new Date(Date.now()).getUTCFullYear()} FLINGR Technologies, Inc. All rights reserved.</span><span class="row wrap-gap"><button class="btn-link qx-link" data-a="quickExit" title="Or press Esc twice">Quick exit</button><button class="btn-link qx-link" data-a="resetSite">Reset site</button><button class="btn-link qx-link kb-link" data-a="keys">Shortcuts</button>${F.fam ? F.fam.footLink() : ''}<a href="#/legal/terms">Terms</a><a href="#/legal/privacy">Privacy</a><a href="#/legal/cookies">Cookies</a><a href="#/legal/refunds">Refunds</a><button class="btn-link tiny" data-a="cookieSettings">Cookie settings</button></span></div></div>`;
 };
@@ -7776,7 +7832,7 @@ const AGENTS = ['Maya', 'Josh', 'Elena', 'Marcus', 'Aisha', 'Tom', 'Priya', 'Sam
 /* ---------- booking context ---------- */
 const dayWord = (ms, tz) => {
   const d = U.dayKey(ms, tz), t = U.dayKey(now(), tz), tm = U.dayKey(now() + 864e5, tz), hr = +U.parts(tz, ms).h;
-  return d === t ? (hr >= 17 ? 'tonight' : 'today') : d === tm ? (hr >= 17 ? 'tomorrow night' : 'tomorrow') : U.fmt(ms, tz, 'wdl');
+  return d === t ? (hr >= 17 ? 'tonight' : 'today') : d === tm ? (hr < 6 && U.parts(tz, now()).h >= 12 ? 'tonight' : hr >= 17 ? 'tomorrow night' : 'tomorrow') : U.fmt(ms, tz, 'wdl');
 };
 const when = (ms, tz) => { const w = dayWord(ms, tz); return /^(to|tomorrow)/.test(w) ? w : 'on ' + w; };
 const partOf = (ms, tz) => { const hr = +U.parts(tz, ms).h; return hr < 12 ? 'morning' : hr < 17 ? 'afternoon' : 'evening'; };
@@ -8640,7 +8696,7 @@ E.letterTick = (st, n) => {
     }
     if (o.status === 'completed' && o.guestRated && !o.guestKept) { o.guestKept = n; u.keptBy = u.keptBy || { yes: 0, total: 0 }; u.keptBy.total++; if (U.hash(o.id + 'kept') % 40) u.keptBy.yes++; ch = true; }
     const rv = o.review && st.reviews.find(x => x.id === o.review);
-    if (o.status === 'completed' && !o.rebook && rv && rv.rating === 5 && o.guestStars === 5 && n >= o.end + 18 * H && n < o.end + 10 * D) {
+    if (o.status === 'completed' && !o.rebook && ((rv && rv.rating === 5 && o.guestStars === 5) || E.chapterN(u, h) >= 3) && n >= o.end + 18 * H && n < o.end + 10 * D) {
       const day = U.addDays(U.dayKey(n, tz), 5 + U.hash(o.id) % 4), sl = E.slots(h, o.planId, day).find(x => x.status === 'available');
       o.rebook = sl ? { at: n, key: day, start: sl.start, text: F.fillT(F.pickT(L.rebook, o.id), { g: first(u.name), h: h.first, d: U.fmt(sl.start, tz, 'wdl') }) } : { at: n, none: 1 };
       if (sl) E.notify(u.id, 'offers', h.first + ' kept a date for you', o.rebook.text, '#/account/booking/' + o.id, n, o.id); ch = true;
@@ -9311,6 +9367,51 @@ A.clockJump = async el => {
 const baseAgent = E.supportAgent, baseReply = E.supportReply; E.supportAgent = t => t.escape ? 'Esme, FLINGR Concierge' : baseAgent(t); E.supportReply = t => t.escape ? E.conciergeReply(t) : baseReply(t);
 })();
 
+/* ---- 06m-chapters.js ---- */
+/* Chapters: booking the same host again moves you on a chapter, and each one makes the next booking easier.
+   2: book your usual in one tap · 3: the host keeps a date free for you after each night · 4: moving a booking with
+   them is free · 5: request-only hosts confirm you straight away. Counted from finished bookings, nothing stored. */
+(() => {
+'use strict';
+const E = F.E, A = F.A, S = () => F.S;
+E.CHAPTERS = [['First night', ''], ['Second night', 'Book your usual in one tap'], ['Third night', '{h} keeps a date free for you after each night'], ['Fourth night', 'Moving a booking with {h} is free'], ['Regular', 'Requests to {h} are confirmed straight away']];
+E.nightsWith = (u, h) => !u || !h ? 0 : S().orders.filter(o => o.customerId === u.id && o.hostId === h.id && o.status === 'completed').length;
+E.chapterN = (u, h) => Math.min(E.CHAPTERS.length, 1 + E.nightsWith(u, h));
+E.lastWith = (u, h) => S().orders.filter(o => u && o.customerId === u.id && o.hostId === h.id && o.status === 'completed').sort((a, b) => b.start - a.start)[0] || null;
+const fill = (t, h) => t.replace(/\{h\}/g, h.first);
+// the strip on the host page and on a booking: only once you've been together at least once
+F.chapterStrip = (h, o = {}) => {
+  const u = E.user(); if (!u || !h) return ''; const n = E.chapterN(u, h); if (n < 2) return '';
+  const nx = E.CHAPTERS[n], have = E.CHAPTERS.slice(1, n).map(c => fill(c[1], h));
+  return `<div class="chap ${o.cls || ''}"><div class="row between nowrap"><span class="lbl">Chapter ${n} with ${esc(h.first)}</span><span class="chap-dots" aria-label="Chapter ${n} of ${E.CHAPTERS.length}">${E.CHAPTERS.map((c, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span></div>
+  <ul class="chap-l mt8">${have.map(x => `<li>${F.ic('check', 12)}<span>${esc(x)}</span></li>`).join('')}${nx ? `<li class="muted">${F.ic('lock', 12)}<span>Next time: ${esc(fill(nx[1], h))}</span></li>` : ''}</ul>
+  ${o.usual !== false && h.status === 'active' ? `<button class="btn btn-ghost btn-sm mt16" data-a="bookUsual" data-h="${h.id}">Book your usual</button>` : ''}</div>`;
+};
+// the usual: the plan and the venue from your last night together, ready in the booking panel
+A.bookUsual = el => {
+  const h = E.host(el.dataset.h), u = E.user(), o = E.lastWith(u, h); if (!h) return;
+  if (F.route.page !== 'host' || F.route.params[0] !== h.id) { F.ui.usual = h.id; return F.nav('/host/' + h.id); }
+  const b = F.ui.bk; if (o && b && b.hostId === h.id) {
+    if (h.plans.some(p => p.id === o.planId)) b.planId = o.planId;
+    if (h.venues.includes(o.venueId) && !(E.CLUB_VENUES || []).includes(o.venueId)) b.venueId = o.venueId;
+    const nx = E.next(h, b.planId); if (nx) { b.key = nx.key; b.month = nx.key.slice(0, 7); b.start = nx.start; b.t = nx.t; }
+  }
+  F.render(false); A.toBook && A.toBook();
+};
+F.renderHooks = F.renderHooks || [];
+F.renderHooks.push(() => { if (F.ui.usual && F.route.page === 'host' && F.route.params[0] === F.ui.usual) { const id = F.ui.usual; F.ui.usual = null; setTimeout(() => A.bookUsual({ dataset: { h: id } }), 0); } });
+
+// Book tonight: the first free time tonight, the default venue, straight to checkout (one tap here, one to pay)
+A.bookTonight = el => {
+  const h = E.host(el.dataset.h), nx = h && E.next(h); if (!h || !nx) return;
+  const venueId = h.venues.includes('partner') ? 'partner' : h.venues.find(v => !(E.CLUB_VENUES || []).includes(v));
+  const c = { hostId: h.id, planId: nx.planId, key: nx.key, t: nx.t, start: nx.start, venueId, meet: 'bar', addons: {} };
+  if (E.validate(c).length) return F.nav('/host/' + h.id + '?plan=' + nx.planId);
+  const go = () => { F.store.commit(s => { E.dropHold(s); s.cart = Object.assign({}, c, { promo: null, seenPlanPrice: E.hp(h, nx.planId, nx.start), addedAt: Date.now(), holdId: null, guest: null, prefs: null }); F.ev('add_to_cart', h.id, { plan: nx.planId, quick: 1 }); }); F.ui.co = null; F.chromeCounts(); F.nav('/checkout'); };
+  if (F.S.cart && E.cartSig(F.S.cart) !== E.cartSig(c)) F.confirm({ title: 'Replace your booking?', body: 'Your bag holds one booking at a time.', ok: 'Replace booking' }).then(ok => ok && go()); else go();
+};
+})();
+
 /* ---- 07-pages-discover.js ---- */
 (() => {
 'use strict';
@@ -9336,7 +9437,7 @@ P.home = {
     const tab = tabs.find(t => t[0] === F.ui.homeTab) || tabs[0];
     const minPrice = pid => { const ps = hosts.filter(h => h.plans.some(p => p.id === pid)).map(h => E.hp(h, pid)); return ps.length ? Math.min(...ps) : 0; };
     const dmax = U.addDays(today, F.S.settings.horizonDays), season = F.seasonLine(c.id);
-    const personal = u ? [F.reviewPrompt(u), F.nudgeCard(u, ['need'])].filter(Boolean).slice(0, innerWidth <= 640 ? 1 : 2).join('') : '';
+    const personal = u ? F.reviewPrompt(u) || '' : '';   // reminders to act on (a screening running out) live on Account
     const later = u ? [F.nudgeCard(u, ['suggest']), F.recentRow(u, 4) || F.forYou(u, c.id, 4)].filter(Boolean).join('') : '';
     return { title: 'One night. Properly arranged.', desc: 'Book verified hosts in Los Angeles, New York and London.', html: `
 <section class="hero">
@@ -9359,16 +9460,15 @@ P.home = {
   <div class="sec-head"><div><div class="eyebrow ln"><i class="dot ok"></i> ${allN} verified hosts in ${c.name}</div><h2 class="h-cond h2 mt16">Who’s <span class="it">free</span> ${tab && tab[0] === 'tonight' ? dayWord : 'this week'}</h2></div>
   <div class="seg seg-scroll" role="tablist">${tabs.map(t => `<button class="seg-b ${t === tab ? 'on' : ''}" role="tab" aria-selected="${t === tab}" data-a="homeTab" data-t="${t[0]}">${t[1]}</button>`).join('')}</div></div>
   ${F.crowdStrip ? F.crowdStrip(c.id) : ''}
-  <div class="g g4 home-grid" id="homeGrid">${tab ? tab[2].slice(0, 8).map((h, i) => F.hostCard(h, { cls: (i >= 4 ? 'hide-ph' : '') + (i >= 6 ? ' hide-tab' : '') })).join('') : ''}</div>
+  <div class="g g4 home-grid" id="homeGrid">${tab ? tab[2].slice(0, 8).map((h, i) => F.hostCard(h, { quick: tab[0] === 'tonight', cls: (i >= 4 ? 'hide-ph' : '') + (i >= 6 ? ' hide-tab' : '') })).join('') : ''}</div>
   <div class="center mt32"><a class="btn btn-ghost" href="#/hosts${U.q({ city: c.id, when: tab && tab[0] === 'tonight' ? 'tonight' : '', gender: tab && tab[0] === 'groups' ? 'group' : '', sort: tab && tab[0] === 'new' ? 'newest' : '' })}">${tab && tab[0] === 'groups' ? 'All group nights' : 'Browse all ' + allN + ' hosts'}</a></div>
 </div></section>
 
-${F.homeEscapes(c.id)}
-${F.homeClub(c.id)}
+${(b => b[U.hash(today) % b.length] || '')([F.homeEscapes(c.id), F.homeClub(c.id)].filter(Boolean))}
 
 <section class="sec-md sec-ink" id="how"><div class="wrap">
   <div class="sec-head"><div><div class="eyebrow ln">How it works</div><h2 class="h-cond h2 mt16">Three plans. <span class="it">Every</span> price shown.</h2></div><a class="btn-link" href="#/how-it-works">Plans, extras and fees</a></div>
-  <div class="g g3 home-plans">${F.S.plans.map(p => `<a class="pcard rv" href="#/how-it-works#${p.id}"><div class="pcard-m">${F.sitePlate('plan-' + p.id, p.id === 'night' ? '#4A0D12' : p.id === 'hour' ? '#5C1118' : '#6E2A2C', 'r43 plate-arch', '', U.dur(p.dur).replace(' hr', '<small>hr</small>'))}</div><div class="pcard-b"><span class="mono tiny muted">${p.n} · ${U.dur(p.dur)}</span><h3 class="h-disp h4 mt8">${p.name}</h3><p class="muted small mt8 pcard-d">${esc(p.short)}</p><div class="row between mt16"><span class="mono small">From ${E.money(minPrice(p.id), c.id)}</span>${F.ic('arrow')}</div></div></a>`).join('')}</div>
+  <div class="g g3 home-plans">${F.S.plans.map(p => `<a class="pcard rv" href="#/plans#${p.id}"><div class="pcard-m">${F.sitePlate('plan-' + p.id, p.id === 'night' ? '#4A0D12' : p.id === 'hour' ? '#5C1118' : '#6E2A2C', 'r43 plate-arch', '', U.dur(p.dur).replace(' hr', '<small>hr</small>'))}</div><div class="pcard-b"><span class="mono tiny muted">${p.n} · ${U.dur(p.dur)}</span><h3 class="h-disp h4 mt8">${p.name}</h3><p class="muted small mt8 pcard-d">${esc(p.short)}</p><div class="row between mt16"><span class="mono small">From ${E.money(minPrice(p.id), c.id)}</span>${F.ic('arrow')}</div></div></a>`).join('')}</div>
   <a class="esc-strip mt24" href="#/safety">${F.ic('shield', 16)}<span><strong>Safety, built in:</strong> every host and guest is verified, boundaries are enforced, live check-ins and a 24/7 team. Either of you can end it at any time.</span>${F.ic('arrow', 14)}</a>
 </div></section>
 
@@ -9444,7 +9544,7 @@ P.hosts = {
 <div class="fbar"><div class="wrap fbar-in">
   <button class="chip fbtn ${active.length ? 'on' : ''}" data-a="filters" aria-haspopup="dialog">${F.ic('filter', 14)} Filter${active.length ? ` <span class="fbtn-n">${active.length}</span>` : ''}</button>
   <span class="fbar-div" aria-hidden="true"></span>
-  <div class="fchips" role="group" aria-label="Who">${WHO.map(o => `<a class="chip ${(q.gender || '') === o[0] ? 'on' : ''}" href="#/hosts${U.q(Object.assign({}, q, { gender: o[0], page: '' }))}" aria-current="${(q.gender || '') === o[0] ? 'true' : 'false'}">${o[1]}</a>`).join('')}</div>
+  <div class="fchips" role="group" aria-label="Who">${WHO.filter(o => ['', 'w', 'm'].includes(o[0]) || (q.gender || '') === o[0]).map(o => `<a class="chip ${(q.gender || '') === o[0] ? 'on' : ''}" href="#/hosts${U.q(Object.assign({}, q, { gender: o[0], page: '' }))}" aria-current="${(q.gender || '') === o[0] ? 'true' : 'false'}">${o[1]}</a>`).join('')}</div>
   <span class="fbar-sp"></span>
   <span class="mono tiny muted nowrap fcount">${list.length} ${list.length === 1 ? 'host' : 'hosts'}</span>
   ${q.city !== 'all' ? `<button class="btn btn-ghost btn-sm nowrap" data-a="bestNights" data-c="${esc(q.city || F.cityId())}">${F.ic('cal', 14)} Best nights</button>` : ''}
@@ -9453,12 +9553,11 @@ P.hosts = {
 <section class="sec-sm"><div class="wrap">
   ${active.length ? `<div class="factive mb32">${active.map(k => `<button class="chip chip-x" data-a="hfx" data-k="${k}" aria-label="Remove ${esc(fLabel(k, q[k], q))}">${esc(fLabel(k, q[k], q))} ${F.ic('close', 11)}</button>`).join('')}<button class="btn-link tiny" data-a="hfclear">Clear all</button>${u ? '<button class="btn-link tiny" data-a="saveSearch">Save this search</button>' : ''}</div>` : ''}
   ${list.length && q.view === 'map' ? P.hosts.map(q, list) : list.length ? `<h2 class="sr">${U.plural(list.length, 'host')}</h2><div id="hgrid" class="${q.view === 'list' ? 'hlist' : q.view === 'dense' ? 'g g5 g-hosts dense' : 'g g4 g-hosts'}">${shown.map(h => F.hostCard(h, { plan: q.plan, list: q.view === 'list', showCity: q.city === 'all' })).join('')}</div>
-  ${shown.length < list.length ? `<div class="center mt64"><p class="mono tiny muted">Showing ${shown.length} of ${list.length}</p><a class="btn btn-ghost mt16" id="more" href="#/hosts${U.q(Object.assign({}, q, { page: page + 1 }))}" data-a="more">Load more hosts</a></div>` : ''}`
+  ${shown.length < list.length ? `<div class="center mt64"><p class="mono tiny muted">Showing ${shown.length} of ${list.length}</p><a class="btn btn-ghost mt16" id="more" href="#/hosts${U.q(Object.assign({}, q, { page: page + 1 }))}" data-a="more">Show more hosts</a></div>` : ''}`
         : F.empty('No hosts match those filters', q.when ? 'Availability changes quickly. Try another date, or remove a filter or two.' : 'Try removing a filter, or search a different neighbourhood.', '<button class="btn btn-ghost mt24" data-a="hfclear">Clear filters</button>')}
 </div></section>` };
   },
   mount() {
-    const m = $('#more'); if (m && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); A.more(m); } }, { rootMargin: '600px' }); io.observe(m); }
   },
   map(q, list) {
     const c = E.city(q.city === 'all' ? F.cityId() : q.city), pos = F.HOODPOS[c.id], sel = q.mhood || '';
@@ -9494,7 +9593,7 @@ A.more = el => {
 A.clearRecent = () => { const u = E.user(); if (u && F.hub && F.hub.write) F.hub.write(h => { h.recent = h.recent.filter(x => !(x.uid === u.id && x.site === 'flingr')); });   // and from the shared hub
   F.store.commit(s => { s.recent = []; }); F.rerender(); };
 // The Filter sheet: everything except "who", with a live count on its button. Changing the city redraws the areas.
-const sheetQ = () => { const f = $('#ffm'); if (!f) return null; const d = F.formData(f); return { city: d.city, sort: d.sort === 'recommended' ? '' : d.sort, when: d.when, date: d.when === 'date' ? d.date : '', plan: d.plan, vibe: d.vibe, photos: d.photos ? '1' : '', pmin: d.pmin, pmax: d.pmax, hood: [].concat(d.hood || []).join(','), lang: d.lang, venue: d.venue, addon: d.addon, verified: d.verified, health: d.health ? '1' : '', match: d.match ? '1' : '', ah: d.ah ? '1' : '', rating: d.rating }; };
+const sheetQ = () => { const f = $('#ffm'); if (!f) return null; const d = F.formData(f); return { city: d.city, gender: d.gender || '', sort: d.sort === 'recommended' ? '' : d.sort, when: d.when, date: d.when === 'date' ? d.date : '', plan: d.plan, vibe: d.vibe, photos: d.photos ? '1' : '', pmin: d.pmin, pmax: d.pmax, hood: [].concat(d.hood || []).join(','), lang: d.lang, venue: d.venue, addon: d.addon, verified: d.verified, health: d.health ? '1' : '', match: d.match ? '1' : '', ah: d.ah ? '1' : '', rating: d.rating }; };
 const sheetCount = () => { const p = sheetQ(), b = $('#ffGo'); if (!p || !b) return; const n = filterHosts(Object.assign({}, F.route.q, p)).length; b.textContent = n ? `Show ${U.plural(n, 'host')}` : 'No hosts match'; b.disabled = !n; };
 A.filters = () => filterSheet(Object.assign({ city: F.cityId() }, F.route.q));
 const filterSheet = q => {
@@ -9503,6 +9602,7 @@ const filterSheet = q => {
   const radios = (name, opts, cls = 'rgrid') => `<div class="${cls}">${opts.map(o => `<label class="${cls === 'rgrid' ? 'rcard' : 'chipcheck'}"><input type="radio" name="${name}" value="${o[0]}" ${String(q[name] || '') === String(o[0]) ? 'checked' : ''}><span>${o[1]}</span></label>`).join('')}</div>`;
   F.drawer({ id: 'filters', title: 'Filter', body: `<form data-f="filters" id="ffm" class="stack-l" data-c="ffCount">
     <fieldset><legend class="lbl">City</legend>${radios('city', F.CITIES.map(x => [x.id, x.name]).concat([['all', 'All cities']]), 'row wrap-gap')}</fieldset>
+    <fieldset><legend class="lbl">Who</legend>${radios('gender', WHO, 'row wrap-gap')}</fieldset>
     <fieldset><legend class="lbl">Sort by</legend><select class="inp" name="sort" aria-label="Sort by">${SORTS.map(o => `<option value="${o[0]}" ${(q.sort || 'recommended') === o[0] ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></fieldset>
     <fieldset><legend class="lbl">Availability</legend>${radios('when', [['', 'Any time'], ['tonight', 'Tonight'], ['morning', 'Tomorrow morning'], ['weekend', 'This weekend'], ['date', 'Specific date']])}<input class="inp mt8" type="date" name="date" value="${esc(q.date || '')}" min="${E.todayKey(cid)}" aria-label="Date"></fieldset>
     <fieldset><legend class="lbl">Plan</legend>${radios('plan', [['', 'Any plan']].concat(F.S.plans.map(p => [p.id, p.name])))}</fieldset>
@@ -9630,6 +9730,7 @@ P.host = {
         <p class="it hp-tag">${esc(h.tagline)}</p>
         <div class="hp-meta small muted mt16"><span>${F.ic('pin', 14)} ${esc(h.hood)}, ${city.name}</span><span>${F.ic('star', 13)} ${h.rating ? h.rating.toFixed(2) + ' · ' + U.plural(h.reviewCount, 'rating') : 'New host'}</span><span>${F.ic('shield', 13)} ${h.ver.video ? 'Video verified' : 'ID verified'} · ${h.instant === false ? 'Request to book: they reply first' : 'Instant book: confirmed when you pay'}</span><span class="act ${active ? 'on' : ''}"><i class="dot ${active ? 'ok' : 'mute'}"></i>${E.activeLabel(h)} · answers ${E.responseRate(h)}% of messages, usually within ${h.responseMin} min</span>${F.matchWhy(h) ? `<span>${F.matchWhy(h)}</span>` : ''}</div>${F.hostPulseLine ? F.hostPulseLine(h) : ''}
         <div class="hp-acts mt16"><button class="btn-link tiny fav ${saved ? 'on' : ''}" data-a="save" data-h="${h.id}" data-lbl="1" aria-pressed="${saved}">${F.ic(saved ? 'heartf' : 'heart', 13)}<span>${saved ? 'Saved' : 'Save'}</span></button><button class="btn-link tiny" data-a="shareHost" data-h="${h.id}">${F.ic('share', 13)} Share</button>${F.cmpBtn(h.id, 'link')}</div>
+        ${F.chapterStrip(h, { cls: 'mt24' })}
       </header>
     </div>
     <div class="hp-b">
@@ -9737,7 +9838,19 @@ F.Fm.report = (f, d) => {
 };
 
 /* =============== PLANS =============== */
-P.plans = { render: r => ({ redirect: '/how-it-works' + (r.frag ? '#' + r.frag : '#plans') }) };
+P.plans = {
+  mount(r) { if (r.frag) setTimeout(() => { const t = document.getElementById(r.frag); if (t) t.scrollIntoView({ block: 'center' }); }, 30); },
+  render() {
+    const c = F.city(), hosts = E.visible(F.S.hosts.filter(h => h.cityId === c.id && h.status === 'active'));
+    const range = pid => { const ps = hosts.filter(h => h.plans.some(p => p.id === pid)).map(h => E.hp(h, pid)); return ps.length ? E.money(Math.min(...ps), c.id) + '–' + E.money(Math.max(...ps), c.id) : '—'; };
+    return { title: 'Plans', desc: 'The Hour, The Night and The Slow Morning: what each includes and what it costs.', html: `${F.pageHead({ eyebrow: 'Plans · ' + c.name, title: 'Three plans. <span class="it">Every</span> price shown.', lead: 'Each host sets a price for each plan. You see the full price, with fees and tax, before you pay.', cls: 'phero-sm' })}
+<section class="sec-sm sec-ink" id="plans"><div class="wrap"><div class="g g3 hscroll">${F.S.plans.map((p, i) => `<article class="plan-card" id="${p.id}"><div class="pcard-m">${F.sitePlate('plan-' + p.id, ['#5C1118', '#4A0D12', '#6E2A2C'][i], 'r169', '', U.dur(p.dur).replace(' hr', '<small>hr</small>'))}${p.popular ? '<span class="badge badge-on">Most booked</span>' : ''}</div>
+  <div class="row between mt16"><h2 class="h-disp h3">${p.name}</h2><span class="mono tiny muted">${p.n}</span></div><p class="small muted">${esc(p.desc)}</p>
+  <ul class="ticks ticks-s mt8">${p.includes.map(x => `<li>${F.ic('check', 14)}<span>${x}</span></li>`).join('')}</ul>
+  <div class="row between mt16 plan-f"><span class="mono small">${range(p.id)}</span><a class="btn btn-ghost btn-sm" href="#/hosts?city=${c.id}&plan=${p.id}">Browse hosts</a></div></article>`).join('')}</div>
+<div class="row wrap-gap mt32"><a class="btn-link" href="#/how-it-works">How a booking works</a><a class="btn-link" href="#/how-it-works?s=extras">Extras</a><a class="btn-link" href="#/how-it-works?s=fees">Venues and fees</a></div></div></section>` };
+  }
+};
 
 /* =============== MORNING MENU =============== */
 F.ui.mm = {};
@@ -9813,64 +9926,60 @@ A.qvBook = async el => {
 };
 
 /* =============== HOW IT WORKS =============== */
+const HOW_TABS = [['steps', 'Step by step'], ['plans', 'Plans', '#/plans'], ['afterhours', 'Afterhours'], ['more', 'Escapes & One Evening'], ['members', 'Memberships'], ['extras', 'Extras'], ['fees', 'Venues & fees']];
 P.how = {
-  mount(r) { if (r.frag) setTimeout(() => { const t = document.getElementById(r.frag); if (t) t.scrollIntoView({ block: 'start' }); }, 30); },
-  render() {
-    const c = F.city(), hosts = E.visible(F.S.hosts.filter(h => h.cityId === c.id && h.status === 'active'));
-    const range = pid => { const ps = hosts.filter(h => h.plans.some(p => p.id === pid)).map(h => E.hp(h, pid)); return ps.length ? E.money(Math.min(...ps), c.id) + '–' + E.money(Math.max(...ps), c.id) : '—'; };
+  render(r) {
+    // old links to a part of this page (#plans, #hour, #afterhours…) open that part
+    if (r.frag && (r.frag === 'plans' || F.S.plans.some(p => p.id === r.frag))) return { redirect: '/plans' + (r.frag === 'plans' ? '' : '#' + r.frag) };
+    const cur = HOW_TABS.some(t => t[0] === (r.q.s || r.frag) && !t[2]) ? (r.q.s || r.frag) : 'steps';
+    const c = F.city();
     const cats = [...new Set(F.S.addons.map(a => a.cat))];
     const steps = [['Choose', 'Browse verified hosts by neighbourhood, plan and availability. Every profile shows boundaries, verification and reviews.'], ['Reserve', 'Pick a plan and a time. It’s held for ten minutes while you check out, with every fee shown first.'], ['Meet', 'Reminders the day before. Venue details two hours before. Check in an hour ahead.'], ['Stay safe', 'A safe word, a live check-in and a 24/7 team. Either of you can end it at any time.'], ['Morning', 'Order breakfast, extend, or simply leave. Reviews are private and optional.']];
-    return { title: 'How it works', desc: 'Plans, prices, extras and what happens from booking to the morning after.', html: `${F.pageHead({ eyebrow: 'How it works · ' + c.name, title: 'Three plans. <span class="it">Every</span> price shown.', lead: 'Hosts set their own price for each plan. What you see is what you pay, plus the service fee and local tax, shown before checkout. Afterhours, Escapes and One Evening work the same way.', cls: 'phero-sm' })}
-${F.spy([['plans', 'Plans'], ['steps', 'Step by step'], ['afterhours', 'Afterhours'], ['more', 'Escapes & One Evening'], ['members', 'Memberships'], ['extras', 'Extras'], ['fees', 'Venues & fees']], 'On this page')}
-<section class="sec-sm sec-ink" id="plans" data-spy><div class="wrap"><div class="g g3 hscroll">${F.S.plans.map((p, i) => `<article class="plan-card" id="${p.id}"><div class="pcard-m">${F.sitePlate('plan-' + p.id, ['#5C1118', '#4A0D12', '#6E2A2C'][i], 'r169', '', U.dur(p.dur).replace(' hr', '<small>hr</small>'))}${p.popular ? '<span class="badge badge-on">Most booked</span>' : ''}</div>
-  <div class="row between mt16"><h2 class="h-disp h3">${p.name}</h2><span class="mono tiny muted">${p.n}</span></div><p class="small muted">${esc(p.desc)}</p>
-  <ul class="ticks ticks-s mt8">${p.includes.map(x => `<li>${F.ic('check', 14)}<span>${x}</span></li>`).join('')}</ul>
-  <div class="row between mt16 plan-f"><span class="mono small">${range(p.id)}</span><a class="btn btn-ghost btn-sm" href="#/hosts?city=${c.id}&plan=${p.id}">Browse hosts</a></div></article>`).join('')}</div></div></section>
-<section class="sec-md sec-ox" id="steps" data-spy><div class="wrap"><div class="row between end"><div><div class="eyebrow ln">From browse to morning</div><h2 class="h-cond h3 mt16">Five steps, <span class="it">no</span> surprises</h2></div><a class="btn-link" href="#/safety">Safety & Trust</a></div>
+    const parts = { steps: () => `<section class="sec-md sec-ox" id="steps"><div class="wrap"><div class="row between end"><div><div class="eyebrow ln">From browse to morning</div><h2 class="h-cond h3 mt16">Five steps, <span class="it">no</span> surprises</h2></div><a class="btn-link" href="#/safety">Safety & Trust</a></div>
 <div class="steps mt32">${steps.map((x, i) => `<div class="step"><div class="step-n">0${i + 1}</div><h3 class="h4 mt8">${x[0]}</h3><p class="small muted mt8">${x[1]}</p></div>`).join('')}</div>
-<details class="acc how-tl mt32"><summary><span>A booking, minute by minute</span>${F.ic('plus', 14)}</summary><div class="acc-b"><ol class="tl">${[['When you book', 'Confirmation by notification and email. Messaging with your host opens.'], ['24 hours before', 'Reminder. Free cancellation closes.'], ['2 hours before', 'Venue name and address arrive.'], ['1 hour before', 'Check-in opens. Buddy Check-in starts if set up.'], ['Start time', 'Your booking begins. The Morning Menu opens for Night and Slow Morning plans.'], ['End time', 'Your booking ends. A private check-in arrives 15 minutes later.'], ['Up to 7 days after', 'Leave or edit a review, report anything, or request a lost item.']].map(x => `<li class="done"><strong class="small">${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></details></div></section>
-${F.howMore(c)}
-<section class="sec-md sec-ink" id="extras" data-spy><div class="wrap"><div class="split-top"><div><div class="eyebrow ln">Extras, venues and fees</div><h2 class="h-cond h3 mt16">Add what <span class="it">you</span> like</h2></div><p class="lead">Some extras depend on your host’s calendar, some on the venue, and limited ones are capped each night. None can override a host’s boundaries.</p></div>
-<div class="addcat mt32">${cats.map(cat => `<details class="xcat" data-d="x-${cat}" ${innerWidth > 640 ? 'open' : ''}><summary class="lbl">${cat} <span class="muted">· ${F.S.addons.filter(a => a.cat === cat).length}</span>${F.ic('plus', 12)}</summary>${F.S.addons.filter(a => a.cat === cat).map(a => `<details class="acc"><summary><span>${esc(a.name)}</span><span class="mono small">${E.money(E.cp(c.id, a.price), c.id)}</span></summary><div class="acc-b small"><p>${esc(a.desc)}</p><dl class="dl mt16"><dt>Plans</dt><dd>${a.plans.map(p => E.plan(p).name).join(', ')}</dd>${a.extraMin ? `<dt>Time</dt><dd>Adds ${a.extraMin} minutes, only when your host is free afterwards</dd>` : ''}${a.venues ? `<dt>Venue</dt><dd>${a.venues.map(v => E.venue(v).name).join(', ')}</dd>` : ''}${a.cutoffH ? `<dt>Order by</dt><dd>${a.cutoffH} hours before start</dd>` : ''}${a.stock != null ? `<dt>Availability</dt><dd>${a.stock} per night in each city · ${E.stockLeft(a, c.id, E.todayKey(c.id))} left tonight</dd>` : ''}${a.boundary ? `<dt>Note</dt><dd>Not offered by hosts who have listed it under their boundaries</dd>` : ''}<dt>Refunds</dt><dd>${esc(a.refund)}</dd></dl></div></details>`).join('')}</details>`).join('')}</div></div></section>
-<section class="sec-md sec-ox" id="fees" data-spy><div class="wrap g g2 how-fees">
+<details class="acc how-tl mt32"><summary><span>A booking, minute by minute</span>${F.ic('plus', 14)}</summary><div class="acc-b"><ol class="tl">${[['When you book', 'Confirmation by notification and email. Messaging with your host opens.'], ['24 hours before', 'Reminder. Free cancellation closes.'], ['2 hours before', 'Venue name and address arrive.'], ['1 hour before', 'Check-in opens. Buddy Check-in starts if set up.'], ['Start time', 'Your booking begins. The Morning Menu opens for Night and Slow Morning plans.'], ['End time', 'Your booking ends. A private check-in arrives 15 minutes later.'], ['Up to 7 days after', 'Leave or edit a review, report anything, or request a lost item.']].map(x => `<li class="done"><strong class="small">${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></details></div></section>`, extras: () => `<section class="sec-md sec-ink" id="extras"><div class="wrap"><div class="split-top"><div><div class="eyebrow ln">Extras, venues and fees</div><h2 class="h-cond h3 mt16">Add what <span class="it">you</span> like</h2></div><p class="lead">Some extras depend on your host’s calendar, some on the venue, and limited ones are capped each night. None can override a host’s boundaries.</p></div>
+<div class="addcat mt32">${cats.map(cat => `<details class="xcat" data-d="x-${cat}" ${innerWidth > 640 ? 'open' : ''}><summary class="lbl">${cat} <span class="muted">· ${F.S.addons.filter(a => a.cat === cat).length}</span>${F.ic('plus', 12)}</summary>${F.S.addons.filter(a => a.cat === cat).map(a => `<details class="acc"><summary><span>${esc(a.name)}</span><span class="mono small">${E.money(E.cp(c.id, a.price), c.id)}</span></summary><div class="acc-b small"><p>${esc(a.desc)}</p><dl class="dl mt16"><dt>Plans</dt><dd>${a.plans.map(p => E.plan(p).name).join(', ')}</dd>${a.extraMin ? `<dt>Time</dt><dd>Adds ${a.extraMin} minutes, only when your host is free afterwards</dd>` : ''}${a.venues ? `<dt>Venue</dt><dd>${a.venues.map(v => E.venue(v).name).join(', ')}</dd>` : ''}${a.cutoffH ? `<dt>Order by</dt><dd>${a.cutoffH} hours before start</dd>` : ''}${a.stock != null ? `<dt>Availability</dt><dd>${a.stock} per night in each city · ${E.stockLeft(a, c.id, E.todayKey(c.id))} left tonight</dd>` : ''}${a.boundary ? `<dt>Note</dt><dd>Not offered by hosts who have listed it under their boundaries</dd>` : ''}<dt>Refunds</dt><dd>${esc(a.refund)}</dd></dl></div></details>`).join('')}</details>`).join('')}</div></div></section>`, fees: () => `<section class="sec-md sec-ox" id="fees"><div class="wrap g g2 how-fees">
 <div><div class="eyebrow ln">Venues</div>${F.S.venues.map(v => `<div class="kv kv-l"><span><strong>${v.name}</strong><small class="d-b muted">${esc(v.desc)}</small></span><span class="mono">${v.price ? '+' + E.money(E.cp(c.id, v.price), c.id) : 'Included'}</span></div>`).join('')}</div>
 <div><div class="eyebrow ln">Fees</div><div class="kv kv-l"><span><strong>Service fee</strong><small class="d-b muted">Verification, 24/7 support, payment protection and venue insurance.</small></span><span class="mono">${F.S.settings.servicePct * 100}%, min ${E.money(E.cp(c.id, F.S.settings.minFeeUsd), c.id)}</span></div>
 <div class="kv kv-l"><span><strong>${c.taxLabel}</strong><small class="d-b muted">Charged at the local rate on your booking and extras.</small></span><span class="mono">${+(c.tax * 100).toFixed(3)}%</span></div>
 <div class="kv kv-l"><span><strong>Rescheduling</strong><small class="d-b muted">Free more than 24 hours before start.</small></span><span class="mono">${E.money(E.cp(c.id, F.S.settings.rescheduleFeeUsd), c.id)}</span></div>
 <div class="kv kv-l"><span><strong>FLINGR Reserve</strong><small class="d-b muted">No service fees, free rescheduling, refunds up to 4 hours before.</small></span><span class="mono">${E.money(F.S.settings.reserveUsd, 'la')}/mo</span></div>
-<p class="small muted mt16">Your statement shows <strong>${E.desc(c.id)}</strong>. <a class="u" href="#/legal/refunds">Refund policy</a></p></div></div></section>
-` };
+<p class="small muted mt16">Your statement shows <strong>${E.desc(c.id)}</strong>. <a class="u" href="#/legal/refunds">Refund policy</a></p></div></div></section>`, afterhours: () => F.howMore(c, 'afterhours'), more: () => F.howMore(c, 'more'), members: () => F.howMore(c, 'members') };
+    return { title: 'How it works', desc: 'Plans, prices, extras and what happens from booking to the morning after.', html: `${F.pageHead({ eyebrow: 'How it works · ' + c.name, title: 'How it <span class="it">works</span>', lead: 'From choosing a host to the morning after. Every price is shown before you pay.', cls: 'phero-sm' })}
+${F.tabNav(HOW_TABS, cur, '#/how-it-works', 'On this page')}
+${parts[cur]()}` };
   }
 };
 
 // How it works: Afterhours passes, Escapes and One Evening, and every membership side by side
-F.howMore = c => {
+F.howMore = (c, only) => {
   const cl = E.clubOf(c.id) || F.CLUBS[0], pr = t => E.clubMoney(cl, E.clubCp(cl, F.CLUB_PASS[t].usd)), wk = [3, 4, 5, 6, 0].map(d => [['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d], F.CLUB_WEEK[d]]), M = F.CLUB_MEMBERSHIP, aa = F.ALLACCESS;
-  return `<section class="sec-md sec-ink" id="afterhours" data-spy><div class="wrap how-split"><div><div class="eyebrow ln">Afterhours</div><h2 class="h-cond h3 mt16">Two passes. <span class="it">One</span> door.</h2><p class="lead mt16">A members’ club in each city. The Lounge is for everyone; the Floor upstairs opens Thursday to Saturday.</p><div class="btn-row mt24"><a class="btn btn-bone btn-sm" href="#/afterhours/book?club=${cl.id}">Get on the list</a><a class="btn-link tiny" href="#/journal/lounge-or-floor-how-passes-work">How passes work</a></div></div>
+  const html = `<section class="sec-md sec-ink" id="afterhours"><div class="wrap how-split"><div><div class="eyebrow ln">Afterhours</div><h2 class="h-cond h3 mt16">Two passes. <span class="it">One</span> door.</h2><p class="lead mt16">A members’ club in each city. The Lounge is for everyone; the Floor upstairs opens Thursday to Saturday.</p><div class="btn-row mt24"><a class="btn btn-bone btn-sm" href="#/afterhours/book?club=${cl.id}">Get on the list</a><a class="btn-link tiny" href="#/journal/lounge-or-floor-how-passes-work">How passes work</a></div></div>
   <div><div class="tblw"><table class="tbl"><thead><tr><th>Pass</th><th>What you get</th><th>Per person</th></tr></thead><tbody><tr><td><strong>Lounge</strong></td><td class="small">The bar, the DJ, the shows</td><td class="mono">${pr('lounge')}</td></tr><tr><td><strong>Floor</strong></td><td class="small">The Lounge, plus the Floor upstairs</td><td class="mono">${pr('single')}</td></tr></tbody></table></div>
   <ul class="ticks ticks-s mt16"><li>${F.ic('check', 14)}<span>Coming on your own? The Floor keeps the same number of places for men as for women and non-binary guests. Pairs of any genders can use any place.</span></li><li>${F.ic('check', 14)}<span>Pairs, of any genders, can use any Floor place. Fridays are Pairs Night.</span></li><li>${F.ic('check', 14)}<span>Members get in free. Add a FLINGR host to your pass in the same checkout.</span></li></ul>
   <div class="how-week mt16">${wk.map(([d, w]) => `<span class="how-wd"><span class="mono tiny muted">${d}</span><span class="tiny">${esc(w.name || 'The month’s theme')}</span></span>`).join('')}</div></div></div></section>
-<section class="sec-md sec-ox" id="more" data-spy><div class="wrap"><div class="eyebrow ln">Beyond one booking</div><div class="g g2 mt24">
+<section class="sec-md sec-ox" id="more"><div class="wrap"><div class="eyebrow ln">Beyond one booking</div><div class="g g2 mt24">
   <div class="card"><h3 class="h-disp h4">Escapes</h3><p class="small muted mt8">Whole places for a night or a week: villas, boats, islands and rooms built for this.</p><ol class="how-mini mt16"><li>Choose a place and your dates</li><li>Add hosts, a chef or extras</li><li>Everyone fills in the house sheet</li></ol><a class="btn btn-ghost btn-sm mt16" href="#/escapes">See ${U.plural((F.PLACES || []).length, 'place')}</a></div>
   <div class="card"><h3 class="h-disp h4">One Evening</h3><p class="small muted mt8">Three sites, your order, one checkout. 10% off with All-Access.</p><ol class="how-mini mt16"><li>Pick the parts: Velvet, Practice, your night</li><li>Put them in the order you like</li><li>Pay once; each site books its part</li></ol><a class="btn btn-ghost btn-sm mt16" href="#/evening">Plan One Evening</a></div></div></div></section>
-<section class="sec-md sec-ink" id="members" data-spy><div class="wrap how-split"><div><div class="eyebrow ln">Memberships</div><h2 class="h-cond h3 mt16">Monthly, <span class="it">and</span> easy to stop.</h2><p class="lead mt16">Cancel any time; it runs to the end of the month you paid for.</p><a class="btn-link tiny mt16" href="#/journal/memberships-explained">Which one pays for itself</a></div>
+<section class="sec-md sec-ink" id="members"><div class="wrap how-split"><div><div class="eyebrow ln">Memberships</div><h2 class="h-cond h3 mt16">Monthly, <span class="it">and</span> easy to stop.</h2><p class="lead mt16">Cancel any time; it runs to the end of the month you paid for.</p><a class="btn-link tiny mt16" href="#/journal/memberships-explained">Which one pays for itself</a></div>
   <div class="tblw"><table class="tbl"><thead><tr><th>Membership</th><th>What you get</th><th>A month</th></tr></thead><tbody>${[['FLINGR Reserve', 'No service fees, free rescheduling, Escapes 48 hours early', U.money(F.S.settings.reserveUsd), '#/account/membership'], ['All-Access', 'Reserve here, plus Velvet and Practice memberships', U.money(aa.usd), '#/account/membership'], [M.lounge.name.replace(' membership', ''), 'Afterhours: ' + M.lounge.line.charAt(0).toLowerCase() + M.lounge.line.slice(1), U.money(M.lounge.usd), '#/afterhours/membership'], [M.full.name.replace(' membership', ''), 'Afterhours: ' + M.full.line.charAt(0).toLowerCase() + M.full.line.slice(1), U.money(M.full.usd) + `<small class="d-b muted">${U.money(M.full.aaUsd)} with All-Access</small>`, '#/afterhours/membership']].map(r => `<tr><td><a class="u" href="${r[3]}"><strong>${r[0].replace(/^Lounge$/, 'Afterhours Lounge').replace(/^Full$/, 'Afterhours Full')}</strong></a></td><td class="small">${esc(r[1])}</td><td class="mono">${r[2]}</td></tr>`).join('')}</tbody></table></div></div></section>`;
+  if (!only) return html;
+  const m = html.match(new RegExp('<section[^>]*id="' + only + '"[\\s\\S]*?</section>'));
+  return m ? m[0] : html;
 };
 
 /* =============== SAFETY =============== */
 P.safety = {
-  render() {
-    return { title: 'Safety & Trust', html: `${F.pageHead({ eyebrow: 'Safety & Trust', title: 'Safety is the <span class="it">product.</span>', lead: 'Every feature on FLINGR starts with the same question: does this make it easier for two adults to meet, relax and leave on their own terms?' })}
-<section class="sec sec-ink"><h2 class="sr">How we keep you safe</h2><div class="wrap g g3">${[['shield', 'Verified, both ways', 'Every host and every guest completes identity verification. Many hosts are also video verified and background checked, with dates shown on their profile.'], ['lock', 'Boundaries, enforced', 'Hosts publish what they are comfortable with, what they do not offer and what to discuss first. Extras that conflict are never offered. Nothing can be purchased to change that.'], ['heart', 'Consent, always', 'A booking reserves time, a venue and listed services. It never purchases consent. Either person can end a booking at any moment, and hosts are never penalised for doing so.'], ['bell', 'Buddy Check-in', 'Nominate a trusted contact. We check in with you privately during your booking. Miss one and we let your buddy know the general area and time.'], ['alert', 'In-booking safety button', 'One tap from your booking page to end the booking, reach our 24/7 team, or call local emergency services.'], ['eye', 'Discretion by default', 'Neutral statement descriptors, discreet notifications and no surnames shared. Hosts never see your contact details or payment information.']].map(x => `<div class="card feat rv">${F.ic(x[0], 26)}<h3 class="h-disp h4 mt16">${x[1]}</h3><p class="small muted mt8">${x[2]}</p></div>`).join('')}</div></section>
-<section class="sec sec-ox"><div class="wrap split"><div><div class="eyebrow ln">Verification levels</div><h2 class="h-cond h2 mt16">What each <span class="it">badge</span> means</h2><a class="btn-link mt24" href="#/journal/how-verification-works">Read the full guide</a></div>
-<div>${[['Identity verified', 'All hosts and guests', 'Government ID matched to a live selfie by our verification partner. Confirms age (18+) and identity.'], ['Video verified', 'Most hosts', 'A recorded call with our Host Success team confirming profile details and boundaries in the host’s own words.'], ['Background checked', 'Where law allows', 'A criminal records check by an accredited third party, renewed every twelve months.'], ['Health disclosure', 'Optional', 'Shows only whether a recent screening is on file and when it was last updated. Never results. Not a guarantee.']].map(x => `<div class="kv kv-l"><span><strong>${x[0]}</strong><small class="d-b muted">${x[2]}</small></span><span class="mono tiny">${x[1]}</span></div>`).join('')}</div></div></section>
-<section class="sec"><div class="wrap split"><div><div class="eyebrow ln">On an Escape</div><h2 class="h-cond h2 mt16">Away, and still <span class="it">looked after</span></h2><a class="btn-link mt24" href="#/journal/the-house-sheet-explained">How the house sheet works</a></div>
-<div><ol class="tl tl-l">${[['A named stay manager', 'Every place has one person who looks after you from arrival to checkout, reachable from your stay page at any hour.'], ['One sheet, everyone’s answers', 'Each person marks their own house sheet. A line is on once two people want it; anyone who said no sits it out, and can change their answers at any time.'], ['Four things always apply', U.list(F.ALWAYS.map((x, i) => i ? x[0].toLowerCase() + x.slice(1) : x)) + '. No booking, extra or answer on the sheet changes them.'], ['Weather and transfers', 'Boats, islands and remote places are checked against the forecast. If we hold a stay for weather, everything is refunded and the next free dates are held for you.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></div></section>
-<section class="sec sec-ink"><div class="wrap split"><div><div class="eyebrow ln">At Afterhours</div><h2 class="h-cond h2 mt16">Security on <span class="it">every</span> door</h2><a class="btn-link mt24" href="#/afterhours/rules">The house rules</a></div>
-<div><ol class="tl tl-l">${[['A named head of security', 'Each club has one, with a team on every door and every floor, and monitors in every room upstairs.'], ['Ask first. Red stops everything.', 'Your wristband says green, yellow or red. Say “Red” and everything stops at once; “Get me out” on your phone brings security to you.'], ['Phones in a pouch', 'Sealed at the door. No photos or filming anywhere in the club.'], ['Seen out safely', 'When a host’s booking or a performer’s show ends, security walks them out, and it’s logged.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></div></section>
-<section class="sec sec-ox"><div class="wrap split"><div><div class="eyebrow ln">If something goes wrong</div><h2 class="h-cond h2 mt16">We <span class="it">answer,</span> day and night</h2></div>
+  render(r) {
+    const cur = ['basics', 'badges', 'escapes', 'afterhours', 'help'].includes(r.q.s) ? r.q.s : 'basics';
+    return { title: 'Safety & Trust', html: `${F.pageHead({ eyebrow: 'Safety & Trust', title: 'Safety is the <span class="it">product.</span>', lead: 'Every part of FLINGR is built so two adults can meet, relax and leave on their own terms.' })}
+${F.tabNav([['basics', 'How we keep you safe'], ['badges', 'Badges'], ['escapes', 'On an Escape'], ['afterhours', 'At Afterhours'], ['help', 'If something goes wrong']], cur, '#/safety', 'Safety')}
+${{ basics: () => `<section class="sec sec-ink"><h2 class="sr">How we keep you safe</h2><div class="wrap g g3">${[['shield', 'Verified, both ways', 'Every host and every guest completes identity verification. Many hosts are also video verified and background checked, with dates shown on their profile.'], ['lock', 'Boundaries, enforced', 'Hosts publish what they are comfortable with, what they do not offer and what to discuss first. Extras that conflict are never offered. Nothing can be purchased to change that.'], ['heart', 'Consent, always', 'A booking reserves time, a venue and listed services. It never purchases consent. Either person can end a booking at any moment, and hosts are never penalised for doing so.'], ['bell', 'Buddy Check-in', 'Nominate a trusted contact. We check in with you privately during your booking. Miss one and we let your buddy know the general area and time.'], ['alert', 'In-booking safety button', 'One tap from your booking page to end the booking, reach our 24/7 team, or call local emergency services.'], ['eye', 'Discretion by default', 'Neutral statement descriptors, discreet notifications and no surnames shared. Hosts never see your contact details or payment information.']].map(x => `<div class="card feat rv">${F.ic(x[0], 26)}<h3 class="h-disp h4 mt16">${x[1]}</h3><p class="small muted mt8">${x[2]}</p></div>`).join('')}</div></section>`, badges: () => `<section class="sec sec-ox"><div class="wrap split"><div><div class="eyebrow ln">Verification levels</div><h2 class="h-cond h2 mt16">What each <span class="it">badge</span> means</h2><a class="btn-link mt24" href="#/journal/how-verification-works">Read the full guide</a></div>
+<div>${[['Identity verified', 'All hosts and guests', 'Government ID matched to a live selfie by our verification partner. Confirms age (18+) and identity.'], ['Video verified', 'Most hosts', 'A recorded call with our Host Success team confirming profile details and boundaries in the host’s own words.'], ['Background checked', 'Where law allows', 'A criminal records check by an accredited third party, renewed every twelve months.'], ['Health disclosure', 'Optional', 'Shows only whether a recent screening is on file and when it was last updated. Never results. Not a guarantee.']].map(x => `<div class="kv kv-l"><span><strong>${x[0]}</strong><small class="d-b muted">${x[2]}</small></span><span class="mono tiny">${x[1]}</span></div>`).join('')}</div></div></section>`, escapes: () => `<section class="sec"><div class="wrap split"><div><div class="eyebrow ln">On an Escape</div><h2 class="h-cond h2 mt16">Away, and still <span class="it">looked after</span></h2><a class="btn-link mt24" href="#/journal/the-house-sheet-explained">How the house sheet works</a></div>
+<div><ol class="tl tl-l">${[['A named stay manager', 'Every place has one person who looks after you from arrival to checkout, reachable from your stay page at any hour.'], ['One sheet, everyone’s answers', 'Each person marks their own house sheet. A line is on once two people want it; anyone who said no sits it out, and can change their answers at any time.'], ['Four things always apply', U.list(F.ALWAYS.map((x, i) => i ? x[0].toLowerCase() + x.slice(1) : x)) + '. No booking, extra or answer on the sheet changes them.'], ['Weather and transfers', 'Boats, islands and remote places are checked against the forecast. If we hold a stay for weather, everything is refunded and the next free dates are held for you.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></div></section>`, afterhours: () => `<section class="sec sec-ink"><div class="wrap split"><div><div class="eyebrow ln">At Afterhours</div><h2 class="h-cond h2 mt16">Security on <span class="it">every</span> door</h2><a class="btn-link mt24" href="#/afterhours/rules">The house rules</a></div>
+<div><ol class="tl tl-l">${[['A named head of security', 'Each club has one, with a team on every door and every floor, and monitors in every room upstairs.'], ['Ask first. Red stops everything.', 'Your wristband says green, yellow or red. Say “Red” and everything stops at once; “Get me out” on your phone brings security to you.'], ['Phones in a pouch', 'Sealed at the door. No photos or filming anywhere in the club.'], ['Seen out safely', 'When a host’s booking or a performer’s show ends, security walks them out, and it’s logged.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol></div></div></section>`, help: () => `<section class="sec sec-ox"><div class="wrap split"><div><div class="eyebrow ln">If something goes wrong</div><h2 class="h-cond h2 mt16">We <span class="it">answer,</span> day and night</h2></div>
 <div><ol class="tl tl-l">${[['During a booking', 'Use the safety button on your booking page. Ending early for safety is reviewed individually and never counted against you.'], ['After a booking', 'Report from your booking page or the host’s profile. Reports are reviewed by our Trust & Safety team, usually within an hour.'], ['Disputes and refunds', 'Open a support request within 30 days. You never need to leave a review to report a concern or request a refund.'], ['No-shows', 'Documented and reviewed by a person before any action is taken on either account.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol>
-<div class="card mt32"><div class="lbl">Emergency numbers</div>${F.CITIES.map(c => `<div class="kv"><span>${c.name}</span><button class="btn-link mono" data-a="call" data-k="emergency" data-c="${c.id}">${c.emergency}</button></div>`).join('')}<div class="kv"><span>FLINGR 24/7 support</span><span class="mono">${F.city().phone}</span></div></div></div></div></section>` };
+<div class="card mt32"><div class="lbl">Emergency numbers</div>${F.CITIES.map(c => `<div class="kv"><span>${c.name}</span><button class="btn-link mono" data-a="call" data-k="emergency" data-c="${c.id}">${c.emergency}</button></div>`).join('')}<div class="kv"><span>FLINGR 24/7 support</span><span class="mono">${F.city().phone}</span></div></div></div></div></section>` }[cur]()}` };
   }
 };
 
@@ -10108,7 +10217,7 @@ P.escapes = {
     events.sort((a, b) => a.k.localeCompare(b.k));
     const setQ = o => '#/escapes' + U.q(Object.assign({}, q, o));
     const act = ESCF.filter(k => q[k]), nf = act.length;
-    const PH = 8, more = F.ui.escMore;
+    const PH = innerWidth > 640 ? 12 : 8, more = F.ui.escMore;
     return { title: 'Escapes', desc: 'Yachts, islands, villas, cabins, penthouses and playrooms, booked with the hosts who travel to them.', html: `
 ${F.pageHead({ eyebrow: 'FLINGR Escapes', title: 'Somewhere nobody <span class="it">can hear</span> you.', lead: `${F.PLACES.length} places, chosen one by one. Book the place, bring who you want, pick the hosts who travel there, set the house rules.`, cls: 'phero-sm' })}
 <div class="fbar"><div class="wrap fbar-in">
@@ -10122,7 +10231,7 @@ ${nf ? `<div class="wrap factive mt24">${act.map(k => `<button class="chip chip-
 ${view === 'map' ? `<section class="sec-sm"><div class="wrap">${escMap(list, city === 'all' ? F.cityId() : city, q.p, u)}</div></section>` : `
 ${feat && !kind && !when && !nf ? `<section class="sec-sm sec-ox hide-ph"><div class="wrap"><div class="efeat rv"><a class="efeat-m" href="#/escape/${feat.id}">${F.placePlate(feat, 1, 'r169 pf')}</a><div class="efeat-b"><div class="eyebrow ln">Open ${U.keyFmt(states[feat.id].key, 'date')}</div><h2 class="h-cond h2 mt16">${esc(feat.name)}</h2><p class="lead mt8">${esc(feat.tagline)}</p><div class="row wrap-gap mt16">${rulesBadge(feat)}<span class="chip">${F.KIND[feat.kind]}</span><span class="chip">Sleeps ${feat.sleeps}</span><span class="chip">From ${fromPrice(feat)}</span></div><div class="btn-row mt24"><a class="btn btn-bone" href="#/escape/${feat.id}?date=${states[feat.id].key}">See the place</a><a class="btn-link" href="#/escape/${feat.id}?date=${states[feat.id].key}&way=two">Book an evening for two</a></div></div></div></div></section>` : ''}
 <section class="sec-sm"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln"><i class="dot ok"></i> ${open.length} open now</div><p class="small muted mt8">Live availability. Nights free up again as other guests cancel.</p></div></div>
-${list.length ? `<div class="g g4 egrid">${list.map((p, i) => F.placeCard(p, { showCity: city === 'all', cls: (i >= PH && !more ? 'more-ph' : '') + (feat && p.id === feat.id && !kind && !when && !nf ? ' is-feat' : '') })).join('')}</div>${list.length > PH && !more ? `<div class="show-more show-ph"><button class="btn btn-ghost" data-a="escMore">Show ${list.length - PH} more</button></div>` : ''}` : F.empty('Nothing free with those filters', 'Loosen a filter, or ask our concierge for a place and dates.', '<button class="btn btn-bone mt24" data-a="askPlace">Ask for a place</button>')}</div></section>
+${list.length ? `<div class="g g4 egrid">${list.map((p, i) => F.placeCard(p, { showCity: city === 'all', cls: (i >= PH && !more ? 'more-all' : '') + (feat && p.id === feat.id && !kind && !when && !nf ? ' is-feat' : '') })).join('')}</div>${list.length > PH && !more ? `<div class="show-more show-all"><button class="btn btn-ghost" data-a="escMore">Show ${list.length - PH} more</button></div>` : ''}` : F.empty('Nothing free with those filters', 'Loosen a filter, or ask our concierge for a place and dates.', '<button class="btn btn-bone mt24" data-a="askPlace">Ask for a place</button>')}</div></section>
 ${events.length ? `<section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Event nights</div><h2 class="h-cond h3 mt16">Nights that <span class="it">only</span> happen once a year</h2></div></div><div class="clist">${events.slice(0, 4).map(x => F.compact({ href: `#/escape/${x.p.id}?date=${x.k}`, plate: F.placePlate(x.p, 2, 'r43 cc-p43'), title: esc(x.ev.name), sub: esc(x.p.name) + ' · ' + U.keyFmt(x.k, 'date'), price: E.pmoney(x.p, E.nightPrice(x.p, x.k, x.p.modes[0])) })).join('')}</div></div></section>` : ''}`}
 <section class="sec-sm"><div class="wrap"><details class="acc"><summary><span>How Escapes work</span>${F.ic('plus', 14)}</summary><div class="acc-b"><div class="steps">${[['Dates', 'Every night is priced and shown as free, booked or released later.'], ['People', 'Just you, a partner or your group. Invite them after booking.'], ['Hosts', 'For the whole stay, the evenings, or not at all.'], ['House rules', 'Hotel rules, Open house or No rules. A safe word always applies.'], ['Pay', 'All now, or half now and half a week before. The deposit comes back.']].map((x, k) => `<div class="step"><div class="step-n">0${k + 1}</div><h3 class="h4 mt8">${x[0]}</h3><p class="small muted mt8">${x[1]}</p></div>`).join('')}</div></div></details>
 <div class="ask-strip mt24"><div><strong>Can’t find it?</strong> <span class="muted">Tell the concierge what you want; they reply in about ten minutes with the place and its first free dates.</span></div><button class="btn btn-ghost btn-sm" data-a="askPlace">Ask for a place</button></div></div></section>` };
@@ -10466,34 +10575,36 @@ F.homeClub = cityId => {
 /* ---------- the club ---------- */
 P.club = {
   render(r) {
+    const cur = ['tonight', 'rooms', 'members', 'more'].includes(r.q.s) ? r.q.s : 'tonight';
     const c = clubQ(r.q), u = E.user(), tonightKey = E.clubNightKey(c), nights = E.clubNights(c, 10), x = E.clubNight(c, tonightKey), day = r.q.day === 'tomorrow' || (!r.q.day && !(x.open && x.closesAt > now())) ? 'tomorrow' : 'tonight';
     const lk = day === 'tomorrow' ? U.addDays(tonightKey, 1) : tonightKey, lx = E.clubNight(c, lk), rt = E.clubRating(c), tier = E.clubTier(u);
     const revs = E.clubS().reviews.filter(z => z.clubId === c.id && z.text).slice(0, 2).map(z => z.text).concat(F.CLUB_REVIEWS.slice(U.hash(c.id) % 4, U.hash(c.id) % 4 + 2)).slice(0, 2);
     const tonightOpen = x.open && x.closesAt - H > now(), book = `#/afterhours/book?club=${c.id}${tonightOpen ? '&date=' + x.key : ''}`, doorsOpen = tonightOpen && now() >= x.opensAt;
     return { title: 'Afterhours', desc: 'FLINGR Afterhours: the members’ club in Los Angeles, New York and London. The Lounge, the Floor and VIP, with security on every door.', html: `
-<section class="ah-hero">${F.plate({ c: '#2A0609', cls: 'ah-hero-p', img: img('club-hero'), label: 'Afterhours' })}<div class="wrap ah-hero-in"><div class="eyebrow ln">FLINGR Afterhours</div><h1 class="h-cond ah-hero-t mt16">After hours, <span class="it">properly</span> kept.</h1><p class="lead mt16">A members’ club in Los Angeles, New York and London. The Lounge to unwind, the Floor for more, VIP for the night of the year. Security on every door, every night.</p>${F.ahLiveChip ? F.ahLiveChip(c) : ''}<div class="btn-row mt32"><a class="btn btn-cherry" href="${book}">${tonightOpen ? (doorsOpen ? 'Go now' : 'Go tonight') : 'Get on the list'}</a><a class="btn btn-ghost" href="#/afterhours/membership">${tier ? 'Your membership' : 'Membership'}</a></div></div></section>
+<section class="ah-hero">${F.plate({ c: '#2A0609', cls: 'ah-hero-p', img: img('club-hero'), label: 'Afterhours' })}<div class="wrap ah-hero-in"><div class="eyebrow ln">FLINGR Afterhours</div><h1 class="h-cond ah-hero-t mt16">After hours, <span class="it">properly</span> kept.</h1><p class="lead mt16">A members’ club in Los Angeles, New York and London. The Lounge, the Floor upstairs and VIP. Security on every door.</p>${F.ahLiveChip ? F.ahLiveChip(c) : ''}<div class="btn-row mt32"><a class="btn btn-cherry" href="${book}">${tonightOpen ? (doorsOpen ? 'Go now' : 'Go tonight') : 'Get on the list'}</a><a class="btn btn-ghost" href="#/afterhours/membership">${tier ? 'Your membership' : 'Membership'}</a></div></div></section>
 <div class="fbar"><div class="wrap fbar-in"><div class="fchips" role="group" aria-label="Club">${F.CLUBS.map(z => `<a class="chip ${z.id === c.id ? 'on' : ''}" href="#/afterhours?city=${z.id}" aria-current="${z.id === c.id}">${esc(z.short)}</a>`).join('')}</div><span class="fbar-sp"></span><span class="mono tiny muted nowrap">${F.ic('star', 11)} ${rt.avg.toFixed(2)} · ${U.plural(rt.n, 'night')} reviewed</span></div></div>
 <section class="sec-sm"><div class="wrap ah-top">
-  <div class="card">${tonightOpen ? F.nightHead(c, x) + F.ahCrowdLine(c, x.key) + `<div class="ah-quick mt24"><a class="btn btn-bone btn-sm" href="${book}&type=lounge">Lounge · ${(p => p.amt ? E.clubMoney(c, p.amt) : 'free')(E.passPrice(u, c, x, 'lounge'))}</a>${x.floor ? `<a class="btn btn-ghost btn-sm" href="${book}&type=${F.ahFloorType(u, x)}">The Floor</a>` : ''}</div><p class="tiny muted mt8">${doorsOpen ? 'Doors are open: buy your pass here and walk straight in.' : 'Most people decide on the night. Buy your pass now or on the way.'}</p>` : `<div class="lbl">Tonight</div><h3 class="h-disp h3 mt8">Closed tonight</h3><p class="small muted mt8">${nights[0] ? 'Next: ' + esc(nights[0].theme.name) + ', ' + U.keyFmt(nights[0].key, 'date') + '.' : ''}</p>${nights[0] ? `<a class="btn btn-ghost btn-sm mt16" href="#/afterhours/book?club=${c.id}&date=${nights[0].key}">See that night</a>` : ''}`}</div>
+  <div class="card">${tonightOpen ? F.nightHead(c, x) + F.ahCrowdLine(c, x.key) + `<div class="ah-quick mt24"><a class="btn btn-bone btn-sm" href="${book}&type=lounge">Lounge · ${(p => p.amt ? E.clubMoney(c, p.amt) : 'free')(E.passPrice(u, c, x, 'lounge'))}</a>${x.floor ? `<a class="btn btn-ghost btn-sm" href="${book}&type=${F.ahFloorType(u, x)}">The Floor</a>` : ''}</div><p class="tiny muted mt8">${doorsOpen ? 'Doors are open: buy your pass here and walk straight in.' : 'Most people decide on the night. Buy your pass now or on the way.'}</p>` : (() => { const last = x.open && x.closesAt > now(), nx = nights.find(n => n.key > tonightKey) || null; return `<div class="lbl">Tonight</div><h3 class="h-disp h3 mt8">${last ? 'Last hour tonight' : 'Closed tonight'}</h3>${last ? `<p class="small muted mt8">Doors close at ${tm(x.closesAt, c)}. Passes for tonight have stopped.</p>` : ''}${F.ahMemberLine(c)}<p class="small muted mt8">${nx ? 'Next: ' + esc(nx.theme.name) + ', ' + U.keyFmt(nx.key, 'date') + '.' : ''}</p>${nx ? `<a class="btn btn-ghost btn-sm mt16" href="#/afterhours/book?club=${c.id}&date=${nx.key}">See that night</a>` : ''}`; })()}</div>
   <div class="card">${F.busyHtml(c)}<div class="ah-sec-l mt24"><span class="lbl">Security</span><p class="small mt8">${F.ic('shield', 14)} ${esc(c.security.head)} runs security at ${esc(c.short)}, with a team on every door and every floor. Monitors in every room upstairs.</p></div></div>
 </div></section>
-<section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Who’s on</div><h2 class="h-cond h3 mt16">${day === 'tonight' ? 'Tonight' : 'Tomorrow'} at <span class="it">${esc(c.short)}</span></h2><p class="small muted mt8">${lx.open ? esc(lx.theme.name) + ' · ' + U.keyFmt(lk, 'date') + '.' : 'Closed ' + (day === 'tonight' ? 'tonight' : 'tomorrow') + '.'}</p></div><div class="seg seg-sm" role="group" aria-label="Night"><a class="seg-b ${day === 'tonight' ? 'on' : ''}" href="#/afterhours?city=${c.id}&day=tonight">Tonight</a><a class="seg-b ${day === 'tomorrow' ? 'on' : ''}" href="#/afterhours?city=${c.id}&day=tomorrow">Tomorrow</a></div></div>
+${F.tabNav([['tonight', 'Tonight'], ['rooms', 'Rooms & hosts'], ['members', 'Membership & VIP'], ['more', 'Questions']], cur, '#/afterhours?city=' + c.id + (r.q.day ? '&day=' + r.q.day : ''), 'Afterhours')}
+${{ tonight: () => `<section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Who’s on</div><h2 class="h-cond h3 mt16">${day === 'tonight' ? 'Tonight' : 'Tomorrow'} at <span class="it">${esc(c.short)}</span></h2><p class="small muted mt8">${lx.open ? esc(lx.theme.name) + ' · ' + U.keyFmt(lk, 'date') + '.' : 'Closed ' + (day === 'tonight' ? 'tonight' : 'tomorrow') + '.'}</p></div><div class="seg seg-sm" role="group" aria-label="Night"><a class="seg-b ${day === 'tonight' ? 'on' : ''}" href="#/afterhours?city=${c.id}&day=tonight">Tonight</a><a class="seg-b ${day === 'tomorrow' ? 'on' : ''}" href="#/afterhours?city=${c.id}&day=tomorrow">Tomorrow</a></div></div>
   ${lx.open ? `<div class="mt24">${F.lineupHtml(c, lk, null)}</div><details class="acc mt32 ah-tld"><summary><span>${day === 'tonight' ? 'Tonight' : 'Tomorrow'}, hour by hour</span>${F.ic('plus', 14)}</summary><div class="acc-b">${F.ahTimelineHtml(c, lk)}</div></details>` : ''}</div></section>
-<section class="sec-sm"><div class="wrap"><div class="eyebrow ln">Three rooms, one door</div><div class="g g3 hscroll ah-areas mt24">${F.CLUB_AREAS.map(a => `<article class="ah-area">${F.clubPlate(c, a.id)}<h3 class="h-disp h3 mt16">${a.name}</h3><p class="small muted mt8">${esc(a.line)}</p><ul class="ah-pts mt16">${a.points.slice(0, 3).map(p => `<li>${F.ic('check', 13)}<span class="small">${esc(p)}</span></li>`).join('')}</ul></article>`).join('')}</div></div></section>
 <section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">The next nights</div><p class="small muted mt8">Saturdays follow the month’s theme. Floor places for people coming on their own are limited: the same number for men as for women.</p></div><a class="btn-link tiny" href="${book}">Get on the list</a></div>
   <div class="ah-nights hscroll mt24">${nights.map(n => { const left = n.floor && !n.noMen ? E.soloLeft(c, n.key, E.soloPool(u)) : null; return `<a class="ah-nt" href="#/afterhours/book?club=${c.id}&date=${n.key}"><span class="lbl">${U.keyFmt(n.key, 'date')}</span><strong class="h-disp h4">${esc(n.theme.name)}</strong><span class="tiny muted">${n.floor ? 'Lounge and Floor' : 'Lounge only'} · from ${tm(n.opensAt, c)}</span>${F.ahNightTags ? F.ahNightTags(c, n, u) : ''}<span class="tiny muted">${E.ahOnList(c, n.key)} on the list</span>${left === null ? '' : `<span class="tiny ${left ? 'muted' : 'warn-t'}">On your own: ${left ? (left <= 3 ? 'last ' + left : 'places left') : 'waitlist'}</span>`}${n.floor && n.noMen ? '<span class="tiny muted">Pairs only upstairs</span>' : ''}</a>`; }).join('')}</div></div></section>
+
+${F.ahFreeRow ? F.ahFreeRow(c, (tonightOpen ? [x.key] : []).concat(nights.map(n => n.key)).find(k => E.ahHosts(c, k).length) || x.key) : ''}`, rooms: () => `<section class="sec-sm"><div class="wrap"><div class="eyebrow ln">Three rooms, one door</div><div class="g g3 hscroll ah-areas mt24">${F.CLUB_AREAS.map(a => `<article class="ah-area">${F.clubPlate(c, a.id)}<h3 class="h-disp h3 mt16">${a.name}</h3><p class="small muted mt8">${esc(a.line)}</p><ul class="ah-pts mt16">${a.points.slice(0, 3).map(p => `<li>${F.ic('check', 13)}<span class="small">${esc(p)}</span></li>`).join('')}</ul></article>`).join('')}</div></div></section>
 <section class="sec-sm"><div class="wrap ah-split"><div><div class="eyebrow ln">The house rules</div><h2 class="h-cond h3 mt16">Safe first. <span class="it">Then</span> everything else.</h2><ol class="ah-rules mt24">${F.CLUB_RULES.slice(0, 3).map((x, i) => `<li><span class="mono tiny">0${i + 1}</span><div><strong class="small">${esc(x[0])}</strong><p class="small muted mt4">${esc(x[1])}</p></div></li>`).join('')}</ol><a class="btn btn-ghost btn-sm mt24" href="#/afterhours/rules">All ${F.CLUB_RULES.length} rules</a></div>
   <div class="card"><div class="lbl">Hosts at Afterhours</div><p class="small mt8">FLINGR hosts come only with the guest who booked them, never on their own. Three ways to bring one:</p><div class="stack-s mt16">${[['cup', 'Meet at the Lounge', 'Add “A drink beforehand” to an Hour or Night booking and choose the Afterhours Lounge. You’re both on the guest list.'], ['door', 'The suite upstairs', 'Choose “Afterhours · Private suite upstairs” as the venue. You never go back out on the street.'], ['sparkle', 'The Floor', 'Choose “Afterhours · The Floor” for The Hour, with a host who plays on the Floor.']].map(z => `<div class="ah-way">${F.ic(z[0], 16)}<div><strong class="small">${z[1]}</strong><p class="tiny muted mt4">${z[2]}</p></div></div>`).join('')}</div><div class="btn-row mt24"><a class="btn btn-bone btn-sm" href="#/afterhours/book?club=${c.id}${(nights[0] || {}).key ? '&date=' + nights[0].key : ''}&host=pick">Book a host with your pass</a><a class="btn-link tiny" href="#/hosts?city=${c.cityId}&ah=1">Hosts at Afterhours</a></div><p class="tiny muted mt16">When a booking ends, security sees the host out safely.</p></div></div></section>
-${F.ahFreeRow ? F.ahFreeRow(c, tonightOpen ? x.key : (nights[0] || {}).key || x.key) : ''}
-<section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Membership</div><p class="small muted mt8">Free entry every night. Or come for one night: every pass is open to verified FLINGR accounts.</p></div></div>
+`, members: () => `<section class="sec-sm sec-ox"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Membership</div><p class="small muted mt8">Free entry every night. Or come for one night: every pass is open to verified FLINGR accounts.</p></div></div>
   ${u && F.ahNightsCard && E.ahStamps(u) ? `<div class="mt24">${F.ahNightsCard(u)}</div>` : ''}<div class="g g2 hscroll mt24">${['lounge', 'full'].map(t => { const m = F.CLUB_MEMBERSHIP[t]; return `<div class="card ah-tier ${t === 'full' ? 'feat' : ''}"><div class="row between"><h3 class="h-disp h3">${m.name}</h3><span class="mono">${U.money(E.memPrice(u, t))}<span class="tiny muted"> / month</span></span></div><p class="small muted mt8">${esc(m.line)}</p>${t === 'lounge' ? '<p class="tiny mt8">Included with FLINGR All-Access.</p>' : ''}<a class="btn ${t === 'full' ? 'btn-bone' : 'btn-ghost'} btn-sm mt24" href="#/afterhours/membership">${tier === t ? 'Your membership' : 'Apply'}</a></div>`; }).join('')}</div></div></section>
 <section class="sec-sm"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Celebrations in VIP</div><p class="small muted mt8">A booth for the night, a bottle, a 15-minute private show and a cake at midnight: ${E.clubMoney(c, E.pkgPrice(c))}.</p></div></div>
   <div class="g g3 hscroll mt24">${F.CLUB_PACKAGES.map(p => `<a class="card ah-pkg" href="#/afterhours/book?club=${c.id}&pkg=${p.id}"><span class="lbl">${esc(p.name)}</span><p class="small mt8">${esc(p.line)}</p><span class="btn-link tiny mt16">Plan it</span></a>`).join('')}</div>
   <p class="small muted mt24">VIP booths on their own: a ${E.clubMoney(c, E.vipMin(c))} minimum spend for the night, with ${F.CLUB_PRICES.depositPct}% paid ahead as a deposit that counts towards it.</p></div></section>
-${F.ahMoreBand ? F.ahMoreBand(c) : ''}
+`, more: () => `${F.ahMoreBand ? F.ahMoreBand(c) : ''}
 <section class="sec-sm sec-ox"><div class="wrap ah-split"><div><div class="eyebrow ln">What members say</div><div class="stack mt24">${revs.map(t => `<blockquote class="ah-q"><p>“${esc(t)}”</p></blockquote>`).join('')}</div>${F.ahFeedHtml(c) ? `<div class="lbl mt32">The last few nights</div><div class="mt16">${F.ahFeedHtml(c)}</div>` : ''}</div>
   <div class="stack-s">${[['Who can come in?', 'Any verified FLINGR account aged 18 or over. The Floor also needs a screening from the last 90 days (book one in Account → Preferences) and the house rules signed once.'], ['Lounge or Floor?', 'Two passes, one price per person. The Floor keeps the same number of places for men as for women and non-binary guests coming on their own; pairs use any place.'], ['What do I bring?', 'The ID you verified with. Your phone is sealed in a pouch at the door, so your pass works from the printed code too.'], ['Performers and hosts?', 'Performers perform: no sex, and no touching unless they start it. FLINGR hosts come only with the guest who booked them.'], ['Can I cancel?', 'Free until 24 hours before doors open, back to your FLINGR Wallet. After that, entry and booth deposits aren’t refunded.']].map(z => `<details class="acc"><summary><span>${z[0]}</span>${F.ic('plus', 14)}</summary><div class="acc-b"><p class="small">${esc(z[1])}</p></div></details>`).join('')}</div></div></section>
-<section class="sec-sm"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">From the Journal</div><p class="small muted mt8">Passes, your first night, and asking first.</p></div><a class="btn-link tiny" href="#/journal?cat=Afterhours">All Afterhours articles</a></div><div class="g g3 hscroll mt24">${F.CONTENT.journal.filter(a => a.cat === 'Afterhours').slice(1, 4).map(P.journal.card).join('')}</div></div></section>` };
+<section class="sec-sm"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">From the Journal</div><p class="small muted mt8">Passes, your first night, and asking first.</p></div><a class="btn-link tiny" href="#/journal?cat=Afterhours">All Afterhours articles</a></div><div class="g g3 hscroll mt24">${F.CONTENT.journal.filter(a => a.cat === 'Afterhours').slice(1, 4).map(P.journal.card).join('')}</div></div></section>` }[cur]()}` };
   }
 };
 
@@ -10848,7 +10959,7 @@ const pickFix = (st, c, key, from) => {
   const opts = E.ahOptions(h, c, key, from, s.venueId); if (!opts.length) { st.host = null; st.hostGone = h.first; return null; }
   const w = opts.find(o => o.way === s.way) || opts[0]; s.way = w.way;
   // how long: the hours asked for, or the longest shorter stay that still fits that night
-  const hrs = E.ahHours(h, w.way), want = hrs.includes(E.ahHoursOf(s)) ? E.ahHoursOf(s) : hrs.includes(1) ? 1 : hrs[0];
+  const hrs = E.ahHours(h, w.way, E.clubNight(c, key)), want = hrs.includes(E.ahHoursOf(s)) ? E.ahHoursOf(s) : hrs.includes(1) ? 1 : hrs[0];
   let pl = null, slots = [], hours = want;
   for (const n of [want].concat(hrs.filter(z => z < want).reverse(), hrs.filter(z => z > want))) { const q = E.ahPlanFor(h, w.way, n), ss = E.ahSlots(h, c, key, w.way, q.planId, { from, venueId: s.venueId, ext: q.ext }); if (ss.length) { pl = q; slots = ss; hours = n; break; } }
   if (!pl) { const p0 = w.plans[0]; pl = { planId: p0.planId, ext: 0 }; slots = p0.slots; hours = p0.planId === 'night' ? 8 : 1; }
@@ -11159,12 +11270,13 @@ P.journal = {
   render(r) {
     const cat = r.q.cat || '', all = jSorted(), cats = [...new Set(all.map(a => a.cat))];
     const list = all.filter(a => !cat || a.cat === cat);
-    const lead = list[0];
-    return { title: 'Journal', html: `${F.pageHead({ eyebrow: 'The Journal', title: 'Notes on doing it <span class="it">well.</span>', lead: 'Afterhours, etiquette, safety and planning, from the people who run FLINGR and the hosts who make it work.' })}
-<section class="sec-sm"><div class="wrap"><div class="row wrap-gap"><a class="chip ${!cat ? 'on' : ''}" href="#/journal">All</a>${cats.map(c => `<a class="chip ${cat === c ? 'on' : ''}" href="#/journal?cat=${encodeURIComponent(c)}">${c}</a>`).join('')}</div>
-${lead ? `<a class="jlead mt48 rv" href="#/journal/${lead.slug}">${F.jPlate(lead, '#4A0D12', 'r169')}<div><div class="mono tiny muted">${lead.cat} · ${U.fmt(ago(lead.ago), 'UTC', 'md')}</div><h2 class="h-cond h2 mt16">${esc(lead.title)}</h2><p class="lead mt16">${esc(lead.excerpt)}</p><span class="btn-link mt24">Read article</span></div></a>` : ''}
-<div class="g g3 jgrid mt64">${list.slice(1).map(P.journal.card).join('')}</div>
-<div class="mt96" id="guides"><div class="eyebrow ln">Neighbourhoods</div><h2 class="h-cond h2 mt16">Where to <span class="it">go</span></h2><div class="g g3 guides-g mt32">${F.CITIES.map(c => `<div class="card"><h3 class="h-disp h4">${c.name}</h3><ul class="guide-list mt16">${Object.keys(F.GUIDES[c.id] || {}).map(hd => `<li><a class="u" href="#/guide/${c.id}/${encodeURIComponent(hd)}">${esc(hd)}</a><span class="tiny muted d-b">${esc(F.GUIDES[c.id][hd][0])}</span></li>`).join('')}</ul></div>`).join('')}</div></div></div></section>` };
+    const lead = list[0], guides = r.q.s === 'guides' || r.frag === 'guides', more = r.q.all === '1' ? list.length : 7;
+    return { title: 'Journal', html: `${F.pageHead({ eyebrow: 'The Journal', title: 'Notes on doing it <span class="it">well.</span>', lead: 'Short reads on Afterhours, manners, safety and planning, from our team and our hosts.' })}
+<section class="sec-sm"><div class="wrap"><div class="row wrap-gap"><a class="chip ${!cat && !guides ? 'on' : ''}" href="#/journal">All</a>${cats.map(c => `<a class="chip ${cat === c && !guides ? 'on' : ''}" href="#/journal?cat=${encodeURIComponent(c)}">${c}</a>`).join('')}<a class="chip ${guides ? 'on' : ''}" href="#/journal?s=guides">Neighbourhoods</a></div>
+${guides ? '' : `${lead ? `<a class="jlead mt48 rv" href="#/journal/${lead.slug}">${F.jPlate(lead, '#4A0D12', 'r169')}<div><div class="mono tiny muted">${lead.cat} · ${U.fmt(ago(lead.ago), 'UTC', 'md')}</div><h2 class="h-cond h2 mt16">${esc(lead.title)}</h2><p class="lead mt16">${esc(lead.excerpt)}</p><span class="btn-link mt24">Read article</span></div></a>` : ''}
+<div class="g g3 jgrid mt64">${list.slice(1, more).map(P.journal.card).join('')}</div>
+${list.length > more ? `<div class="center mt48"><a class="btn btn-ghost" href="#/journal${U.q({ cat, all: '1' })}">Show all ${list.length} articles</a></div>` : ''}`}
+${!guides ? '' : `<div class="mt48" id="guides"><div class="eyebrow ln">Neighbourhoods</div><h2 class="h-cond h2 mt16">Where to <span class="it">go</span></h2><div class="g g3 guides-g mt32">${F.CITIES.map(c => `<div class="card"><h3 class="h-disp h4">${c.name}</h3><ul class="guide-list mt16">${Object.keys(F.GUIDES[c.id] || {}).map(hd => `<li><a class="u" href="#/guide/${c.id}/${encodeURIComponent(hd)}">${esc(hd)}</a><span class="tiny muted d-b">${esc(F.GUIDES[c.id][hd][0])}</span></li>`).join('')}</ul></div>`).join('')}</div></div>`}</div></section>` };
   }
 };
 P.guide = {
@@ -11173,7 +11285,7 @@ P.guide = {
     if (!g) return P.notfound.render(r);
     const hosts = E.visible(F.S.hosts).filter(h => h.cityId === c.id && h.hood === hood && h.status === 'active').sort((a, b) => (F.hasPhotos(b) ? 1 : 0) - (F.hasPhotos(a) ? 1 : 0));
     return { title: hood + ', ' + c.name, html: `${F.pageHead({ eyebrow: 'Neighbourhoods · ' + c.name, title: esc(hood), lead: esc(g[0]) + '.' })}
-<section class="sec-sm"><div class="wrap narrow"><p class="lead">${esc(g[1])}</p><div class="row mt32"><a class="btn btn-bone" href="#/hosts?city=${c.id}&hood=${encodeURIComponent(hood)}">Hosts in ${esc(hood)}</a><a class="btn btn-ghost" href="#/hosts?city=${c.id}&view=map&mhood=${encodeURIComponent(hood)}">See on the map</a><a class="btn-link" href="#/journal#guides">All neighbourhoods</a></div></div>
+<section class="sec-sm"><div class="wrap narrow"><p class="lead">${esc(g[1])}</p><div class="row mt32"><a class="btn btn-bone" href="#/hosts?city=${c.id}&hood=${encodeURIComponent(hood)}">Hosts in ${esc(hood)}</a><a class="btn btn-ghost" href="#/hosts?city=${c.id}&view=map&mhood=${encodeURIComponent(hood)}">See on the map</a><a class="btn-link" href="#/journal?s=guides">All neighbourhoods</a></div></div>
 ${hosts.length ? `<div class="wrap mt64"><div class="eyebrow ln">${U.plural(hosts.length, 'host')} in ${esc(hood)}</div><div class="g g4 mt24">${hosts.slice(0, 8).map(h => F.hostCard(h)).join('')}</div></div>` : ''}</section>` };
   }
 };
@@ -11275,7 +11387,7 @@ P.help = {
     return { title: 'Help Center', html: `${F.pageHead({ eyebrow: 'Help Center', title: 'How can we <span class="it">help?</span>', extra: `<form class="hsrch mt32" data-f="helpSearch"><label class="sr" for="hq">Search help</label>${F.ic('search', 20)}<input id="hq" name="q" class="inp" placeholder="Search refunds, passes, check-in…" value="${esc(r.q.q || '')}"></form>` })}
 <section class="sec-sm"><div class="wrap help">
 <nav class="help-nav" aria-label="Help topics"><a class="${!cat ? 'on' : ''}" href="#/help${q ? '?q=' + encodeURIComponent(q) : ''}">All topics</a>${cats.map(c => `<a class="${cat === c ? 'on' : ''}" href="#/help${U.q({ cat: c, q: r.q.q })}">${c}</a>`).join('')}<div class="card mt32"><h2 class="h4">Still need help?</h2><p class="small muted mt8">Our team answers around the clock.</p><a class="btn btn-bone btn-sm mt16" href="#/contact">Contact us</a></div></nav>
-<div>${list.length ? cats.filter(c => list.some(f => f[0] === c)).map(c => `<h2 class="lbl mt32">${c}</h2>${list.filter(f => f[0] === c).map(f => `<details class="acc" ${q ? 'open' : ''}><summary><span>${esc(f[1])}</span>${F.ic('plus', 16)}</summary><div class="acc-b"><p>${esc(f[2])}</p><div class="row mt16 tiny muted">Was this helpful? <button class="btn-link tiny" data-a="faqVote">Yes</button><button class="btn-link tiny" data-a="faqVote">No</button></div></div></details>`).join('')}`).join('') : F.empty('No answers found', 'Try different words, or contact our team directly.', '<a class="btn btn-ghost mt24" href="#/contact">Contact us</a>')}</div>
+<div>${list.length ? cats.filter(c => list.some(f => f[0] === c)).map(c => { const all = list.filter(f => f[0] === c), few = !cat && !q && all.length > 3; return `<h2 class="lbl mt32">${c}</h2>${(few ? all.slice(0, 3) : all).map(f => `<details class="acc" ${q ? 'open' : ''}><summary><span>${esc(f[1])}</span>${F.ic('plus', 16)}</summary><div class="acc-b"><p>${esc(f[2])}</p><div class="row mt16 tiny muted">Was this helpful? <button class="btn-link tiny" data-a="faqVote">Yes</button><button class="btn-link tiny" data-a="faqVote">No</button></div></div></details>`).join('')}${few ? `<a class="btn-link tiny mt16" style="display:inline-block" href="#/help${U.q({ cat: c })}">All ${all.length} on ${esc(c.toLowerCase())}</a>` : ''}`; }).join('') : F.empty('No answers found', 'Try different words, or contact our team directly.', '<a class="btn btn-ghost mt24" href="#/contact">Contact us</a>')}</div>
 </div></section>` };
   }
 };
@@ -11309,24 +11421,22 @@ F.Fm.contact = (f, d) => {
 
 /* =============== ABOUT, PRESS, CAREERS =============== */
 P.about = {
-  render() {
+  render(r) {
+    const cur = ['story', 'history', 'press', 'careers'].includes(r.q.s || r.frag) ? (r.q.s || r.frag) : 'story';
     const hosts = F.S.hosts.filter(h => h.status === 'active').length;
-    return { title: 'About', html: `${F.pageHead({ eyebrow: 'About FLINGR', title: 'We built the booking we <span class="it">wished</span> existed.', lead: 'FLINGR started in Los Angeles in 2023 with a simple belief: adults arranging a night together deserve the same clarity, safety and service they expect from a good hotel.' })}
-<section class="sec sec-ink"><div class="wrap split"><div class="rv">${F.sitePlate('about', '#4A0D12', 'r45 plate-arch plate-lg', '', 'Est.<br><i>2023</i>')}</div><div class="prose"><p class="lead">Before FLINGR, arranging a night like this meant guesswork. Unclear prices, unverified profiles, boundaries discussed too late, and no one to call if something went wrong.</p><p>We started with a booking system: every host verified, every price shown, every boundary enforced. Then we added what a great hotel would: discreet rooms, a concierge at 3 AM and a morning menu.</p><p>Today FLINGR operates in Los Angeles, New York and London, with ${hosts} active hosts and a team of 64 across three time zones.</p></div></div></section>
+    return { title: 'About', html: `${F.pageHead({ eyebrow: 'About FLINGR', title: 'We built the booking we <span class="it">wished</span> existed.', lead: 'FLINGR started in Los Angeles in 2023. We believe adults arranging a night together deserve the same care they get from a good hotel.' })}
+${F.tabNav([['story', 'Our story'], ['history', 'Timeline'], ['press', 'Press'], ['careers', 'Careers']], cur, '#/about')}
+${{ story: () => `<section class="sec sec-ink"><div class="wrap split"><div class="rv">${F.sitePlate('about', '#4A0D12', 'r45 plate-arch plate-lg', '', 'Est.<br><i>2023</i>')}</div><div class="prose"><p class="lead">Before FLINGR, arranging a night like this was guesswork. Prices were unclear, profiles unchecked, boundaries talked about too late, and nobody to call if something went wrong.</p><p>We started with a booking system: every host verified, every price shown, every boundary enforced. Then we added what a great hotel would: discreet rooms, a concierge at 3 AM and a morning menu.</p><p>Today FLINGR operates in Los Angeles, New York and London, with ${hosts} active hosts and a team of 64 across three time zones.</p></div></div></section>
 <section class="sec sec-ox"><div class="wrap"><div class="g g4 stats">${[[hosts, 'Active hosts'], [(F.PLACES || []).length, 'Escapes'], [F.CLUBS.length, 'Afterhours clubs'], ['24/7', 'Human support']].map(x => `<div class="rv"><div class="h-disp h1">${x[0]}</div><div class="mono tiny muted mt8">${x[1]}</div></div>`).join('')}</div></div></section>
-<section class="sec sec-ink"><div class="wrap split"><div><div class="eyebrow ln">How we got here</div><h2 class="h-cond h2 mt16">From one city to <span class="it">one door</span> in three</h2></div>
-<div><ol class="tl tl-l">${[['2023', 'Los Angeles. The Hour and The Night, every host verified, every price shown.'], ['2024', 'New York and London. The Slow Morning becomes our most-reviewed plan.'], ['2025', 'The Morning Menu, then Practice and Velvet join the family, with one account and one Wallet.'], ['2026', 'Escapes in October: whole places for a night or a week. Then Afterhours, our members’ club, in all three cities.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol><a class="btn-link mt24" href="#/journal/afterhours-is-open">Afterhours is open</a></div></div></section>
-<section class="sec sec-ox"><div class="wrap"><h2 class="eyebrow ln">What we believe</h2><div class="g g3 hscroll mt32">${[['Clarity is kindness', 'Prices, plans and boundaries are published before anyone books. Surprises are for birthdays.'], ['Consent is not a product', 'We sell time, venues and service. Never consent. Either person can end a booking at any time.'], ['Discretion is a feature', 'Neutral descriptors, discreet notifications, no surnames shared. Privacy is the default setting.']].map(x => `<div class="card rv"><h3 class="h-disp h4">${x[0]}</h3><p class="small muted mt8">${x[1]}</p></div>`).join('')}</div></div></section>
-<section class="sec sec-ink" id="press"><div class="wrap"><div class="row between end"><div><div class="eyebrow ln">Press</div><h2 class="h-cond h2 mt16">In the <span class="it">news.</span></h2></div><div class="row"><span class="small muted">press@flingr.com</span><button class="btn btn-ghost btn-sm" data-a="pressKit">${F.ic('download', 14)} Press kit</button></div></div>
-<div class="g g3 hscroll mt32">${CT.press.slice(0, 6).map((p, i) => `<figure class="pq-c card rv"><span class="press-mark pm${i % 6}" aria-hidden="true">${esc(p[0])}</span><blockquote class="h-disp h4 mt16">“${p[1]}”</blockquote><figcaption class="mono tiny muted mt16">${p[0]} · ${U.fmt(ago(20 + i * 37), 'UTC', 'md')}</figcaption></figure>`).join('')}</div></div></section>
-<section class="sec" id="careers"><div class="wrap"><div class="eyebrow ln">Careers</div><h2 class="h-cond h2 mt16">Build something <span class="it">careful.</span></h2><p class="lead mt16">We are a team of 64 across Los Angeles, New York and London. We value calm judgement, clear writing and people who notice details.</p>
-<div class="mt32">${CT.careers.map((j, i) => `<div class="job rv"><div><h3 class="h-disp h4">${j[0]}</h3><p class="small muted mt8">${j[3]}</p></div><span class="mono tiny">${j[1]}</span><span class="mono tiny">${j[2]}</span><button class="btn btn-ghost btn-sm" data-a="apply" data-i="${i}">Apply</button></div>`).join('')}</div></div></section>` };
-  },
-  mount(r) { if (r.frag) setTimeout(() => { const t = document.getElementById(r.frag); if (t) t.scrollIntoView({ block: 'start' }); }, 40); }
+<section class="sec sec-ox"><div class="wrap"><h2 class="eyebrow ln">What we believe</h2><div class="g g3 hscroll mt32">${[['Clarity is kindness', 'Prices, plans and boundaries are published before anyone books. Surprises are for birthdays.'], ['Consent is not a product', 'We sell time, venues and service. Never consent. Either person can end a booking at any time.'], ['Discretion is a feature', 'Neutral descriptors, discreet notifications, no surnames shared. Privacy is the default setting.']].map(x => `<div class="card rv"><h3 class="h-disp h4">${x[0]}</h3><p class="small muted mt8">${x[1]}</p></div>`).join('')}</div></div></section>`, history: () => `<section class="sec sec-ink"><div class="wrap split"><div><div class="eyebrow ln">How we got here</div><h2 class="h-cond h2 mt16">From one city to <span class="it">one door</span> in three</h2></div>
+<div><ol class="tl tl-l">${[['2023', 'Los Angeles. The Hour and The Night, every host verified, every price shown.'], ['2024', 'New York and London. The Slow Morning becomes our most-reviewed plan.'], ['2025', 'The Morning Menu, then Practice and Velvet join the family, with one account and one Wallet.'], ['2026', 'Escapes in October: whole places for a night or a week. Then Afterhours, our members’ club, in all three cities.']].map(x => `<li class="done"><strong>${x[0]}</strong><p class="small muted">${x[1]}</p></li>`).join('')}</ol><a class="btn-link mt24" href="#/journal/afterhours-is-open">Afterhours is open</a></div></div></section>`, press: () => `<section class="sec sec-ink" id="press"><div class="wrap"><div class="row between end"><div><div class="eyebrow ln">Press</div><h2 class="h-cond h2 mt16">In the <span class="it">news.</span></h2></div><div class="row"><span class="small muted">press@flingr.com</span><button class="btn btn-ghost btn-sm" data-a="pressKit">${F.ic('download', 14)} Press kit</button></div></div>
+<div class="g g3 hscroll mt32">${CT.press.slice(0, 6).map((p, i) => `<figure class="pq-c card rv"><span class="press-mark pm${i % 6}" aria-hidden="true">${esc(p[0])}</span><blockquote class="h-disp h4 mt16">“${p[1]}”</blockquote><figcaption class="mono tiny muted mt16">${p[0]} · ${U.fmt(ago(20 + i * 37), 'UTC', 'md')}</figcaption></figure>`).join('')}</div></div></section>`, careers: () => `<section class="sec" id="careers"><div class="wrap"><div class="eyebrow ln">Careers</div><h2 class="h-cond h2 mt16">Build something <span class="it">careful.</span></h2><p class="lead mt16">We are a team of 64 across Los Angeles, New York and London. We value calm judgement, clear writing and people who notice details.</p>
+<div class="mt32">${CT.careers.map((j, i) => `<div class="job rv"><div><h3 class="h-disp h4">${j[0]}</h3><p class="small muted mt8">${j[3]}</p></div><span class="mono tiny">${j[1]}</span><span class="mono tiny">${j[2]}</span><button class="btn btn-ghost btn-sm" data-a="apply" data-i="${i}">Apply</button></div>`).join('')}</div></div></section>` }[cur]()}` };
+  }
 };
-P.press = { render: () => ({ redirect: '/about#press' }) };
+P.press = { render: () => ({ redirect: '/about?s=press' }) };
 A.pressKit = () => U.download('flingr-press-facts.txt', `FLINGR · Press facts\n\nFounded: 2023, Los Angeles\nCities: Los Angeles, New York, London\nActive hosts: ${F.S.hosts.filter(h => h.status === 'active').length}\nPartner hotels: 6\nSupport: 24/7, human\nBrand colours: Oxblood #2A0609, Merlot #7A1520, Cherry #A3202B, Bone #EDE8DD\nPress contact: press@flingr.com\n`, 'text/plain');
-P.careers = { render: () => ({ redirect: '/about#careers' }) };
+P.careers = { render: () => ({ redirect: '/about?s=careers' }) };
 A.apply = el => {
   const j = CT.careers[+el.dataset.i];
   F.modal(`<h2 class="h-disp h3">${j[0]}</h2><p class="mono tiny muted mt8">${j[1]} · ${j[2]}</p><form class="stack mt24" data-f="apply"><input type="hidden" name="role" value="${esc(j[0])}"><div class="field"><label for="apN">Full name</label><input class="inp" id="apN" name="name" required></div><div class="field"><label for="apE">Email</label><input class="inp" id="apE" name="email" type="email" required></div><div class="field"><label for="apL">LinkedIn or portfolio</label><input class="inp" id="apL" name="link" type="url" placeholder="https://"></div><div class="field"><label for="apW">Why FLINGR?</label><textarea class="inp" id="apW" name="why" required></textarea></div><button class="btn btn-bone">Submit application</button></form>`, { label: 'Apply' });
@@ -11633,7 +11743,7 @@ A.coPay = async el => {
   const m = u.methods.find(x => x.id === co.method);
   const rest = U.r2(pr.total - (co.useWallet && !co.deferred ? Math.min(E.walletIn(u, h.cityId), pr.total) : 0));
   if (rest > 0 && !m) return F.toast('Choose a payment method.', 'err');
-  if (E.overLimit(u, E.toUsd(h.cityId, pr.total))) return F.toast('This booking would go over your monthly limit. You can change it in Settings → Billing.', 'err', { label: 'Settings', fn: () => F.nav('/account/settings') });
+  if (E.overLimit(u, E.toUsd(h.cityId, pr.total))) return F.toast('This booking would go over your monthly limit. You can change it in Settings → Payment.', 'err', { label: 'Settings', fn: () => F.nav('/account/settings') });
   if (!co.deferred && rest > 0 && ['apple', 'google', 'paypal', 'bank'].includes(m.type)) { const ok = await expressSheet(m, rest, h.cityId); if (!ok) return; }
   F.busy(el, true, co.deferred ? 'Authorising card' : 'Processing payment');
   const ov = document.createElement('div'); ov.className = 'paying'; ov.innerHTML = `<div class="center"><span class="spin lg"></span><p class="mt16">${co.deferred ? 'Authorising with your bank' : 'Confirming with your bank'}</p></div>`; document.body.append(ov);
@@ -11937,9 +12047,9 @@ const reschedModal = () => {
   const rs = F.ui.rs, o = E.order(rs.id), h = E.host(o.hostId), tz = E.city(o.cityId).tz, pv = E.reschedPreview(o);
   const today = E.todayKey(o.cityId), horizon = U.addDays(today, F.S.settings.horizonDays);
   const days = []; for (let k = today; days.length < 14 && k <= horizon; k = U.addDays(k, 1)) days.push(k);
-  const sl = E.slots(h, o.planId, rs.key, o.extraMin || 0, [o.id]).filter(s => s.status === 'available');
+  const sl = E.slots(h, o.planId, rs.key, o.extraMin || 0, [o.id]).filter(s => s.status === 'available' && E.clubSlotOk(o, s.start));
   F.modal(`<h2 class="h-disp h3">Reschedule ${o.no}</h2><p class="small muted mt8">Same host and plan. Your current time (${U.fmt(o.start, tz, 'dt')}) stays reserved until the new time is confirmed.</p>
-  <div class="dayscroll mt24">${days.map(k => { const c = E.slots(h, o.planId, k, o.extraMin || 0, [o.id]).filter(s => s.status === 'available').length; return `<button class="dayb ${k === rs.key ? 'sel' : ''}" ${c ? `data-a="rsDay" data-k="${k}"` : 'disabled'}><span class="tiny">${U.keyFmt(k, 'wd')}</span><strong>${+k.slice(8)}</strong><span class="tiny muted">${c || '–'}</span></button>`; }).join('')}</div>
+  <div class="dayscroll mt24">${days.map(k => { const c = E.slots(h, o.planId, k, o.extraMin || 0, [o.id]).filter(s => s.status === 'available' && E.clubSlotOk(o, s.start)).length; return `<button class="dayb ${k === rs.key ? 'sel' : ''}" ${c ? `data-a="rsDay" data-k="${k}"` : 'disabled'}><span class="tiny">${U.keyFmt(k, 'wd')}</span><strong>${+k.slice(8)}</strong><span class="tiny muted">${c || '–'}</span></button>`; }).join('')}</div>
   <div class="slots mt16">${sl.length ? sl.map(s => `<button class="slot ${rs.start === s.start ? 'sel' : ''}" data-a="rsSlot" data-s="${s.start}">${U.fmt(s.start, tz, 'time')}</button>`).join('') : '<p class="small muted">No times this day.</p>'}</div>
   <div class="card-s mt24 small"><div class="kv"><span>Reschedule fee</span><span>${pv.fee ? U.money(pv.fee, o.price.cur, true) : 'Free'}</span></div>${pv.diff ? `<div class="kv"><span>Price difference</span><span>${pv.diff > 0 ? '+' : '−'}${U.money(Math.abs(pv.diff), o.price.cur, true)}</span></div>` : ''}<div class="kv kv-total"><span>Due now</span><span>${U.money(pv.due, o.price.cur, true)}</span></div></div>
   <button class="btn btn-bone btn-block mt24" data-a="rsGo" ${rs.start ? '' : 'disabled'}>Confirm new time</button>`, { cls: 'modal-lg', label: 'Reschedule' });
@@ -12104,14 +12214,14 @@ A.tClose = el => { F.store.commit(s => { s.tickets.find(x => x.id === el.dataset
 
 /* ---------- settings ---------- */
 V.settings = u => {
-  const n = u.prefs.notif;
-  return { title: 'Settings', html: `<nav class="chiprow set-jump" aria-label="Settings sections">${[['Profile', 'set-profile'], ['Identity', 'set-id'], ['Notifications', 'notif'], ['Payment', 'set-pay'], ['Password', 'set-pw'], ['Security', 'set-sec'], ['Devices', 'set-dev']].map(x => `<button class="chip" data-a="toSet" data-k="${x[1]}">${x[0]}</button>`).join('')}</nav><div class="settings">
+  const n = u.prefs.notif, q = (F.route && F.route.q.s) || (F.route && F.route.frag === 'notif' ? 'notif' : ''), cur = ['profile', 'notif', 'pay', 'security', 'browser'].includes(q) ? q : 'profile';
+  return { title: 'Settings', html: `${F.tabNav([['profile', 'Profile'], ['notif', 'Notifications'], ['pay', 'Payment'], ['security', 'Password & security'], ['browser', 'This browser']], cur, '#/account/settings', 'Settings sections')}<div class="settings">${{ profile: () => `
 <form id="set-profile" class="card stack" data-f="profile"><h2 class="h-disp h4">Profile</h2><div class="fgrid"><div class="field"><label for="pfN">Full name</label><input class="inp" id="pfN" name="name" value="${esc(u.name)}" required></div><div class="field"><label for="pfE">Email</label><input class="inp" id="pfE" name="email" type="email" value="${esc(u.email)}" required></div></div>
 <div class="fgrid"><div class="field"><label for="pfP">Mobile</label><input class="inp" id="pfP" name="phone" value="${esc(u.phone)}"></div><div class="field"><label for="pfC">Home city</label><select class="inp" id="pfC" name="city">${F.CITIES.map(c => `<option value="${c.id}" ${u.city === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div></div>
 <div class="fgrid"><div class="field"><label for="pfEn">Emergency contact</label><input class="inp" id="pfEn" name="emName" value="${esc(u.emergency.name)}"></div><div class="field"><label for="pfEp">Emergency number</label><input class="inp" id="pfEp" name="emPhone" value="${esc(u.emergency.phone)}"></div></div>
 <label class="tgl-row"><span><strong>Show times in my time zone</strong><small class="d-b muted">Hosts keep their city’s schedule; times are shown in yours (${esc(F.devTz.replace(/_/g, ' '))}).</small></span><input type="checkbox" class="tgl" data-ch="myTimePref" ${F.myTime() ? 'checked' : ''}></label>
 <button class="btn btn-bone">Save profile</button></form>
-<div id="set-id" class="card"><h2 class="h-disp h4">Identity</h2>${u.verified ? `<p class="small mt8">${F.ic('shield', 14)} Verified ${U.fmt(u.verifiedAt, 'UTC', 'md')}. Your documents were deleted after verification.</p>` : `<p class="small muted mt8">Required before your first booking.</p><button class="btn btn-bone btn-sm mt16" data-a="verifyId">Verify now</button>`}</div>
+<div id="set-id" class="card"><h2 class="h-disp h4">Identity</h2>${u.verified ? `<p class="small mt8">${F.ic('shield', 14)} Verified ${U.fmt(u.verifiedAt, 'UTC', 'md')}. Your documents were deleted after verification.</p>` : `<p class="small muted mt8">Required before your first booking.</p><button class="btn btn-bone btn-sm mt16" data-a="verifyId">Verify now</button>`}</div>`, notif: () => `
 <form class="card stack" data-f="notifPrefs" id="notif"><h2 class="h-disp h4">Notifications</h2>
 ${[['bookings', 'Bookings', 'Confirmations, changes, messages and refunds'], ['reminders', 'Reminders', 'The day before and two hours before'], ['morning', 'Morning Menu', 'When the menu opens and deliveries'], ['aftercare', 'Aftercare', 'A private check-in after each booking'], ['offers', 'Offers', 'Promotions and new hosts']].map(x => `<label class="tgl-row"><span><strong>${x[1]}</strong><small class="d-b muted">${x[2]}</small></span><input type="checkbox" class="tgl" name="${x[0]}" ${n[x[0]] ? 'checked' : ''}></label>`).join('')}
 <label class="tgl-row"><span><strong>Safety</strong><small class="d-b muted">Buddy Check-ins and urgent messages. Always on.</small></span><input type="checkbox" class="tgl" checked disabled></label>
@@ -12119,18 +12229,18 @@ ${[['bookings', 'Bookings', 'Confirmations, changes, messages and refunds'], ['r
 <label class="tgl-row"><span><strong>Plain tab title</strong><small class="d-b muted">Show “Notes” in the browser tab instead of FLINGR.</small></span><input type="checkbox" class="tgl" name="plainTitle" ${u.prefs.plainTitle ? 'checked' : ''}></label>
 <label class="tgl-row"><span><strong>Quiet hours</strong><small class="d-b muted">Hold non-urgent notifications overnight.</small></span><input type="checkbox" class="tgl" name="quiet" ${u.prefs.quiet.on ? 'checked' : ''}></label>
 <div class="fgrid"><div class="field"><label for="qF">From</label><input class="inp" id="qF" type="time" name="qfrom" value="${u.prefs.quiet.from}"></div><div class="field"><label for="qT">To</label><input class="inp" id="qT" type="time" name="qto" value="${u.prefs.quiet.to}"></div></div>
-<button class="btn btn-bone">Save notification settings</button></form>
+<button class="btn btn-bone">Save notification settings</button></form>`, pay: () => `
 <div id="set-pay" class="card"><h2 class="h-disp h4">Payment methods</h2><div class="mt16">${F.pmRows(u)}</div><button class="btn btn-ghost btn-sm mt16" data-a="addMethod">${F.ic('plus', 14)} Add a payment method</button></div>
-${F.billingCard(u)}
+${F.billingCard(u)}`, security: () => `
 <form id="set-pw" class="card stack" data-f="password"><h2 class="h-disp h4">Password</h2><button type="button" class="btn-link tiny" data-a="fillPw">${F.ic('key', 12)} Use saved password</button><div class="field"><label for="pwC">Current password</label><input class="inp" id="pwC" name="current" type="password" autocomplete="current-password"></div><div class="field"><label for="pwN">New password</label><input class="inp" id="pwN" name="next" type="password" minlength="8" autocomplete="new-password"></div><button class="btn btn-ghost">Change password</button></form>
 <div id="set-sec" class="card stack"><h2 class="h-disp h4">Security</h2><label class="tgl-row"><span><strong>Two-step sign-in</strong><small class="d-b muted">A 6-digit code by text each time you sign in on a new browser.</small></span><input type="checkbox" class="tgl" data-ch="twoStepPref" ${u.prefs.twoStep === false ? '' : 'checked'}></label>${u.trustedUntil && u.trustedUntil > Date.now() ? `<div class="kv small"><span>This browser is trusted until ${U.fmt(u.trustedUntil, 'UTC', 'md')}</span><button class="btn-link tiny" data-a="untrust">Stop trusting</button></div>` : ''}
 <div class="kv small"><span><strong>Account PIN</strong><small class="d-b muted">${u.prefs.pin ? 'Your account pages ask for a 4-digit PIN once per visit.' : 'Ask for a 4-digit PIN before showing your account pages.'}</small></span>${u.prefs.pin ? '<button class="btn-link tiny" data-a="pinOff">Remove PIN</button>' : '<button class="btn btn-ghost btn-sm" data-a="pinSet">Set a PIN</button>'}</div></div>
 <div id="set-dev" class="card"><h2 class="h-disp h4">Devices</h2><p class="small muted mt8">Where your account is signed in.</p><div class="stack mt16">${(u.devices || [{ id: 'dv1', name: 'This browser', where: '', at: Date.now(), current: true }]).map(d => `<div class="kv"><span>${F.ic(/iPhone|app/.test(d.name) ? 'phone' : 'globe', 14)} ${esc(d.name)}${d.current ? ' <span class="badge b-ok">This device</span>' : ''}<small class="d-b muted">${esc(d.where)}${d.where ? ' · ' : ''}${d.current ? 'Active now' : 'Last active ' + U.rel(d.at)}</small></span>${d.current ? '' : `<button class="btn-link tiny" data-a="devOut" data-id="${d.id}">Sign out</button>`}</div>`).join('')}</div>
-<div class="row mt16">${(u.devices || []).length > 1 ? '<button class="btn btn-ghost btn-sm" data-a="devOutAll">Sign out all other devices</button>' : ''}<button class="btn btn-ghost btn-sm" data-a="signout">Sign out here</button></div></div>
+<div class="row mt16">${(u.devices || []).length > 1 ? '<button class="btn btn-ghost btn-sm" data-a="devOutAll">Sign out all other devices</button>' : ''}<button class="btn btn-ghost btn-sm" data-a="signout">Sign out here</button></div></div>`, browser: () => `
 ${F.fam ? `<div id="set-browser">${F.fam.settingsCard()}</div>` : ''}
+` }[cur]()}
 </div>` };
 };
-A.toSet = el => { const t = document.getElementById(el.dataset.k); if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); const f = t.querySelector('input:not([type=checkbox]),button'); if (f) setTimeout(() => f.focus({ preventScroll: true }), 400); } };
 C.twoStepPref = el => { F.store.commit(() => { E.user().prefs.twoStep = el.checked; }); F.toast(el.checked ? 'Two-step sign-in is on.' : 'Two-step sign-in is off.'); };
 A.untrust = () => { F.store.commit(() => { E.user().trustedUntil = null; }); F.toast('This browser will ask for a code next time.'); F.rerender(); };
 A.pinSet = () => F.modal(`<h2 class="h-disp h3">Set an account PIN</h2><p class="small muted mt8">You’ll enter it once per visit before your account pages open.</p><form class="stack mt24" data-f="pinSet"><div class="field"><label for="pn1">New PIN</label><input class="inp mono code-inp" id="pn1" name="pin" inputmode="numeric" maxlength="4" autocomplete="off"></div><div class="field"><label for="pn2">Repeat PIN</label><input class="inp mono code-inp" id="pn2" name="pin2" inputmode="numeric" maxlength="4" autocomplete="off"></div><button class="btn btn-bone">Save PIN</button></form>`, { cls: 'modal-sm', label: 'Account PIN' });
@@ -12140,7 +12250,6 @@ F.Fm.pinUnlock = (f, d) => { F.clearErr(f); if (String(d.pin) !== String(E.user(
 A.unreadNotif = el => { F.store.commit(st => { const n = st.notifications.find(x => x.id === el.dataset.id); if (n) n.read = false; }); F.chromeCounts(); F.rerender(); };
 A.devOut = el => { F.store.commit(() => { const u = E.user(); u.devices = (u.devices || []).filter(d => d.id !== el.dataset.id); }); F.toast('Signed out of that device.'); F.rerender(); };
 A.devOutAll = async () => { if (!(await F.confirm({ title: 'Sign out everywhere else?', body: 'Every other device will need your password to sign in again.', ok: 'Sign out others' }))) return; F.store.commit(() => { const u = E.user(); u.devices = (u.devices || []).filter(d => d.current); }); F.toast('Signed out of all other devices.'); F.rerender(); };
-M.settings = r => { if (r.frag === 'notif') setTimeout(() => { const n = $('#notif'); if (n) n.scrollIntoView({ behavior: 'smooth' }); }, 80); };
 F.Fm.profile = (f, d) => { F.clearErr(f); if (!d.name) return F.fieldErr(f, 'name', 'Enter your name.'); if (!U.validEmail(d.email)) return F.fieldErr(f, 'email', 'Enter a valid email.'); F.store.commit(() => { const u = E.user(); Object.assign(u, { name: d.name, email: d.email, phone: d.phone, city: d.city }); u.emergency.name = d.emName; u.emergency.phone = d.emPhone; }); F.toast('Profile saved.'); F.rerender(); };
 F.Fm.notifPrefs = (f, d) => { F.store.commit(() => { const u = E.user(); ['bookings', 'reminders', 'morning', 'aftercare', 'offers'].forEach(k => { u.prefs.notif[k] = !!d[k]; }); u.prefs.discreet = !!d.discreet; u.prefs.plainTitle = !!d.plainTitle; u.prefs.quiet = { on: !!d.quiet, from: d.qfrom, to: d.qto }; }); F.toast('Notification settings saved.'); };
 A.pmDefault = el => { F.store.commit(() => { E.user().methods.forEach(m => { m.default = m.id === el.dataset.id; }); }); F.rerender(); };
@@ -12216,10 +12325,10 @@ V.record = u => {
 F.bookAgainCard = o => {
   if (!['completed', 'missed'].includes(o.status) || o.customerId !== (E.user() || {}).id || (o.rebook && o.rebook.start > now())) return '';
   const h = E.host(o.hostId); if (!h) return '';
-  const club = E.orderClub && E.orderClub(o), ah = club && E.ahAgainHref(o);
-  if (club) { const sel = E.ahSelOf(o); return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${ah ? `Afterhours ${esc(club.c.short)} with ${esc(h.first)}, ${sel.planId === 'night' ? 'the night' : U.plural(sel.hours, 'hour')}, ${E.ahWay(sel.way).short}, a week on. Pass and host in one checkout.` : `${esc(club.c.short)} has no open night in the next four weeks.`}</p><div class="row wrap-gap mt16">${ah ? `<a class="btn btn-bone btn-sm" href="${ah}">Book the same night</a>` : ''}<a class="btn-link tiny" href="#/host/${h.id}">Other times</a></div></div>`; }
+  const club = E.orderClub && E.orderClub(o), ah = club && E.ahAgainHref(o), chap = o.status === 'completed' ? F.chapterStrip(h, { usual: false, cls: 'chap-in mt24' }) : '';
+  if (club) { const sel = E.ahSelOf(o); return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${ah ? `Afterhours ${esc(club.c.short)} with ${esc(h.first)}, ${sel.planId === 'night' ? 'the night' : U.plural(sel.hours, 'hour')}, ${E.ahWay(sel.way).short}, a week on. Pass and host in one checkout.` : `${esc(club.c.short)} has no open night in the next four weeks.`}</p><div class="row wrap-gap mt16">${ah ? `<a class="btn btn-bone btn-sm" href="${ah}">Book the same night</a>` : ''}<a class="btn-link tiny" href="#/host/${h.id}">Other times</a></div>${chap}</div>`; }
   const s = E.sameSlot(o);
-  return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${s ? `${esc(E.plan(o.planId).name)} with ${esc(h.first)}, ${F.availLabel(s.start, h.cityId)}. Same venue and extras.` : `${esc(h.first)} has no matching time in the next four weeks.`}</p><div class="row wrap-gap mt16">${s ? `<button class="btn btn-bone btn-sm" data-a="bookSame" data-o="${o.id}">Book this time</button>` : ''}<a class="btn-link tiny" href="#/host/${h.id}?plan=${o.planId}">Other times</a></div></div>`;
+  return `<div class="card mt24 again"><span class="lbl">Book again</span><p class="small mt8">${s ? `${esc(E.plan(o.planId).name)} with ${esc(h.first)}, ${F.availLabel(s.start, h.cityId)}. Same venue and extras.` : `${esc(h.first)} has no matching time in the next four weeks.`}</p><div class="row wrap-gap mt16">${s ? `<button class="btn btn-bone btn-sm" data-a="bookSame" data-o="${o.id}">Book this time</button>` : ''}<a class="btn-link tiny" href="#/host/${h.id}?plan=${o.planId}">Other times</a></div>${chap}</div>`;
 };
 
 /* ---------- reviews: what guests mention most ---------- */
@@ -12403,11 +12512,18 @@ SV.orders = r => {
 };
 A.opGo = el => { F.store.commit(() => { const o = E.order(el.dataset.o); if (el.dataset.s === 'checked_in') o.guestIn = Date.now(); if (!E.go(o, el.dataset.s, E.LABEL[el.dataset.s] + ' (by FLINGR)')) F.toast('That transition is not allowed.', 'err'); if (el.dataset.s === 'in_progress') { const len = o.end - o.start; if (Date.now() < o.start) { o.start = Date.now(); o.end = o.start + len; } E.unschedule(o); E.schedule(o, 'post'); } if (el.dataset.s === 'completed') o.endedAt = Date.now(); }); F.rerender(); };
 A.opCancel = async el => { if (!(await F.confirm({ title: 'Cancel and refund in full?', ok: 'Cancel booking', danger: true }))) return; E.cancel(el.dataset.o, { by: 'staff', dest: 'original', reason: 'Cancelled by operations' }); F.rerender(); };
+// one page of a long staff list at a time, with Previous and Next keeping the other filters
+F.pageOf = (list, r, path, per) => { const pages = Math.max(1, Math.ceil(list.length / per)), pg = Math.min(pages, Math.max(1, +(r.q.p || 1))), rows = list.slice((pg - 1) * per, pg * per);
+  const link = n => '#' + path + U.q(Object.assign({}, r.q, { p: n > 1 ? String(n) : '' }));
+  const nav = pages > 1 ? `<div class="row between wrap-gap mt24 pager"><span class="mono tiny muted">${(pg - 1) * per + 1}–${(pg - 1) * per + rows.length} of ${list.length}</span><span class="row nowrap">${pg > 1 ? `<a class="btn btn-ghost btn-sm" href="${link(pg - 1)}">Previous</a>` : ''}${pg < pages ? `<a class="btn btn-ghost btn-sm" href="${link(pg + 1)}">Next</a>` : ''}</span></div>` : '';
+  return { rows, nav };
+};
 SV.hosts = r => {
-  const c = r.q.c || 'all', list = F.S.hosts.filter(h => c === 'all' || h.cityId === c);
+  const c = r.q.c || 'all', all = F.S.hosts.filter(h => c === 'all' || h.cityId === c), pgd = F.pageOf(all, r, '/staff/hosts', innerWidth <= 640 ? 12 : 25), list = pgd.rows;
   return `<div class="row wrap-gap">${[['all', 'All']].concat(F.CITIES.map(x => [x.id, x.name])).map(x => `<a class="chip ${c === x[0] ? 'on' : ''}" href="#/staff/hosts?c=${x[0]}">${x[1]}</a>`).join('')}<button class="btn btn-ghost btn-sm" data-a="opNewHost">${F.ic('plus', 12)} New host</button><button class="btn btn-ghost btn-sm" data-a="csvHosts">${F.ic('download', 12)} Export CSV</button></div>
 <div class="bulkbar mt16 row wrap-gap"><span class="small muted" id="bulkN">${(F.ui.hsel || []).length} selected</span>${[['active', 'Activate'], ['paused', 'Pause'], ['video', 'Mark video verified'], ['bg', 'Mark background checked']].map(x => `<button class="btn btn-ghost btn-sm" data-a="opBulk" data-s="${x[0]}">${x[1]}</button>`).join('')}${(F.S.audit || []).some(a => a.undo && !a.undone) ? '<button class="btn btn-ghost btn-sm" data-a="opUndo">Undo last change</button>' : ''}<label class="btn btn-ghost btn-sm">Import CSV<input type="file" accept=".csv,text/csv" class="sr" data-ch="opImportCsv"></label><button class="btn-link tiny" data-a="opSelAll">Select all shown</button><button class="btn-link tiny" data-a="opSelNone">Clear</button></div>
 <div class="tblw mt16"><table class="tbl"><thead><tr><th><span class="sr">Actions</span></th><th>Host</th><th>City</th><th>Plans</th><th>Rating</th><th>Verification</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>${list.map(h => `<tr><td><input type="checkbox" data-ch="opSel" value="${h.id}" ${(F.ui.hsel || []).includes(h.id) ? 'checked' : ''} aria-label="Select ${esc(h.name)}"></td><td><a class="u" href="#/host/${h.id}">${esc(h.name)}</a><div class="tiny muted mono">${h.id} · <button class="btn-link tiny" data-a="opHostHist" data-h="${h.id}">History</button></div></td><td>${E.city(h.cityId).abbr} · ${esc(h.hood)}</td><td class="small">${h.plans.map(p => E.plan(p.id).name.replace('The ', '') + ' ' + E.money(p.price, h.cityId)).join('<br>')}</td><td>${h.rating ? h.rating.toFixed(2) : '—'}</td><td class="small"><label class="check"><input type="checkbox" data-ch="opVer" data-h="${h.id}" data-k="video" ${h.ver.video ? 'checked' : ''}><span>Video</span></label><label class="check"><input type="checkbox" data-ch="opVer" data-h="${h.id}" data-k="bg" ${h.ver.bg ? 'checked' : ''}><span>Background</span></label></td><td>${h.status === 'active' ? '<span class="badge b-ok">Active</span>' : h.status === 'suspended' ? '<span class="badge b-err">Suspended</span>' : '<span class="badge">Paused</span>'}</td><td class="nowrap"><button class="btn-link tiny" data-a="opEditHost" data-h="${h.id}">Edit</button> <button class="btn-link tiny" data-a="opHostStatus" data-h="${h.id}" data-s="${h.status === 'active' ? 'suspended' : 'active'}">${h.status === 'active' ? 'Suspend' : 'Activate'}</button><div class="row nowrap mt4"><label class="check tiny"><input type="checkbox" data-ch="opFlag" data-h="${h.id}" data-k="featured" ${h.featured ? 'checked' : ''}><span>Featured</span></label><label class="check tiny"><input type="checkbox" data-ch="opFlag" data-h="${h.id}" data-k="hidden" ${h.hidden ? 'checked' : ''}><span>Hidden</span></label></div></td></tr>`).join('')}</tbody></table></div>
+${pgd.nav}
 ${P.staff.changeLog()}`;
 };
 /* ---- change log and undo ---- */
@@ -12463,8 +12579,8 @@ A.clockAdd = el => { F.clock.add(+el.dataset.ms); F.toast('Moved forward ' + el.
 A.clockTo = el => { const t = +el.dataset.t; if (t > Date.now()) F.clock.add(t - Date.now()); afterClock(); };
 A.clockReset = async () => { if (!(await F.confirm({ title: 'Back to real time?', body: 'Anything that already happened while the clock was ahead stays as it is.', ok: 'Back to real time' }))) return; F.clock.reset(); afterClock(); };
 C.opSel = el => { const s = F.ui.hsel = F.ui.hsel || []; if (el.checked) { if (!s.includes(el.value)) s.push(el.value); } else F.ui.hsel = s.filter(x => x !== el.value); const n = $('#bulkN'); if (n) n.textContent = F.ui.hsel.length + ' selected'; };
-A.opSelAll = () => { F.ui.hsel = $$('input[data-ch=opSel]').map(x => x.value); F.rerender(); };
 A.opSelNone = () => { F.ui.hsel = []; F.rerender(); };
+A.opSelAll = () => { F.ui.hsel = $$('input[data-ch=opSel]').map(x => x.value); F.rerender(); };
 A.opBulk = el => { const ids = F.ui.hsel || []; if (!ids.length) return F.toast('Select hosts first.', 'err'); const k = el.dataset.s; F.store.commit(() => { ids.forEach(id => { const h = E.host(id); if (k === 'active' || k === 'paused') h.status = k; else { h.ver[k] = true; h.ver[k + 'At'] = Date.now(); } }); F.ev('host_bulk', null, { k, n: ids.length }); }); F.toast('Updated ' + U.plural(ids.length, 'host') + '.'); F.rerender(); };
 const csv = (name, head, rows) => U.download(name, [head].concat(rows).map(r => r.map(v => { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',')).join('\n'), 'text/csv');
 A.csvHosts = () => csv('flingr-hosts.csv', ['id', 'name', 'age', 'city', 'neighbourhood', 'status', 'instant', 'rating', 'reviews', 'plans', 'email'], F.S.hosts.map(h => [h.id, h.name, h.age, E.city(h.cityId).name, h.hood, h.status, h.instant !== false, h.rating, h.reviewCount, h.plans.map(p => p.id + ':' + p.price).join(' '), h.email]));
@@ -12473,13 +12589,14 @@ A.csvGuests = () => csv('flingr-guests.csv', ['id', 'name', 'email', 'city', 've
 A.opHist = el => { const o = E.order(el.dataset.o), tz = E.city(o.cityId).tz; F.modal(`<h2 class="h-disp h3">${o.no || o.id}</h2><p class="small muted mt8">${esc(E.host(o.hostId).name)} · ${E.plan(o.planId).name} · ${U.fmt(o.start, tz, 'dt')}</p><ol class="tl mt24">${(o.history || []).slice().reverse().map(x => `<li class="done"><strong class="small">${esc(x.note)}</strong><span class="tiny muted d-b">${U.fmt(x.at, tz, 'dt')} · ${esc(E.LABEL[x.s] || x.s)}</span></li>`).join('') || '<li>No history.</li>'}</ol>${o.payment ? `<div class="kv small mt24"><span>Payment</span><span>${esc(o.payment.label)} · ${o.payment.ref}${o.payment.deferred ? (o.payment.captured ? ' · captured' : ' · authorised only') : ''}</span></div>` : ''}`, { label: 'Order history' }); };
 A.opHostHist = el => { const h = E.host(el.dataset.h), ev = F.S.events.filter(e => e.entity === h.id || (e.meta && e.meta.host === h.id)).slice(-60).reverse(), os = F.S.orders.filter(o => o.hostId === h.id).sort((a, b) => b.start - a.start).slice(0, 12); F.modal(`<h2 class="h-disp h3">${esc(h.name)}</h2><p class="small muted mt8">${h.id} · joined ${U.fmt(h.joined, 'UTC', 'md')} · ${h.status}</p><div class="lbl mt24">Recent bookings</div><div class="stack mt8">${os.map(o => `<div class="kv small"><span>${o.no || o.id} · ${E.plan(o.planId).name}</span><span>${U.fmt(o.start, E.city(o.cityId).tz, 'md')} · ${esc(E.LABEL[o.status] || o.status)}</span></div>`).join('') || '<p class="small muted">None.</p>'}</div><div class="lbl mt24">Activity</div><div class="stack mt8">${ev.map(e => `<div class="kv tiny"><span class="mono">${e.type}</span><span class="muted">${U.rel(e.at)}</span></div>`).join('') || '<p class="small muted">No recorded activity.</p>'}</div>`, { label: 'Host history' }); };
 SV.photos = r => {
-  const c = r.q.c || 'la', list = F.S.hosts.filter(h => h.cityId === c), n = F.images.count('hosts/'), up = Object.keys(F.IMG).filter(k => F.images.uploaded(k)).length;
+  const c = r.q.c || 'la', pgd = F.pageOf(F.S.hosts.filter(h => h.cityId === c), r, '/staff/photos', innerWidth <= 640 ? 6 : 12), list = pgd.rows, n = F.images.count('hosts/'), up = Object.keys(F.IMG).filter(k => F.images.uploaded(k)).length;
   const site = ['hero', 'hero-inset', 'about', 'safety', 'gift', 'host', 'plan-hour', 'plan-night', 'plan-morning'].concat((F.CONTENT.journal || []).map(j => 'journal-' + j.slug));
-  return `<div class="card"><h2 class="h-disp h4">Bulk upload</h2><p class="small muted mt8">Drop in any number of photos named by slot: <span class="mono">FL-1001-1.jpg</span> to <span class="mono">FL-1001-4.jpg</span> for hosts (‑1 is the main portrait), or <span class="mono">hero.jpg</span>, <span class="mono">about.jpg</span>, <span class="mono">plan-night.jpg</span> and so on for site imagery. Photos are resized and stored in this browser.</p>
+  return `<div class="card"><h2 class="h-disp h4">Bulk upload</h2><p class="small muted mt8">Name each photo after its slot. Hosts: <span class="mono">FL-1001-1.jpg</span> to <span class="mono">FL-1001-4.jpg</span> (‑1 is the main portrait). Site: <span class="mono">hero.jpg</span>, <span class="mono">about.jpg</span>, <span class="mono">plan-night.jpg</span> and so on. Photos are resized and kept in this browser.</p>
 <label class="dropz mt16" id="dropz"><input type="file" accept="image/*" multiple class="sr" data-ch="bulkPhotos">${F.ic('plus', 20)}<span>Choose photos or drop them here</span></label><p class="tiny muted mt8" id="bulkMsg">${n} host photos and ${F.images.count('site/')} site photos in use${up ? ', ' + up + ' of them uploaded in this browser' : ''}.</p>${up ? '<button class="btn-link tiny mt8" data-a="photoClear">Remove uploaded photos (built-in photos stay)</button>' : ''}</div>
 <div class="row wrap-gap mt32">${F.CITIES.map(x => `<a class="chip ${c === x.id ? 'on' : ''}" href="#/staff/photos?c=${x.id}">${x.name}</a>`).join('')}</div>
 ${P.staff.photoCheck()}<div class="phgrid mt24">${list.map(h => `<div class="card ph-host"><div class="row between"><strong class="small">${esc(h.name)}</strong><span class="row nowrap">${F.hostPhotos(h).length ? `<button class="btn-link tiny" data-a="opFocus" data-h="${h.id}">Focus</button>` : ''}<span class="mono tiny muted">${h.id}</span></span></div><div class="ph-row mt8">${[1, 2, 3, 4].map(i => { const k = 'hosts/' + h.id + '-' + i; return `<label class="ph-mini" title="${h.id}-${i}">${F.hostPlate(h, i, 'r34', true)}<input type="file" accept="image/*" class="sr" data-ch="photoUp" data-k="${k}"><span class="tiny">${F.IMG[k] ? '✓' : i}</span></label>`; }).join('')}</div></div>`).join('')}</div>
-<div class="lbl mt48">Site imagery</div><div class="phgrid mt16">${site.map(k => `<label class="card ph-host"><span class="mono tiny">${k}.jpg ${F.IMG['site/' + k] ? '✓' : ''}</span>${F.sitePlate(k, '#3B0A0E', 'r169 mt8')}<input type="file" accept="image/*" class="sr" data-ch="photoUp" data-k="site/${k}"></label>`).join('')}</div>`;
+${pgd.nav}
+<details class="acc mt48"><summary><span>Site imagery <span class="muted small">· ${site.length}</span></span>${F.ic('plus', 14)}</summary><div class="acc-b"><div class="phgrid">${site.map(k => `<label class="card ph-host"><span class="mono tiny">${k}.jpg ${F.IMG['site/' + k] ? '✓' : ''}</span>${F.sitePlate(k, '#3B0A0E', 'r169 mt8')}<input type="file" accept="image/*" class="sr" data-ch="photoUp" data-k="site/${k}"></label>`).join('')}</div></div></details>`;
 };
 P.staff.photoCheck = () => {
   const rep = F.PHOTO_REPORT, hs = F.S.hosts, withP = hs.filter(h => F.hostPhotos(h).length), part = withP.filter(h => F.hostPhotos(h).length < 4);
@@ -12554,7 +12671,7 @@ A.opReply = el => { F.modal(`<h2 class="h-disp h3">Reply to guest</h2><form clas
 F.Fm.opReply = (f, d) => { const t = d.t; if (!t) return F.fieldErr(f, 't', 'Write a reply.'); const el = f; F.closeModal(); F.store.commit(s => { const tk = s.tickets.find(x => x.id === el.dataset.id); tk.msgs.push({ from: 'staff', name: 'FLINGR Care', text: t, at: Date.now() }); tk.status = 'resolved'; if (tk.userId) E.notify(tk.userId, 'bookings', 'Support replied', `New reply on ${tk.no}.`, '#/account/support?t=' + tk.id); }); F.rerender(); };
 SV.apps = () => `<div class="tblw"><table class="tbl"><thead><tr><th>Name</th><th>City</th><th>Age</th><th>Plans</th><th>About</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>${F.S.applications.map(a => `<tr><td>${esc(a.name)}<div class="tiny muted">${esc(a.email)}</div></td><td>${E.city(a.city).abbr}</td><td>${a.age}</td><td class="small">${a.plans.map(p => E.plan(p).name).join(', ')}${a.escapes ? '<div class="tiny muted">Travels for Escapes</div>' : ''}</td><td class="small">${esc(a.about)}</td><td><span class="badge">${a.status}</span></td><td class="nowrap">${['Approved', 'Declined'].includes(a.status) ? '' : `<button class="btn-link tiny" data-a="opApp" data-id="${a.id}" data-s="Approved">Approve</button> <button class="btn-link tiny" data-a="opApp" data-id="${a.id}" data-s="Declined">Decline</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 A.opApp = el => { F.store.commit(s => { s.applications.find(x => x.id === el.dataset.id).status = el.dataset.s; }); F.rerender(); };
-SV.events = r => { const t = r.q.t || ''; const types = [...new Set(F.S.events.map(e => e.type))].sort(); const list = F.S.events.filter(e => !t || e.type === t).slice(-150).reverse(); return `<div class="row wrap-gap"><a class="chip ${!t ? 'on' : ''}" href="#/staff/events">All</a>${types.map(x => `<a class="chip ${t === x ? 'on' : ''}" href="#/staff/events?t=${x}">${x}</a>`).join('')}</div><div class="tblw mt24"><table class="tbl"><thead><tr><th>Time (UTC)</th><th>Type</th><th>Entity</th><th>Data</th></tr></thead><tbody>${list.map(e => `<tr><td class="mono tiny nowrap">${new Date(e.at).toISOString().replace('T', ' ').slice(0, 19)}</td><td class="mono tiny">${e.type}</td><td class="mono tiny">${esc(e.entity || '')}</td><td class="mono tiny">${e.meta ? esc(JSON.stringify(e.meta)) : ''}</td></tr>`).join('')}</tbody></table></div>`; };
+SV.events = r => { const t = r.q.t || ''; const types = [...new Set(F.S.events.map(e => e.type))].sort(); const pgd = F.pageOf(F.S.events.filter(e => !t || e.type === t).slice(-150).reverse(), r, '/staff/events', 40), list = pgd.rows; return `<div class="row wrap-gap"><a class="chip ${!t ? 'on' : ''}" href="#/staff/events">All</a>${types.map(x => `<a class="chip ${t === x ? 'on' : ''}" href="#/staff/events?t=${x}">${x}</a>`).join('')}</div><div class="tblw mt24"><table class="tbl"><thead><tr><th>Time (UTC)</th><th>Type</th><th>Entity</th><th>Data</th></tr></thead><tbody>${list.map(e => `<tr><td class="mono tiny nowrap">${new Date(e.at).toISOString().replace('T', ' ').slice(0, 19)}</td><td class="mono tiny">${e.type}</td><td class="mono tiny">${esc(e.entity || '')}</td><td class="mono tiny">${e.meta ? esc(JSON.stringify(e.meta)) : ''}</td></tr>`).join('')}</tbody></table></div>${pgd.nav}`; };
 SV.settings = () => { const s = F.S.settings; return `<form class="card stack" data-f="opSettings"><div class="g g3">${[['servicePct', 'Service fee (0–1)', '0.01'], ['minFeeUsd', 'Minimum fee (USD)', '1'], ['minNoticeMin', 'Minimum notice (minutes)', '15'], ['horizonDays', 'Booking horizon (days)', '1'], ['bufferMin', 'Between bookings: shower and reset (min)', '5'], ['restMin', 'Sleep after a Night (min)', '30'], ['maxPerDay', 'Most bookings a host takes a day', '1'], ['maxDayMin', 'Most booked minutes a day', '30'], ['holdMin', 'Checkout hold (minutes)', '1'], ['checkinMin', 'Check-in opens (min before)', '5'], ['cancelFullH', 'Full refund until (hours)', '1'], ['cancelHalfH', '50% refund until (hours)', '1'], ['rescheduleFeeUsd', 'Reschedule fee (USD)', '1'], ['reserveUsd', 'Reserve price (USD/month)', '1']].map(x => `<div class="field"><label for="os-${x[0]}">${x[1]}</label><input class="inp" id="os-${x[0]}" name="${x[0]}" type="number" step="${x[2]}" min="0" value="${s[x[0]]}"></div>`).join('')}</div><button class="btn btn-bone">Save settings</button></form>`; };
 F.Fm.opSettings = (f, d) => { if (+d.cancelHalfH >= +d.cancelFullH) return F.toast('The 50% window must be shorter than the full-refund window.', 'err'); F.store.commit(s => { Object.keys(d).forEach(k => { s.settings[k] = +d[k]; }); }); F.toast('Settings saved.'); F.rerender(); };
 SV.data = () => `<div class="g g3"><div class="card"><h2 class="h-disp h4">Export</h2><p class="small muted mt8">The full marketplace state as JSON.</p><button class="btn btn-ghost btn-sm mt16" data-a="opExport">${F.ic('download', 14)} Export JSON</button></div>
@@ -12989,16 +13106,8 @@ A.cmpOpen = () => {
 };
 
 /* ---------- sticky section chips with scroll-spy ---------- */
-F.spy = (items, label = 'Sections') => `<nav class="spy" aria-label="${esc(label)}"><div class="wrap spy-in">${items.map(([id, l], i) => `<a class="chip ${i ? '' : 'on'}" href="#${id}" data-spy-to="${id}">${l}</a>`).join('')}</div></nav>`;
-const spyScroll = () => {
-  const chips = $$('[data-spy-to]'); if (!chips.length) return;
-  const top = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 64) + 80;
-  let cur = chips[0];
-  chips.forEach(c => { const t = document.getElementById(c.dataset.spyTo); if (t && t.getBoundingClientRect().top <= top) cur = c; });
-  chips.forEach(c => { const on = c === cur; if (c.classList.contains('on') !== on) { c.classList.toggle('on', on); if (on) { c.setAttribute('aria-current', 'true'); const row = c.parentElement; row.scrollLeft = c.offsetLeft - row.clientWidth / 2 + c.offsetWidth / 2; } else c.removeAttribute('aria-current'); } });
-};
-window.addEventListener('scroll', U.debounce(spyScroll, 60), { passive: true });
-F.renderHooks.push(() => setTimeout(spyScroll, 50));
+// tabs that each show one part of a long page (one screen at a time, every part one tap away)
+F.tabNav = (items, cur, base, label = 'Sections') => `<nav class="spy" aria-label="${esc(label)}"><div class="wrap spy-in">${items.map(([id, l, href]) => `<a class="chip ${id === cur ? 'on' : ''}" href="${href || base + (base.includes('?') ? '&' : '?') + 's=' + id}" ${id === cur ? 'aria-current="page"' : ''}>${l}</a>`).join('')}</div></nav>`;
 
 /* ---------- calendar files ---------- */
 F.ics = ({ id, title, start, end, loc = '', desc = '' }) => {
@@ -13179,7 +13288,7 @@ const cardTick = (st, n) => {
   for (const u of st.users) { if (u.gen) continue; for (const m of u.methods || []) {
     if (m.type !== 'card' || !m.exp || m.decline) continue; const [mm, yy] = m.exp.split('/').map(Number), end = Date.UTC(2000 + yy, mm, 1);
     if (n < end - 21 * D) continue; const d = new Date(end); d.setUTCFullYear(d.getUTCFullYear() + 4); m.exp = U.pad(d.getUTCMonth() + 1) + '/' + String(d.getUTCFullYear()).slice(2); ch = true;
-    E.notify(u.id, 'bookings', 'Card updated by your bank', `${E.methodLabel(m)} now expires ${m.exp}. Nothing to do.`, '#/account/settings', n);
+    E.notify(u.id, 'bookings', 'Card updated by your bank', `${E.methodLabel(m)} now expires ${m.exp}. Nothing to do.`, '#/account/settings?s=pay', n);
   } }
   return ch;
 };
@@ -13642,6 +13751,76 @@ F.studioClub = h => {
   return `<div class="card ah-st mb24"><div class="row between wrap-gap"><div><span class="lbl">Tonight at ${esc(c.short)}</span><p class="small mt8">${open ? `${esc(x.theme.name)}, doors ${tm(x.opensAt, c)}. Switch this on and you’re first in the club’s list of hosts free tonight; guests at the club can book you for a drink at the Lounge, the suite or the Floor.` : 'The club is closed tonight, or the night is nearly over.'}</p>${fromLounge ? `<p class="tiny muted mt8">${U.plural(fromLounge, 'booking')} at the club coming up.</p>` : ''}${open ? `<p class="tiny muted mt8"><i class="dot live"></i> ${E.hostsAtLounge(c)} hosts at the Lounge tonight</p>` : ''}</div><label class="tgl-row"><span class="small">At the Lounge tonight</span><input type="checkbox" class="tgl" data-ch="stAhTonight" ${on ? 'checked' : ''} ${open ? '' : 'disabled'}></label></div><p class="tiny muted mt16">This week: ${U.plural(wk.mine, 'booking')} for you, ${wk.avg} on average for ${U.plural(wk.n, 'similar host')} in ${esc(E.city(h.cityId).name)}.</p></div>` + base;
 };
 C.stAhTonight = el => { const hid = F.S.session.hostId; if (!hid) return; E.ahHostTonight(hid, el.checked); F.toast(el.checked ? 'You’re on the club’s list for tonight. Guests there can book you now.' : 'Off the club’s list for tonight.'); F.rerender(); };
+})();
+
+/* ---- 11u-guide.js ---- */
+/* The FLINGR family: getting started, the same on all three sites.
+   - A three-step guide, shown once per site on the first visit after the age check (Skip or Next; Esc or the backdrop
+     close it too). Never on staff pages. Its last button goes to the site's next step: F.SITE.nextStep(u) when a site
+     defines one ({ href, label }), otherwise the site's main list. Reset site removes the "seen" mark with everything else.
+   - "Words we use" on the Help page: the site's own words, one line each, folded away under one heading.
+   Automated browsers (navigator.webdriver) don't get the guide on their own, so page checks see the pages as before;
+   F.guide.open() shows it on demand. */
+(() => {
+'use strict';
+const SITE = () => (F.SITE && F.SITE.id) || 'flingr', KEY = () => 'flingr.guide.' + SITE();
+const WORDS = {
+  flingr: {
+    steps: [['Find a host', 'Pick a city and a date, then browse the hosts who are free.'], ['Book a plan', 'Choose The Hour, The Night or The Slow Morning, and pay with your card or your Wallet.'], ['After you book', 'Message your host, say what you like and don’t, and check in on the night.']],
+    next: { href: '#/hosts', label: 'Browse hosts' },
+    gloss: [['Host', 'The person you book for your night.'], ['Plan', 'How long you book: The Hour, The Night or The Slow Morning.'], ['Match sheet', 'What you like and don’t. Your host sees it before the night.'], ['Screening', 'A health test from the last 90 days. Some hosts ask for one.'], ['Buddy Check-in', 'Someone you trust who hears from us if you miss a check-in during your booking.'], ['Morning Menu', 'Breakfast and extras for the morning after.'], ['Escapes', 'Places you book for a stay, like a villa or a yacht, with hosts who travel there.'], ['Afterhours', 'The members’ club nights in each city.'], ['Lounge, Floor, VIP', 'The three parts of Afterhours: the Lounge to unwind, the Floor for more, VIP for a private night.'], ['One Evening', 'A Velvet ritual, a Practice lesson and your FLINGR night in one checkout.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
+  },
+  practice: {
+    steps: [['Choose a skill', 'Each skill has five levels, from the basics to a final test.'], ['Choose how to learn', 'Voice, video, in person, a group class, or a practical with a model.'], ['Book again to move on', 'Each lesson starts where the last one ended.']],
+    next: { href: '#/skills', label: 'See the skills' },
+    gloss: [['Educator', 'The person who teaches your lesson.'], ['Voice and Video', 'Lessons online. With video, your camera can stay off.'], ['Earpiece', 'Your educator coaches you through an earpiece during your own night with your partner.'], ['The Hall', 'The studio room where group classes happen.'], ['Gallery seat', 'A seat at the back of a class, to watch only.'], ['Practical', 'A hands-on lesson with your educator and a practice model.'], ['Feedback Dial', 'Five lights the model uses to show what works, plus a STOP button.'], ['Blind Practical', 'The final test, with a model who doesn’t know your level.'], ['Practice Contract', 'What will be touched, by whom and with what protection, agreed before a lesson.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
+  },
+  velvet: {
+    steps: [['Pick a ritual', 'The menu says what happens, how long it takes and how it ends.'], ['Make it yours', 'Choose the length, your therapist and how it ends. Mark your body map once.'], ['Come back', 'Each visit moves you to the next stage, and your usual books again in one tap.']],
+    next: { href: '#/menu', label: 'See the menu' },
+    gloss: [['Ritual', 'A treatment on the menu.'], ['Release', 'An orgasm. Each ritual lists how it can end, and you choose.'], ['Body map', 'Where you’d like to be touched, gently, or not at all. Every therapist reads it first.'], ['Touch sheet', 'Your body map and choices on one page.'], ['Stage', 'Where you are, from a first visit to the longest rituals. Each visit moves you on.'], ['Your usual', 'A ritual you’ve booked twice or more, ready to book again in one tap.'], ['Glow Lab', 'Skin care for intimate areas.'], ['Rosé series', 'Six brightening sessions, two weeks apart, with a tracker.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
+  }
+};
+const W = () => Object.assign({}, WORDS[SITE()] || WORDS.flingr, F.SITE && F.SITE.guide || {});
+const pri = () => (SITE() === 'flingr' ? 'btn btn-cherry' : 'btn btn-pri');
+const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
+let step = 0;
+const draw = () => {
+  const w = W(), s = w.steps[step], last = step === w.steps.length - 1, u = F.E && F.E.user && F.E.user(), nx = (F.SITE && F.SITE.nextStep && F.SITE.nextStep(u)) || w.next;
+  return `<div class="fg-guide"><p class="eyebrow">Getting started · ${step + 1} of ${w.steps.length}</p><h2 class="h-disp h3 mt16">${s[0]}</h2><p class="small muted mt8">${s[1]}</p>
+  <div class="fg-dots mt24" aria-hidden="true">${w.steps.map((_, i) => `<i class="${i === step ? 'on' : ''}"></i>`).join('')}</div>
+  <div class="fg-act mt24"><button class="btn-link tiny" data-a="fgSkip">Skip</button>${last ? `<a class="${pri()}" href="${nx.href}" data-a="fgDone">${nx.label}</a>` : `<button class="${pri()}" data-a="fgNext">Next</button>`}</div></div>`;
+};
+const seen = () => ls.set(KEY(), String(Date.now()));
+const open = () => { step = 0; F.modal(draw(), { cls: 'fg-modal', label: 'Getting started', onClose: seen }); };
+F.A.fgNext = () => { step++; const m = F._modal && F._modal.m && F._modal.m.querySelector('.fg-guide'); if (m) { m.outerHTML = draw(); const b = F._modal.m.querySelector('[data-a=fgNext],[data-a=fgDone]'); if (b) b.focus(); } };
+F.A.fgSkip = () => { seen(); F.closeModal(); };
+F.A.fgDone = el => { seen(); F.closeModal(); if (el && el.getAttribute) location.hash = el.getAttribute('href'); };
+const STAFF = /^#\/(staff|ops|host-studio|studio|desk)\b/;
+const maybe = () => {
+  if (navigator.webdriver || ls.get(KEY()) || F._modal || document.getElementById('gate') || STAFF.test(location.hash) || !(F.ageOk && F.ageOk())) return;
+  open();
+};
+let t = 0; const later = () => { clearTimeout(t); t = setTimeout(maybe, 900); };
+// "Words we use" at the end of the Help page
+const gloss = () => { const g = W().gloss; if (!g || !g.length) return '';
+  return `<section class="sec-sm fg-gloss"><div class="wrap"><details class="acc"><summary><span class="h-disp h4">Words we use</span>${F.ic ? F.ic('plus', 14) : '+'}</summary><dl class="fg-dl">${g.map(([k, v]) => `<div><dt>${k}</dt><dd class="small muted">${v}</dd></div>`).join('')}</dl></details></div></section>`; };
+const wrapHelp = () => { const P = F.pages && F.pages.help; if (!P || P._fg) return; const r0 = P.render; P.render = function (r) { const out = r0.apply(this, arguments); if (out && typeof out.html === 'string') out.html += gloss(); return out; }; P._fg = true; };
+const CSS = `.fg-modal{max-width:440px}.fg-guide{padding:8px 4px 4px}.fg-dots{display:flex;gap:6px}.fg-dots i{width:8px;height:8px;border-radius:50%;background:var(--ln)}.fg-dots i.on{background:var(--fg)}
+.fg-act{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.fg-gloss{padding-top:0}.fg-gloss .acc{border-top:1px solid var(--ln)}.fg-gloss summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;cursor:pointer;list-style:none}.fg-gloss summary::-webkit-details-marker{display:none}
+.fg-dl{display:grid;grid-template-columns:minmax(0,1fr);gap:12px 32px;padding:4px 0 24px;margin:0}.fg-dl dt{font-weight:500;font-size:14px}.fg-dl dd{margin:2px 0 0}
+@media (min-width:768px){.fg-dl{grid-template-columns:repeat(2,minmax(0,1fr))}}`;
+const start = () => {
+  if (!document.getElementById('fgCss')) { const s = document.createElement('style'); s.id = 'fgCss'; s.textContent = CSS; document.head.appendChild(s); }
+  wrapHelp();
+  const main = document.getElementById('main'); if (main && window.MutationObserver) new MutationObserver(later).observe(main, { childList: true });
+  if (window.MutationObserver) new MutationObserver(later).observe(document.body, { childList: true });
+  later();
+};
+F.guide = { open, words: W };
+wrapHelp();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else setTimeout(start, 0);
 })();
 
 /* ---- 11v-evening.js ---- */
@@ -14170,7 +14349,7 @@ const redrawDevice = () => { const m = F._modal && F._modal.m; if (m && m.queryS
 A.famZoom = el => { FAM.setPref('z', +el.dataset.v); redrawDevice(); };
 A.famHc = el => { FAM.setPref('hc', el.dataset.v === '1'); redrawDevice(); };
 FAM.footLink = () => `<button class="btn-link tiny" data-a="famDevice">This browser</button>`;
-FAM.settingsCard = () => `<div class="card"><h2 class="h-disp h4">This browser</h2><p class="small muted mt8">Text size and contrast; storage; moving your account and bookings to another device; installing the app.</p><button class="btn btn-ghost btn-sm mt16" data-a="famDevice">Open</button></div>`;
+FAM.settingsCard = () => `<div class="card"><h2 class="h-disp h4">This browser</h2><p class="small muted mt8">Text size and contrast; storage; moving your account and bookings to another device; installing the app. Start over removes everything you changed on all three sites.</p><div class="row wrap-gap mt16"><button class="btn btn-ghost btn-sm" data-a="famDevice">Open</button><button class="btn btn-ghost btn-sm" data-a="resetSite">Start over</button></div></div>`;
 
 /* ---------- Operations → Health ---------- */
 FAM.errors = () => (window.FLINGR_ERRLOG ? window.FLINGR_ERRLOG.read() : []);
