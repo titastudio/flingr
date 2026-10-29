@@ -75,7 +75,7 @@ hr.hr{border:0;border-top:1px solid var(--ln)}
 .sec{padding:120px 0;position:relative}
 .sec-sm{padding:56px 0;position:relative}
 .sec-ink{background:var(--ink)}.sec-ox{background:var(--ox9)}
-.g{display:grid;gap:28px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g6{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.g{display:grid;gap:28px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
 .split.rev>:first-child{order:2}
 .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.row.nowrap,.nowrap{flex-wrap:nowrap;white-space:nowrap}
@@ -584,7 +584,7 @@ a.stat{transition:border-color .3s}a.stat:hover{border-color:var(--ln2)}
 /* responsive */
 @media (max-width:1180px){
   .hdr-l{display:none}.burger{display:inline-grid}.hdr-in{grid-template-columns:auto 1fr auto}.logo{justify-self:center}
-  .g4{grid-template-columns:repeat(3,minmax(0,1fr))}.g6{grid-template-columns:repeat(4,1fr)}
+  .g4{grid-template-columns:repeat(3,minmax(0,1fr))}
   .steps{grid-template-columns:repeat(3,1fr)}
   .ftr-grid{grid-template-columns:1fr 1fr 1fr}
   .ftr-grid>div:first-child{grid-column:1/-1}
@@ -628,7 +628,7 @@ a.stat{transition:border-color .3s}a.stat:hover{border-color:var(--ln2)}
   .gal{grid-template-columns:repeat(3,1fr)}.gal-i:not(.main):nth-child(4){display:block}
   .pcard{padding:12px}
   .g-hosts{row-gap:32px}
-  .g6{grid-template-columns:repeat(3,1fr)}
+
   .fgrid{grid-template-columns:1fr}
 
   .hcard-n{font-size:17px}.hcard-t{font-size:15px}
@@ -1610,6 +1610,35 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
 /* a tab row scrolled to show the current tab fades on the left, so it reads as more tabs, not a cut-off word */
 @media (max-width:1023px){.subnav.sc-l,.spy-in.sc-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px);mask-image:linear-gradient(90deg,transparent,#000 28px)}}
 @media (max-width:640px){.subnav a{padding-left:11px;padding-right:11px}}
+/* spacing pass: room between a page head and the band under it; the flexible-dates row; photo count off small cards */
+.phero-sm{padding-bottom:48px}
+@media (max-width:760px){.phero-sm{padding-bottom:32px}}
+.hp-flexrow{row-gap:16px}
+.g-hosts.dense .hc-count{display:none}
+/* footer: one plain style for every link in the bottom row; the support number on one line */
+.ftr-b .btn-link{font:inherit;font-size:12px;letter-spacing:normal;text-transform:none;border-bottom:0;padding:0;color:var(--mut);width:auto;min-height:0}
+.ftr-b .btn-link:hover{color:var(--fg)}.ftr-b .btn-link[data-a=quickExit]{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.ftr-b .row.wrap-gap{gap:10px 16px}
+.ftr-sup .btn-link{margin-left:6px}
+@media (max-width:640px){.ftr-grid>div:not(:first-child) p.ftr-sup{display:block;margin-top:8px}}
+/* back-to-top covers text on phones: phones keep their own scroll-to-top */
+@media (max-width:640px){.totop{display:none!important}}
+/* Morning Menu: the "with your booking" tag stays on one line under the price */
+.addcat .kv>span:last-child{flex:none;text-align:right}.addcat .kv>span:last-child small{white-space:nowrap}
+/* Afterhours: only the tab row sticks while scrolling; the club picker scrolls away */
+body[data-page=club] .fbar{position:static}
+/* Escapes on phones: the open-date tag sits in the text, not on the small photo */
+.ecard-st{display:none}
+@media (max-width:640px){.egrid .ecard-bl{display:none}.egrid .ecard-st{display:block}.egrid .ecard-st .chip{font-size:10px;padding:4px 8px;min-height:0}}
+/* phones: shorter home (the line-up and One Evening live on the Afterhours page and in the menu) and shorter host rows */
+@media (max-width:640px){
+  .home-club .ah-split>.card,.home-club .ev-strip{display:none}
+  .hlist .hrow .hrow-b>.row.mt16 .chip:nth-child(n+2){display:none}
+  .hlist .hrow .hcard-t{-webkit-line-clamp:1;line-clamp:1}
+  .hlist .hrow-s{flex-wrap:nowrap;align-items:center;gap:8px}.hlist .hrow-s>*{flex:none}.hlist .hrow-s>:first-child{flex:1 1 auto;min-width:0;margin-right:0}
+}
+/* phones: Practice and Velvet stay in the menu and footer; home keeps your suggestions */
+@media (max-width:640px){.home-more .home-fam{display:none}.home-more .mb48{margin-bottom:0}.home-more:not(:has(.stack-l)){display:none}}
 
 /* ============ FLINGR Afterhours (07c-pages-club.js, 11i-club-ops.js) ============ */
 .ah-hero{position:relative;min-height:min(78vh,720px);display:flex;align-items:flex-end;padding:120px 0 64px;overflow:hidden;isolation:isolate}
@@ -1828,6 +1857,7 @@ a,button,label,summary,[data-a]{-webkit-tap-highlight-color:transparent}
 .ev-up svg{transform:rotate(180deg)}
 @media (max-width:420px){.ev-oa .ibtn{width:30px;height:30px}.ev-o{gap:8px;padding:10px}}
 .sec-sm.pt0{padding-top:0}
+.sec-ox + .sec-sm.pt0,.sec-ink + .sec-sm.pt0,.sec-alt + .sec-sm.pt0{padding-top:var(--sec-sm-y,48px)}
 /* the lineup: performers fill the row without leaving empty columns; the DJs sit beside them on wide screens */
 .ah-lw{display:grid;gap:24px}
 .ah-lw .ah-line{grid-template-columns:repeat(auto-fit,minmax(200px,260px))}
@@ -7473,7 +7503,7 @@ F.footer = () => {
     <div><a href="#/" class="logo">FLINGR</a><p class="small muted mt16">One night. Properly arranged.<br>Verified hosts in Los Angeles, New York and London.</p>
       <div class="row mt24"><button class="appb" data-a="getApp" data-p="iOS">${F.ic('phone', 16)}<span><small>Download on</small>iOS</span></button><button class="appb" data-a="getApp" data-p="Android">${F.ic('phone', 16)}<span><small>Get it on</small>Android</span></button></div></div>
     <div><h4 class="eyebrow">Book</h4><a href="#/hosts">All hosts</a><a href="#/escapes">Escapes</a><a href="#/afterhours">Afterhours</a><a href="#/how-it-works">Plans & pricing</a><a href="#/morning">Morning Menu</a><a href="#/trip">Plan a trip</a><a href="#/evening">One Evening</a><a href="#/gift-cards">Gift cards</a><a href="#/account/membership">Reserve and All-Access</a></div>
-    <div><h4 class="eyebrow">Trust</h4><a href="#/safety">Safety & Trust</a><a href="#/legal/guidelines">Community Guidelines</a><a href="#/help">Help Center</a><a href="#/contact">Contact</a><p class="tiny muted mt16">24/7 support<br><button class="btn-link tiny" data-a="call" data-k="safety" data-c="${c.id}">${c.phone}</button></p></div>
+    <div><h4 class="eyebrow">Trust</h4><a href="#/safety">Safety & Trust</a><a href="#/legal/guidelines">Community Guidelines</a><a href="#/help">Help Center</a><a href="#/contact">Contact</a><p class="tiny muted mt16 ftr-sup">24/7 support <button class="btn-link tiny" data-a="call" data-k="safety" data-c="${c.id}">${c.phone}</button></p></div>
     <div><h4 class="eyebrow">Company</h4><a href="#/about">About</a><a href="#/journal">Journal</a><a href="#/about?s=press">Press</a><a href="#/about?s=careers">Careers</a><a href="#/become-a-host">Become a host</a><a href="#/host-studio">Host Studio</a>${F.FAMILY.map(x => `<a href="${x.url}">${x.name} by FLINGR</a>`).join('')}</div>
   </div>
   <div class="ftr-b"><span>© ${new Date(Date.now()).getUTCFullYear()} FLINGR Technologies, Inc. All rights reserved.</span><span class="row wrap-gap"><button class="btn-link qx-link" data-a="quickExit" title="Or press Esc twice">Quick exit</button><button class="btn-link qx-link" data-a="resetSite">Reset site</button><button class="btn-link qx-link kb-link" data-a="keys">Shortcuts</button>${F.fam ? F.fam.footLink() : ''}<a href="#/legal/terms">Terms</a><a href="#/legal/privacy">Privacy</a><a href="#/legal/cookies">Cookies</a><a href="#/legal/refunds">Refunds</a><button class="btn-link tiny" data-a="cookieSettings">Cookie settings</button></span></div></div>`;
@@ -9472,10 +9502,10 @@ ${(b => b[U.hash(today) % b.length] || '')([F.homeEscapes(c.id), F.homeClub(c.id
   <a class="esc-strip mt24" href="#/safety">${F.ic('shield', 16)}<span><strong>Safety, built in:</strong> every host and guest is verified, boundaries are enforced, live check-ins and a 24/7 team. Either of you can end it at any time.</span>${F.ic('arrow', 14)}</a>
 </div></section>
 
-<section class="sec-md sec-ox"><div class="wrap">
+<section class="sec-md sec-ox home-more"><div class="wrap">
   ${later ? `<div class="stack-l mb48">${later}</div>` : ''}
-  <div class="sec-head"><div><div class="eyebrow ln">Also by FLINGR</div><h2 class="h-cond h2 mt16">Learn it. <span class="it">Feel it.</span></h2></div><p class="small muted fam-note">Your FLINGR account, Wallet and cards work on both.</p></div>
-  <div class="g g2">${F.FAMILY.map(x => `<a class="fam-c rv" href="${x.url}">${F.sitePlate('family-' + x.id, '#2A0609', 'r169')}<div class="fam-b"><span class="eyebrow">${x.name} by FLINGR</span><h3 class="h-disp h4 mt8">${x.line}</h3><p class="small muted mt8">${x.desc}</p><span class="btn-link mt16">Visit ${x.name} ${F.ic('arrow', 12)}</span></div></a>`).join('')}</div>
+  <div class="sec-head home-fam"><div><div class="eyebrow ln">Also by FLINGR</div><h2 class="h-cond h2 mt16">Learn it. <span class="it">Feel it.</span></h2></div><p class="small muted fam-note">Your FLINGR account, Wallet and cards work on both.</p></div>
+  <div class="g g2 home-fam">${F.FAMILY.map(x => `<a class="fam-c rv" href="${x.url}">${F.sitePlate('family-' + x.id, '#2A0609', 'r169')}<div class="fam-b"><span class="eyebrow">${x.name} by FLINGR</span><h3 class="h-disp h4 mt8">${x.line}</h3><p class="small muted mt8">${x.desc}</p><span class="btn-link mt16">Visit ${x.name} ${F.ic('arrow', 12)}</span></div></a>`).join('')}</div>
 </div></section>
 
 <section class="sec-md sec-ink hide-ph"><div class="wrap"><div class="sec-head"><div><div class="eyebrow ln">Journal</div><h2 class="h-cond h3 mt16">Notes on <span class="it">doing</span> it well</h2></div><a class="btn-link" href="#/journal">All articles</a></div>
@@ -9487,7 +9517,7 @@ C.heroCity = el => { const d = $('#hsD'); if (d) { const k = E.todayKey(el.value
 F.Fm.heroSearch = (f, d) => { F.store.commit(s => { s.prefs.city = d.city; }); F.footer(); F.nav('/hosts' + U.q({ city: d.city, date: d.date, plan: d.plan, when: d.date ? 'date' : '' })); };
 
 /* =============== HOSTS (browse) =============== */
-const PER = 12;
+const per = () => (window.innerWidth <= 640 ? 8 : 12);   // hosts per page: fewer on phones, "Show more" for the rest
 const filterHosts = q => {
   const cityIds = q.city === 'all' ? F.CITIES.map(c => c.id) : [q.city || F.cityId()];
   let list = E.visible(F.S.hosts.filter(h => cityIds.includes(h.cityId)));
@@ -9535,7 +9565,7 @@ P.hosts = {
     const q = Object.assign({ city: F.cityId() }, r.q);
     if (q.city !== 'all' && q.city !== F.cityId()) F.S.prefs.city = q.city;
     const c = q.city === 'all' ? null : E.city(q.city);
-    const list = filterHosts(q), page = +(q.page || 1), shown = list.slice(0, page * PER);
+    const list = filterHosts(q), page = +(q.page || 1), shown = list.slice(0, page * per());
     const active = Object.keys(FKEYS).filter(k => q[k] && !(k === 'sort' && q.sort === 'recommended'));
     const u = E.user();
     return { title: c ? `Hosts in ${c.name}` : 'All hosts', html: `
@@ -9583,10 +9613,10 @@ A.hfclear = () => { F.closeDrawer(true); F.navReplace('/hosts' + U.q({ city: F.r
 A.more = el => {
   const g = $('#hgrid'), path = el.getAttribute('href').slice(1); if (!g) { F.navReplace(path); return; }
   const q = Object.assign({ city: F.cityId() }, F.route.q), page = +(q.page || 1) + 1; q.page = page;
-  const list = filterHosts(q), seen = new Set([...g.querySelectorAll('[data-h]')].map(x => x.dataset.h)), add = list.filter(h => !seen.has(h.id)).slice(0, page * PER - g.children.length);   // never the same host twice
+  const list = filterHosts(q), seen = new Set([...g.querySelectorAll('[data-h]')].map(x => x.dataset.h)), add = list.filter(h => !seen.has(h.id)).slice(0, page * per() - g.children.length);   // never the same host twice
   F._path = path; F.route.q.page = String(page); try { history.replaceState(history.state, '', '#' + path); } catch (e) { }
   g.insertAdjacentHTML('beforeend', add.map(h => F.hostCard(h, { plan: q.plan, list: q.view === 'list', showCity: q.city === 'all' })).join(''));
-  const box = el.closest('.center'), n = Math.min(page * PER, list.length);
+  const box = el.closest('.center'), n = Math.min(page * per(), list.length);
   if (n >= list.length) box.remove(); else { box.querySelector('p').textContent = `Showing ${n} of ${list.length}`; el.setAttribute('href', '#/hosts' + U.q(Object.assign({}, q, { page: page + 1 }))); }
   F.reveal(); F.loadImages(); F.say(U.plural(add.length, 'more host') + ' added.');
 };
@@ -9757,7 +9787,7 @@ P.host = {
     const extra = E.extraOf(b.addons), counts = days.map(k => k < today ? -1 : E.slots(h, b.planId, k, extra).filter(s => s.status === 'available').length), max = Math.max(1, ...counts);
     const near = []; for (let d = 0; d < 21 && near.length < 4; d++) { const k = U.addDays(today, d), s = E.slots(h, b.planId, k, extra).find(x => x.status === 'available'); if (s) near.push(s); }
     const flex = b.flex ? days.map((k, i) => counts[i] > 0 && Math.abs((Date.parse(k) - Date.parse(b.key)) / 864e5) <= 3) : [];
-    return `<div class="row between wrap-gap"><div class="seg seg-sm seg-scroll" role="group" aria-label="Plan">${h.plans.map(p => `<button class="seg-b ${p.id === b.planId ? 'on' : ''}" data-a="hpPlan" data-p="${p.id}" aria-pressed="${p.id === b.planId}">${E.plan(p.id).name}</button>`).join('')}</div><label class="check small"><input type="checkbox" data-ch="hpFlex" ${b.flex ? 'checked' : ''}><span>My dates are flexible (±3 days)</span></label></div>
+    return `<div class="row between wrap-gap hp-flexrow"><div class="seg seg-sm seg-scroll" role="group" aria-label="Plan">${h.plans.map(p => `<button class="seg-b ${p.id === b.planId ? 'on' : ''}" data-a="hpPlan" data-p="${p.id}" aria-pressed="${p.id === b.planId}">${E.plan(p.id).name}</button>`).join('')}</div><label class="check small"><input type="checkbox" data-ch="hpFlex" ${b.flex ? 'checked' : ''}><span>My dates are flexible (±3 days)</span></label></div>
     <div class="heat mt16" role="grid" aria-label="Free times over the next five weeks">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(x => `<span class="cal-wd">${x}</span>`).join('')}${days.map((k, i) => { const n = counts[i], lvl = n < 0 ? 'past' : !n ? 'l0' : n / max > .6 ? 'l3' : n / max > .3 ? 'l2' : 'l1'; return `<button class="heat-d ${lvl} ${k === b.key ? 'sel' : ''} ${flex[i] ? 'flex' : ''} ${k === today ? 'today' : ''}" ${n > 0 ? `data-a="twkGo" data-k="${k}"` : 'disabled'} aria-label="${U.keyFmt(k, 'dateLong')}: ${n > 0 ? U.plural(n, 'start time') : n < 0 ? 'past' : 'fully booked'}"><span class="mono">${+k.slice(8)}</span>${n > 0 ? `<small>${n}</small>` : ''}</button>`; }).join('')}</div>
     <div class="heat-leg tiny muted mt8"><span><i class="l1"></i>A few times</span><span><i class="l3"></i>Most free</span>${b.flex ? '<span><i class="flex"></i>Within your flexible dates</span>' : ''}</div>
     <div class="lbl mt32">Nearest free times</div>${near.length ? `<div class="slots near mt8">${near.map(s => `<button class="slot" data-a="hpNear" data-k="${s.key}" data-s="${s.start}" data-t="${s.t}"><span class="tiny d-b muted">${F.availLabel(s.start, h.cityId).split(' · ')[0]}</span>${U.fmt(s.start, tz, 'time')}</button>`).join('')}</div>` : `<p class="small muted mt8">Nothing free in the next three weeks.${h.status === 'active' ? ' Join the waitlist from the booking panel and we’ll hold the first time that opens.' : ''}</p>`}${F.tzNote(h.cityId)}`;
@@ -10084,7 +10114,7 @@ F.placeNights = nightsText; F.placeFrom = fromPrice;
 F.placeCard = (p, o = {}) => {
   const u = E.user(), city = E.city(p.cityId), st = E.placeState(p, u), ym = (st.key || E.ptoday(p)).slice(0, 7), mn = st.s === 'open' ? E.monthNights(p, ym, u) : null;
   return `<article class="ecard rv${o.cls ? ' ' + o.cls : ''}"><a class="ecard-m" href="#/escape/${p.id}" aria-label="${esc(p.name)}">${F.placePlate(p, 1, 'r43')}<div class="ecard-tl">${rulesBadge(p)}${st.s === 'launch' ? '<span class="chip chip-solid"><i class="dot warn"></i>Opening</span>' : ''}</div><div class="ecard-bl">${stateChip(p, u)}</div></a>
-  <div class="ecard-b"><div class="ecard-h"><h3 class="h-disp h4"><a href="#/escape/${p.id}">${esc(p.name)}</a></h3><span class="mono tiny muted">${F.KIND[p.kind]}</span></div><p class="small muted mt4">${esc(p.where)}${o.showCity ? ' · via ' + city.abbr : ''}</p><p class="ecard-t mt8">${esc(p.tagline)}</p>
+  <div class="ecard-b"><div class="ecard-h"><h3 class="h-disp h4"><a href="#/escape/${p.id}">${esc(p.name)}</a></h3><span class="mono tiny muted">${F.KIND[p.kind]}</span></div><p class="small muted mt4">${esc(p.where)}${o.showCity ? ' · via ' + city.abbr : ''}</p><p class="ecard-st mt8">${stateChip(p, u)}</p><p class="ecard-t mt8">${esc(p.tagline)}</p>
   <div class="ecard-f mono tiny muted mt16"><span>${p.modes.includes('night') ? 'Sleeps ' : 'Up to '}${p.sleeps}${p.modes.includes('night') ? '' : ' guests'}<span class="ecard-x"> · ${nightsText(p)}${mn && mn.free ? ` · ${U.plural(mn.free, p.modes.includes('night') ? 'night' : 'day')} left in ${U.keyFmt(ym + '-01', 'my').split(' ')[0]}` : ''}</span></span><span>From ${fromPrice(p)}</span></div></div></article>`;
 };
 const facts = p => [['Sleeps', `${p.sleeps}, including hosts`], ['Hosts', `Up to ${p.maxHosts}`], ['Stay', nightsText(p)], ['House rules', p.rules.max === 'hotel' ? 'Hotel rules' : 'Hotel rules to ' + F.RULES[p.rules.max].name.toLowerCase()], ['Season', p.season.closed.length ? 'Open ' + openMonths(p) : 'Year round'], ['Arrival', p.transfers.find(t => t.required) ? p.transfers.find(t => t.required).name : U.fmt(U.zoned(p.tz, '2026-01-01', p.checkIn), p.tz, 'time').replace(':00', '') + ' check-in']];
@@ -13735,7 +13765,7 @@ F.opsClub = r => {
   const enc = F.PERFORMERS.filter(p => p.clubId === c.id && m.encores[p.id]).sort((a, b) => m.encores[b.id] - m.encores[a.id]);
   const door = E.ahDoorCrowd(c, key, 14);
   return base + `
-<h2 class="lbl mt48">Everyone on the list</h2>${door.total ? `<p class="small muted mt8">${door.total} on the list in all: FLINGR bookings above, members below (by alias).</p><div class="tblw mt16"><table class="tbl"><thead><tr><th>Member</th><th>Pass</th><th>Arrives</th><th>Status</th></tr></thead><tbody>${door.rows.map(z => `<tr><td>${esc(z.alias)}</td><td class="small">${esc(F.CLUB_PASS[z.type].name)}</td><td class="mono small">${tm(z.at, c)}</td><td class="small">${z.status}</td></tr>`).join('')}</tbody></table></div>${door.total > door.rows.length ? `<p class="tiny muted mt8">and ${door.total - door.rows.length} more</p>` : ''}` : '<p class="small muted mt16">Closed this night.</p>'}
+<h2 class="lbl mt48">Everyone on the list</h2>${door.total ? `<p class="small muted mt8">${door.total} on the list in all: FLINGR bookings above, members below (by alias).</p><div class="tblw mt16"><table class="tbl"><thead><tr><th>Member</th><th>Pass</th><th>Arrives</th><th>Status</th></tr></thead><tbody>${door.rows.map(z => `<tr><td>${esc(z.alias)}</td><td class="small">${esc(F.CLUB_PASS[z.type].name)}</td><td class="mono small">${tm(z.at, c)}</td><td class="small">${z.status}</td></tr>`).join('')}</tbody></table></div>${door.total > door.rows.length ? `<p class="tiny muted mt16">and ${door.total - door.rows.length} more</p>` : ''}` : '<p class="small muted mt16">Closed this night.</p>'}
 <h2 class="lbl mt48">With a FLINGR host</h2>${withHost.length ? `<div class="tblw mt16"><table class="tbl"><thead><tr><th>Ref</th><th>Guest</th><th>Host</th><th>Where</th><th>From</th></tr></thead><tbody>${withHost.flatMap(v => E.ahOrdersFor(v).map(o => { const u = E.userById(v.customerId), h = E.host(o.hostId); return `<tr><td class="mono">${v.no}</td><td>${esc(u ? u.name : 'Guest')}</td><td>${esc(h ? h.name : '')}</td><td class="small">${o.meet === 'lounge' ? 'Drink at the Lounge, then ' : ''}${esc(E.venue(o.venueId).name)}</td><td class="mono small">${tm(o.start, c)}</td></tr>`; })).join('')}</tbody></table></div>` : '<p class="small muted mt16">Nobody on the list this night has booked a host yet.</p>'}
 <div class="g g2 mt48"><div><h2 class="lbl">Song requests</h2>${songs.length ? `<div class="stack-s mt16">${songs.map(({ s, v }) => `<div class="kv small"><span>“${esc(s.song)}” <span class="muted">· ${esc(s.dj)} · ${v.no}</span></span><span class="tiny">${s.status === 'sent' ? 'Waiting' : s.status === 'passed' ? 'Passed' : 'At ' + tm(s.playAt, c)}${s.tip ? ' · tip' : ''}</span></div>`).join('')}</div>` : '<p class="small muted mt16">None this night.</p>'}</div>
 <div><h2 class="lbl">Encores asked</h2>${enc.length ? `<div class="stack-s mt16">${enc.map(p => `<div class="kv small"><span>${esc(p.name)}</span><span class="mono tiny">${m.encores[p.id]}</span></div>`).join('')}</div>` : '<p class="small muted mt16">No encores asked yet.</p>'}</div></div>
@@ -13754,71 +13784,34 @@ C.stAhTonight = el => { const hid = F.S.session.hostId; if (!hid) return; E.ahHo
 })();
 
 /* ---- 11u-guide.js ---- */
-/* The FLINGR family: getting started, the same on all three sites.
-   - A three-step guide, shown once per site on the first visit after the age check (Skip or Next; Esc or the backdrop
-     close it too). Never on staff pages. Its last button goes to the site's next step: F.SITE.nextStep(u) when a site
-     defines one ({ href, label }), otherwise the site's main list. Reset site removes the "seen" mark with everything else.
-   - "Words we use" on the Help page: the site's own words, one line each, folded away under one heading.
-   Automated browsers (navigator.webdriver) don't get the guide on their own, so page checks see the pages as before;
-   F.guide.open() shows it on demand. */
+/* The FLINGR family: "Words we use" at the end of each site's Help page, the site's own words one line each, folded
+   away under one heading. Words come from WORDS below, or F.SITE.guide.gloss when a site sets its own. */
 (() => {
 'use strict';
-const SITE = () => (F.SITE && F.SITE.id) || 'flingr', KEY = () => 'flingr.guide.' + SITE();
+const SITE = () => (F.SITE && F.SITE.id) || 'flingr';
 const WORDS = {
   flingr: {
-    steps: [['Find a host', 'Pick a city and a date, then browse the hosts who are free.'], ['Book a plan', 'Choose The Hour, The Night or The Slow Morning, and pay with your card or your Wallet.'], ['After you book', 'Message your host, say what you like and don’t, and check in on the night.']],
-    next: { href: '#/hosts', label: 'Browse hosts' },
     gloss: [['Host', 'The person you book for your night.'], ['Plan', 'How long you book: The Hour, The Night or The Slow Morning.'], ['Match sheet', 'What you like and don’t. Your host sees it before the night.'], ['Screening', 'A health test from the last 90 days. Some hosts ask for one.'], ['Buddy Check-in', 'Someone you trust who hears from us if you miss a check-in during your booking.'], ['Morning Menu', 'Breakfast and extras for the morning after.'], ['Escapes', 'Places you book for a stay, like a villa or a yacht, with hosts who travel there.'], ['Afterhours', 'The members’ club nights in each city.'], ['Lounge, Floor, VIP', 'The three parts of Afterhours: the Lounge to unwind, the Floor for more, VIP for a private night.'], ['One Evening', 'A Velvet ritual, a Practice lesson and your FLINGR night in one checkout.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
   },
   practice: {
-    steps: [['Choose a skill', 'Each skill has five levels, from the basics to a final test.'], ['Choose how to learn', 'Voice, video, in person, a group class, or a practical with a model.'], ['Book again to move on', 'Each lesson starts where the last one ended.']],
-    next: { href: '#/skills', label: 'See the skills' },
     gloss: [['Educator', 'The person who teaches your lesson.'], ['Voice and Video', 'Lessons online. With video, your camera can stay off.'], ['Earpiece', 'Your educator coaches you through an earpiece during your own night with your partner.'], ['The Hall', 'The studio room where group classes happen.'], ['Gallery seat', 'A seat at the back of a class, to watch only.'], ['Practical', 'A hands-on lesson with your educator and a practice model.'], ['Feedback Dial', 'Five lights the model uses to show what works, plus a STOP button.'], ['Blind Practical', 'The final test, with a model who doesn’t know your level.'], ['Practice Contract', 'What will be touched, by whom and with what protection, agreed before a lesson.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
   },
   velvet: {
-    steps: [['Pick a ritual', 'The menu says what happens, how long it takes and how it ends.'], ['Make it yours', 'Choose the length, your therapist and how it ends. Mark your body map once.'], ['Come back', 'Each visit moves you to the next stage, and your usual books again in one tap.']],
-    next: { href: '#/menu', label: 'See the menu' },
     gloss: [['Ritual', 'A treatment on the menu.'], ['Release', 'An orgasm. Each ritual lists how it can end, and you choose.'], ['Body map', 'Where you’d like to be touched, gently, or not at all. Every therapist reads it first.'], ['Touch sheet', 'Your body map and choices on one page.'], ['Stage', 'Where you are, from a first visit to the longest rituals. Each visit moves you on.'], ['Your usual', 'A ritual you’ve booked twice or more, ready to book again in one tap.'], ['Glow Lab', 'Skin care for intimate areas.'], ['Rosé series', 'Six brightening sessions, two weeks apart, with a tracker.'], ['Wallet', 'Money on your account. It works on all three sites.'], ['All-Access', 'One membership for FLINGR, Practice and Velvet.']]
   }
 };
 const W = () => Object.assign({}, WORDS[SITE()] || WORDS.flingr, F.SITE && F.SITE.guide || {});
-const pri = () => (SITE() === 'flingr' ? 'btn btn-cherry' : 'btn btn-pri');
-const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-let step = 0;
-const draw = () => {
-  const w = W(), s = w.steps[step], last = step === w.steps.length - 1, u = F.E && F.E.user && F.E.user(), nx = (F.SITE && F.SITE.nextStep && F.SITE.nextStep(u)) || w.next;
-  return `<div class="fg-guide"><p class="eyebrow">Getting started · ${step + 1} of ${w.steps.length}</p><h2 class="h-disp h3 mt16">${s[0]}</h2><p class="small muted mt8">${s[1]}</p>
-  <div class="fg-dots mt24" aria-hidden="true">${w.steps.map((_, i) => `<i class="${i === step ? 'on' : ''}"></i>`).join('')}</div>
-  <div class="fg-act mt24"><button class="btn-link tiny" data-a="fgSkip">Skip</button>${last ? `<a class="${pri()}" href="${nx.href}" data-a="fgDone">${nx.label}</a>` : `<button class="${pri()}" data-a="fgNext">Next</button>`}</div></div>`;
-};
-const seen = () => ls.set(KEY(), String(Date.now()));
-const open = () => { step = 0; F.modal(draw(), { cls: 'fg-modal', label: 'Getting started', onClose: seen }); };
-F.A.fgNext = () => { step++; const m = F._modal && F._modal.m && F._modal.m.querySelector('.fg-guide'); if (m) { m.outerHTML = draw(); const b = F._modal.m.querySelector('[data-a=fgNext],[data-a=fgDone]'); if (b) b.focus(); } };
-F.A.fgSkip = () => { seen(); F.closeModal(); };
-F.A.fgDone = el => { seen(); F.closeModal(); if (el && el.getAttribute) location.hash = el.getAttribute('href'); };
-const STAFF = /^#\/(staff|ops|host-studio|studio|desk)\b/;
-const maybe = () => {
-  if (navigator.webdriver || ls.get(KEY()) || F._modal || document.getElementById('gate') || STAFF.test(location.hash) || !(F.ageOk && F.ageOk())) return;
-  open();
-};
-let t = 0; const later = () => { clearTimeout(t); t = setTimeout(maybe, 900); };
-// "Words we use" at the end of the Help page
 const gloss = () => { const g = W().gloss; if (!g || !g.length) return '';
   return `<section class="sec-sm fg-gloss"><div class="wrap"><details class="acc"><summary><span class="h-disp h4">Words we use</span>${F.ic ? F.ic('plus', 14) : '+'}</summary><dl class="fg-dl">${g.map(([k, v]) => `<div><dt>${k}</dt><dd class="small muted">${v}</dd></div>`).join('')}</dl></details></div></section>`; };
 const wrapHelp = () => { const P = F.pages && F.pages.help; if (!P || P._fg) return; const r0 = P.render; P.render = function (r) { const out = r0.apply(this, arguments); if (out && typeof out.html === 'string') out.html += gloss(); return out; }; P._fg = true; };
-const CSS = `.fg-modal{max-width:440px}.fg-guide{padding:8px 4px 4px}.fg-dots{display:flex;gap:6px}.fg-dots i{width:8px;height:8px;border-radius:50%;background:var(--ln)}.fg-dots i.on{background:var(--fg)}
-.fg-act{display:flex;justify-content:space-between;align-items:center;gap:16px}
-.fg-gloss{padding-top:0}.fg-gloss .acc{border-top:1px solid var(--ln)}.fg-gloss summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;cursor:pointer;list-style:none}.fg-gloss summary::-webkit-details-marker{display:none}
+const CSS = `.fg-gloss{padding-top:0}.fg-gloss .acc{border-top:1px solid var(--ln)}.fg-gloss summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;cursor:pointer;list-style:none}.fg-gloss summary::-webkit-details-marker{display:none}
 .fg-dl{display:grid;grid-template-columns:minmax(0,1fr);gap:12px 32px;padding:4px 0 24px;margin:0}.fg-dl dt{font-weight:500;font-size:14px}.fg-dl dd{margin:2px 0 0}
 @media (min-width:768px){.fg-dl{grid-template-columns:repeat(2,minmax(0,1fr))}}`;
 const start = () => {
   if (!document.getElementById('fgCss')) { const s = document.createElement('style'); s.id = 'fgCss'; s.textContent = CSS; document.head.appendChild(s); }
   wrapHelp();
-  const main = document.getElementById('main'); if (main && window.MutationObserver) new MutationObserver(later).observe(main, { childList: true });
-  if (window.MutationObserver) new MutationObserver(later).observe(document.body, { childList: true });
-  later();
 };
-F.guide = { open, words: W };
+F.guide = { words: W };
 wrapHelp();
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else setTimeout(start, 0);
 })();
