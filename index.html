@@ -314,9 +314,10 @@ input.chip-sel{padding:0 12px;background-image:none;color-scheme:dark}
 .cal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-wd{font:500 10px var(--f-mono);color:var(--mut);text-align:center;padding:4px 0}
-.cal-d{aspect-ratio:1;display:grid;place-items:center;font-size:13px;position:relative;border:1px solid transparent;transition:border-color .2s,background .2s}
+.cal-d{aspect-ratio:1;width:100%;max-width:44px;justify-self:center;display:grid;place-items:center;font-size:13px;position:relative;border:1px solid transparent;transition:border-color .2s,background .2s}
 .cal-d.av::after{content:"";width:4px;height:4px;border-radius:50%;background:var(--ok);position:absolute;bottom:5px;left:50%;margin-left:-2px}
 .cal-d.av:hover{border-color:var(--ln2)}
+.cal-d.av{width:100%;height:auto;border-radius:50%}   /* .av is also the avatar class (30px round): in a calendar the day keeps its own size, always a circle */
 .cal-d.sel{background:var(--bone);color:var(--ink)}.cal-d.sel::after{background:var(--cherry)}
 .cal-d.dis{color:rgba(237,232,221,.42)}.cal-d.today{text-decoration:underline;text-underline-offset:3px}
 .slot-g+.slot-g{margin-top:14px}.slot-g .lbl{margin-bottom:8px;font-size:9.5px}
@@ -442,6 +443,8 @@ input[type=date].inp,input[type=time].inp{color-scheme:dark}
 .tbl{width:100%;border-collapse:collapse;font-size:14px}
 .tbl th{font:500 10.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);text-align:left;padding:14px 16px;border-bottom:1px solid var(--ln2);white-space:nowrap}
 .tbl td{padding:14px 16px;border-bottom:1px solid var(--ln);vertical-align:middle}
+.tbl th.center{text-align:center}.tbl th.right{text-align:right}   /* a header lines up with its column (the general th rule is left-aligned) */
+.tbl.trip th,.tbl.trip td{vertical-align:middle}.tbl.trip th.center,.tbl.trip td.center{width:84px;min-width:84px;padding-left:6px;padding-right:6px}.tbl.trip .tcell{min-width:64px}
 .tbl tr:last-child td{border-bottom:0}
 .tbl .ic{color:var(--merlot)}
 .tbl tr.urgent td{background:rgba(163,32,43,.12)}
@@ -569,6 +572,8 @@ a.stat{transition:border-color .3s}a.stat:hover{border-color:var(--ln2)}
 .wk{display:flex;flex-direction:column;gap:6px}
 .wk-r{display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--ln)}
 .wk-w{display:flex;gap:16px;flex-wrap:wrap}.wk-i{display:inline-flex;gap:6px;align-items:center}.wk-i .inp{width:128px}
+.wk-sum,.wk-ed{display:none}
+@media (max-width:640px){.wk .wk-r{grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;padding:12px 0}.wk-sum,.wk-ed{display:block}.wk-sum{text-align:right;overflow-wrap:anywhere}.wk .wk-w{display:none;grid-column:1/-1;gap:8px}.wk .wk-r.open .wk-w{display:flex}.wk-i .inp{width:auto;flex:1;min-width:0}.wk-i{display:flex;width:100%}}
 
 /* receipt */
 .receipt{background:#fff;max-width:860px;margin:0 auto;padding:64px;font-size:14px;box-shadow:0 30px 80px rgba(18,7,8,.12)}
@@ -1548,7 +1553,7 @@ body:not([data-page=home]):not([data-page=hosts]):not([data-page=journal]):not([
 .ep-av{display:flex}.ep-av .plate{width:40px;height:40px;border-radius:50%;border:2px solid var(--ox9);flex:none}.ep-av .plate+.plate{margin-left:-12px}
 @media (max-width:640px){.hp-bio.clamp{-webkit-line-clamp:3;font-size:16px;line-height:1.65}}
 /* detail pages from 1024px: content about 60%, a sticky booking card about 40%, a gallery that stays short */
-@media (min-width:1024px){.hp-side .cal-d{aspect-ratio:auto;height:42px}.ep-story.clamp{-webkit-line-clamp:3}.hp{grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-rows:auto 1fr;column-gap:48px}.hp-sim{grid-template-columns:1fr 1fr}.gal{height:clamp(280px,26vw,360px)}.hp-bio.clamp{-webkit-line-clamp:3}.gal-i.main .plate{min-height:0;aspect-ratio:auto}}
+@media (min-width:1024px){.hp-side .cal-d{aspect-ratio:1;height:auto}.ep-story.clamp{-webkit-line-clamp:3}.hp{grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-rows:auto 1fr;column-gap:48px}.hp-sim{grid-template-columns:1fr 1fr}.gal{height:clamp(280px,26vw,360px)}.hp-bio.clamp{-webkit-line-clamp:3}.gal-i.main .plate{min-height:0;aspect-ratio:auto}}
 /* on booking pages the footer is one compact block of links at every width */
 :is(body[data-page=host],body[data-page=escape]) .ftr-grid{grid-template-columns:1fr;gap:10px;padding-bottom:8px}:is(body[data-page=host],body[data-page=escape]) .ftr-grid h4,:is(body[data-page=host],body[data-page=escape]) .ftr-grid .appb,:is(body[data-page=host],body[data-page=escape]) .ftr-grid>div:first-child p{display:none}
 :is(body[data-page=host],body[data-page=escape]) .ftr-grid>div:not(:first-child) a:not(.logo),:is(body[data-page=host],body[data-page=escape]) .ftr-grid>div:not(:first-child) p{display:inline-block;margin:0 16px 0 0;padding:3px 0}:is(body[data-page=host],body[data-page=escape]) .ftr{padding-top:40px}
@@ -1639,10 +1644,24 @@ body[data-page=club] .fbar{position:static}
 /* phones: Practice and Velvet stay in the menu and footer; home keeps your suggestions */
 @media (max-width:640px){.home-more .home-fam{display:none}.home-more .mb48{margin-bottom:0}.home-more:not(:has(.stack-l)){display:none}}
 
+/* all-in price under the plan price on host cards */
+.hc-pr{text-align:right}.hc-pr small{font-size:10px;letter-spacing:.04em;opacity:.8;margin-top:2px}
 /* Late openings on home: The Hour after 10pm with LATEHOUR applied */
 .late-row{margin-top:48px;padding-top:32px;border-top:1px solid var(--ln)}
 .late-row .cc-p s{margin-right:6px;font-size:.92em}
 @media (max-width:640px){.late-row{margin-top:32px;padding-top:24px}.late-row .clist{grid-auto-flow:column;grid-auto-columns:86%;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.late-row .clist>*{scroll-snap-align:start}.late-row .clist>.hide-ph{display:grid}.late-row p.small{font-size:13px}}
+
+/* Checkout on a phone: details as one line when filled, optional preferences folded, total and Pay at the foot of the screen */
+.co-who,.co-bar{display:none}
+.co-opt>summary{cursor:pointer;list-style:none;padding:4px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}.co-opt>summary::-webkit-details-marker{display:none}.co-opt[open]>summary svg{transform:rotate(45deg)}
+@media (max-width:640px){
+  #co1.co-min .co-who{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px 18px}
+  #co1.co-min .costep-b{display:none}
+  .co-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--bgc,#120708);border-top:1px solid var(--ln2);transition:transform .2s}
+  .co-bar.off{transform:translateY(110%)}
+  .co-bar .btn{min-width:150px}
+  .co-page>.wrap{padding-bottom:72px}
+}
 
 /* ============ FLINGR Afterhours (07c-pages-club.js, 11i-club-ops.js) ============ */
 .ah-hero{position:relative;min-height:min(78vh,720px);display:flex;align-items:flex-end;padding:120px 0 64px;overflow:hidden;isolation:isolate}
@@ -4827,6 +4846,8 @@ E.calc = (c, userId) => {
 E.cartSig = c => c ? [c.hostId, c.planId, c.start, c.venueId, JSON.stringify(c.addons || {}), c.meet || ''].join('|') : '';
 
 /* ---------- wallet & payment methods ---------- */
+// the price a guest actually pays for a plan price: service fee (none for Reserve) and local tax included, as E.calc works it out
+E.allIn = (h, amount, u = E.user()) => { const city = E.city(h.cityId), st = S().settings, fee = u && u.reserve ? 0 : U.r2(Math.max(E.cp(city.id, st.minFeeUsd), amount * st.servicePct)); return U.r2(amount + fee + U.r2(amount * city.tax)); };
 E.walletIn = (u, cityId) => E.fromUsd(cityId, u.wallet.usd);
 E.walletTx = (u, usd, label, ref) => { u.wallet.usd = U.r2(u.wallet.usd + usd); u.wallet.tx.unshift({ id: U.uid('tx'), at: now(), usd: U.r2(usd), label, ref: ref || null }); };
 E.methodLabel = m => m ? (m.type === 'card' ? `${m.brand} ending ${m.last4}` : m.type === 'bank' ? `${m.brand} •••• ${m.last4}` : m.brand) : '';
@@ -7415,7 +7436,7 @@ F.hostCard = (h, o = {}) => {
   if (o.list) return `<article class="hrow rv"><a href="#/host/${h.id}" class="hrow-m">${F.hostPlate(h, 1, 'r34')}</a><div class="hrow-b"><div class="row between"><h3 class="h-disp hcard-n"><a href="#/host/${h.id}">${esc(h.name)}</a> <span class="muted">${F.ageLabel(h)}</span></h3><button class="ibtn fav ${saved ? 'on' : ''}" data-a="save" data-h="${h.id}" aria-pressed="${saved}" aria-label="Save ${esc(h.name)}">${F.ic(saved ? 'heartf' : 'heart')}</button></div><p class="hcard-t">${esc(h.tagline)}</p>${F.hostPulse ? F.hostPulse(h) : ''}<div class="row wrap-gap small muted mono"><span>${F.ic('pin', 12)} ${esc(h.hood)}, ${city.abbr}</span><span>${h.rating ? F.ic('star', 11) + ' ' + h.rating.toFixed(2) + ' (' + h.reviewCount + ')' : 'New'}</span><span>${h.languages.join(', ')}</span><span>${h.ver.video ? 'Video verified' : 'ID verified'}</span>${mc}</div><div class="row mt16">${h.plans.map(p => `<span class="chip">${E.plan(p.id).name} · ${E.money(p.price, h.cityId)}</span>`).join('')}</div></div><div class="hrow-s">${avail}<a class="btn btn-ghost btn-sm mt16" href="#/host/${h.id}">View profile</a>${F.cmpBtn(h.id, 'mt8')}</div></article>`;
   const mode = h.instant === false ? '<span class="mode" title="Hosts review each request">Request</span>' : '<span class="mode" title="Confirmed immediately">' + F.ic('bolt', 11) + ' Instant</span>';
   const np = F.hostPhotos(h).length, nt = F.hostTiles(h).length, media = nt > 1 ? `<a class="hc-strip" href="#/host/${h.id}" aria-label="View ${esc(h.name)}, ${U.plural(np, 'photo')}">${Array.from({ length: nt }, (_, k) => F.hostPlate(h, k + 1, 'r34')).join('')}</a>${np > 1 ? `<span class="hc-count mono" aria-hidden="true">${np} photos</span>` : ''}` : `<a href="#/host/${h.id}" aria-label="View ${esc(h.name)}">${F.hostPlate(h, 1, 'r34')}</a>`;
-  return `<article class="hcard rv${o.cls ? ' ' + o.cls : ''}"><div class="hcard-media">${media}${h.status === 'active' && nx ? `<button class="qv" data-a="quickView" data-h="${h.id}">Quick view</button>` : ''}<button class="hcard-fav ${saved ? 'on' : ''}" data-a="save" data-h="${h.id}" aria-pressed="${saved}" aria-label="${saved ? 'Remove' : 'Save'} ${esc(h.name)}">${F.ic(saved ? 'heartf' : 'heart', 17)}</button>${tag || mc ? `<div class="hcard-tl">${mc || tag}</div>` : ''}<div class="hcard-avail">${avail}</div></div><div class="hcard-b"><div class="row between nowrap"><h3 class="h-disp hcard-n"><a href="#/host/${h.id}">${esc(h.name)}</a> <span class="muted">${F.ageLabel(h)}</span></h3><span class="rt mono">${h.rating ? F.ic('star', 11) + ' ' + h.rating.toFixed(2) : 'New'}</span></div><p class="hcard-t">${esc(h.tagline)}</p>${F.hostPulse ? F.hostPulse(h) : ''}<div class="row between mono tiny muted"><span>${esc(h.hood)}${o.showCity ? ', ' + city.abbr : ''} · ${mode}</span><span>${o.plan ? '' : 'From '}${E.money(price, h.cityId)}</span></div></div></article>`;
+  return `<article class="hcard rv${o.cls ? ' ' + o.cls : ''}"><div class="hcard-media">${media}${h.status === 'active' && nx ? `<button class="qv" data-a="quickView" data-h="${h.id}">Quick view</button>` : ''}<button class="hcard-fav ${saved ? 'on' : ''}" data-a="save" data-h="${h.id}" aria-pressed="${saved}" aria-label="${saved ? 'Remove' : 'Save'} ${esc(h.name)}">${F.ic(saved ? 'heartf' : 'heart', 17)}</button>${tag || mc ? `<div class="hcard-tl">${mc || tag}</div>` : ''}<div class="hcard-avail">${avail}</div></div><div class="hcard-b"><div class="row between nowrap"><h3 class="h-disp hcard-n"><a href="#/host/${h.id}">${esc(h.name)}</a> <span class="muted">${F.ageLabel(h)}</span></h3><span class="rt mono">${h.rating ? F.ic('star', 11) + ' ' + h.rating.toFixed(2) : 'New'}</span></div><p class="hcard-t">${esc(h.tagline)}</p>${F.hostPulse ? F.hostPulse(h) : ''}<div class="row between mono tiny muted"><span>${esc(h.hood)}${o.showCity ? ', ' + city.abbr : ''} · ${mode}</span><span class="hc-pr">${o.plan ? '' : 'From '}${E.money(price, h.cityId)}<small class="d-b" title="With service fee and tax">${E.money(Math.round(E.allIn(h, price)), h.cityId)} all-in</small></span></div></div></article>`;
 };
 F.sumHtml = (pr, o = {}) => `<div class="sum">${pr.lines.map(l => `<div class="kv"><span>${esc(l.name)}${l.qty > 1 ? ` × ${l.qty}` : ''}${l.sub ? `<small class="d-b muted">${esc(l.sub)}</small>` : ''}</span><span>${U.money(l.amount, pr.cur)}</span></div>`).join('')}
   <div class="kv kv-sub"><span>Subtotal</span><span>${U.money(pr.subtotal, pr.cur, true)}</span></div>
@@ -9826,7 +9847,7 @@ const widgetHtml = h => {
   const pr = b.start ? E.calc(ctx, u && u.id) : null;
   const cut = b.start ? b.start - F.S.settings.cancelFullH * 36e5 : null;
   const req = h.instant === false;
-  return `<div class="bk-h row between"><div><span class="mono tiny muted">${plan.name}</span><div class="h-disp h3">${E.money(b.start ? E.hp(h, b.planId, b.start) : E.hp(h, b.planId), h.cityId)}</div>${h.peakPct ? `<div class="tiny muted">Fri–Sat evenings +${h.peakPct}%</div>` : ''}${(sn => sn ? `<div class="tiny muted">${esc(sn)}</div>` : '')(F.seasonNote(h.cityId, b.planId, b.start || U.zoned(city.tz, b.key, 1200)))}</div><div class="right small">${h.rating ? `${F.ic('star', 12)} ${h.rating.toFixed(2)}<div class="tiny muted">${U.plural(h.reviewCount, 'rating')}</div>` : '<span class="badge">New host</span>'}<div class="mt4"><span class="badge ${req ? '' : 'b-ok'}">${req ? 'Request to book' : F.ic('bolt', 11) + ' Instant'}</span></div></div></div>
+  return `<div class="bk-h row between"><div><span class="mono tiny muted">${plan.name}</span><div class="h-disp h3">${E.money(b.start ? E.hp(h, b.planId, b.start) : E.hp(h, b.planId), h.cityId)}</div><div class="tiny muted bk-all">${pr ? `${E.money(pr.total, h.cityId)} total` : `About ${E.money(Math.round(E.allIn(h, E.hp(h, b.planId))), h.cityId)} all-in`} · ${u && u.reserve ? 'tax included, no service fee' : 'service fee and tax included'}</div>${h.peakPct ? `<div class="tiny muted">Fri–Sat evenings +${h.peakPct}%</div>` : ''}${(sn => sn ? `<div class="tiny muted">${esc(sn)}</div>` : '')(F.seasonNote(h.cityId, b.planId, b.start || U.zoned(city.tz, b.key, 1200)))}</div><div class="right small">${h.rating ? `${F.ic('star', 12)} ${h.rating.toFixed(2)}<div class="tiny muted">${U.plural(h.reviewCount, 'rating')}</div>` : '<span class="badge">New host</span>'}<div class="mt4"><span class="badge ${req ? '' : 'b-ok'}">${req ? 'Request to book' : F.ic('bolt', 11) + ' Instant'}</span></div></div></div>
   <div class="bk-sec"><div class="lbl">1. Plan</div><div class="plans">${h.plans.map(p => { const pl = E.plan(p.id); return `<button class="pl ${p.id === b.planId ? 'on' : ''}" data-a="bkPlan" data-p="${p.id}" aria-pressed="${p.id === b.planId}"><span class="pl-n">${pl.name}</span><span class="tiny muted">${U.dur(pl.dur)}</span><span class="mono small">${E.money(p.price, h.cityId)}</span></button>`; }).join('')}</div></div>
   <div class="bk-sec"><div class="row between"><div class="lbl">2. Date</div><div class="seg seg-sm" role="group" aria-label="Calendar view"><button class="seg-b ${b.view !== 'week' ? 'on' : ''}" data-a="bkView" data-v="month">Month</button><button class="seg-b ${b.view === 'week' ? 'on' : ''}" data-a="bkView" data-v="week">Week</button></div></div><div class="mt8">${b.view === 'week' ? weekHtml(h, b) : calHtml(h, b)}</div></div>
   <div class="bk-sec"><div class="lbl">3. Start time · ${U.keyFmt(b.key, 'date')}</div>${slotsHtml(h, b)}</div>
@@ -11762,7 +11783,8 @@ P.checkout = {
 <div class="co mt32"><div>
 ${co.err ? `<div class="notice err mb16" role="alert">${F.ic('alert', 16)}<span>${esc(co.err)}</span></div>` : ''}
 ${req ? `<div class="notice mb16">${F.ic('clock', 16)}<span><strong>${esc(h.first)} reviews each booking request.</strong> Most reply within ${h.responseMin} minutes. If they decline, or don’t reply within 2 hours, you’re refunded in full.</span></div>` : ''}
-<section class="costep open" id="co1">${stepHead(1, 'Your details', !!c.guest)}
+<section class="costep open${g.name && g.email && g.phone && !F.ui.coWhoEdit ? ' co-min' : ''}" id="co1">${stepHead(1, 'Your details', !!c.guest)}
+<div class="co-who"><span class="small"><strong>${esc(g.name)}</strong><span class="d-b muted tiny">${esc(g.email)} · ${esc(g.phone)}</span></span><button type="button" class="btn-link tiny" data-a="coWhoEdit">Edit</button></div>
 <form class="costep-b stack" data-f="coDetails" novalidate>
   <button type="button" class="btn btn-ghost btn-sm" data-a="coFill">${F.ic('bolt', 14)} Use my saved details</button>
   <div class="fgrid" data-c="coDraft"><div class="field"><label for="coN">Full name</label><input class="inp" id="coN" name="name" value="${esc(g.name || '')}" autocomplete="name" required></div><div class="field"><label for="coE">Email</label><input class="inp" id="coE" name="email" type="email" value="${esc(g.email || '')}" autocomplete="email" required></div></div>
@@ -11774,10 +11796,11 @@ ${req ? `<div class="notice mb16">${F.ic('clock', 16)}<span><strong>${esc(h.firs
 <div class="costep-b"><div class="addons addons-l">${adShown.map(a => { const on = !!c.addons[a.id]; const st = E.addonState(ctxOf(c), a.id, on); return `<label class="addon ${st.ok || on ? '' : 'dis'}"><input type="checkbox" data-ch="coAddon" value="${a.id}" ${on ? 'checked' : ''} ${st.ok || on ? '' : 'disabled'}><span class="addon-b"><span class="addon-n">${esc(a.name)}${a.extraMin ? ` <span class="tiny muted">+${a.extraMin} min</span>` : ''}</span><span class="tiny muted">${st.ok || on ? esc(a.desc) + (st.left <= 5 ? ` <span class="warn-t">Only ${st.left} left that night.</span>` : '') : esc(st.reason)}</span></span><span class="mono small">${E.money(E.addonUnit(a, city.id, c.hostId, c.planId), city.id)}</span></label>${a.id === 'drink' && on ? F.meetPick(E.host(c.hostId), ctxOf(c), 'coMeet') : ''}`;}).join('')}</div>${adOrd.length > adShown.length ? `<button class="btn btn-ghost btn-sm mt16" data-a="coExAll">Show all ${adOrd.length} extras</button>` : ''}</div></details></section>
 <section class="costep open" id="co3">${stepHead(3, 'Preferences & agreement', !!(c.prefs && c.prefs.bounds))}
 <form class="costep-b stack" data-f="coConfirm" novalidate>
+  <details class="co-opt" open><summary class="row between"><span class="lbl">Add a note or preferences <span class="muted">(optional)</span></span>${F.ic('plus', 14)}</summary><div class="stack mt16">
   <fieldset data-ch="coDraft"><legend class="lbl">How should your host reach you?</legend><div class="rgrid">${[['app', 'FLINGR messages'], ['sms', 'Text message (number masked)']].map(o => `<label class="rcard"><input type="radio" name="comm" value="${o[0]}" ${(pf.comm || u.prefs.comm || 'app') === o[0] ? 'checked' : ''}><span>${o[1]}</span></label>`).join('')}</div></fieldset>
   <div class="fgrid" data-c="coDraft"><div class="field"><label for="coAc">Accessibility or comfort needs <span class="muted">(optional)</span></label><textarea class="inp" id="coAc" name="access" maxlength="300" rows="3" placeholder="Step-free access, fragrance-free room…">${esc(pf.access || '')}</textarea></div>
   <div class="field"><label for="coNt">A note for ${esc(h.first)} <span class="muted">(optional)</span></label><textarea class="inp" id="coNt" name="note" maxlength="300" rows="3">${esc(pf.note || '')}</textarea></div></div>
-  <details class="bnd-mini"><summary class="row between"><span class="lbl">${esc(h.first)}’s boundaries</span>${F.ic('plus', 14)}</summary><div class="g g3 mt8 small"><div><strong>Comfortable with</strong><ul>${h.boundaries.yes.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><strong>Not available for</strong><ul>${h.boundaries.no.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><strong>Discuss first</strong><ul>${h.boundaries.ask.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></div></details>
+  <details class="bnd-mini"><summary class="row between"><span class="lbl">${esc(h.first)}’s boundaries</span>${F.ic('plus', 14)}</summary><div class="g g3 mt8 small"><div><strong>Comfortable with</strong><ul>${h.boundaries.yes.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><strong>Not available for</strong><ul>${h.boundaries.no.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><strong>Discuss first</strong><ul>${h.boundaries.ask.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></div></details></div></details>
   <div class="consent">${F.ic('heart', 20)}<div><strong>Consent is never part of the price.</strong><p class="small mt4">Your booking reserves ${esc(h.first)}’s time, a venue and the extras listed. Consent is given freely, can be withdrawn by either of you at any moment, and cannot be purchased.</p></div></div>
   <div class="card-s small"><strong>Cancellation</strong><p class="mt4">${req ? 'You can withdraw a request free of charge until it’s accepted. Once accepted: ' : ''}${cut > Date.now() ? `${req ? 'full' : 'Full'} refund until ${U.fmt(cut, city.tz, 'dt')}.` : `${req ? 'this' : 'This'} booking starts within 24 hours.`} 50% refund between 24 and 4 hours before start. No refund within 4 hours${c.addons.flex ? ', except under Flexible rescheduling (full refund until 2 hours before)' : ''}${u.reserve ? '. As a Reserve member you receive a full refund until 4 hours before' : ''}.</p></div>
   <div class="checks" data-ch="coAgreeD">
@@ -11792,7 +11815,8 @@ ${req ? `<div class="notice mb16">${F.ic('clock', 16)}<span><strong>${esc(h.firs
   ${walletAvail > 0 && !co.deferred ? `<label class="tgl-row card-s"><span><strong>FLINGR Wallet${co.useWallet ? ' applied' : ''}</strong><small class="d-b muted">${co.useWallet ? E.money(Math.min(walletAvail, pr.total), city.id, true) + ' of ' : ''}${E.money(walletAvail, city.id, true)} available${city.fx !== 1 ? ' (' + U.money(u.wallet.usd, 'USD', true) + ')' : ''}</small></span><input type="checkbox" class="tgl" data-ch="coWallet" ${co.useWallet ? 'checked' : ''}></label>` : ''}
   ${rest > 0 ? `<fieldset><legend class="lbl">${willWallet > 0 ? 'Pay the remaining ' + E.money(rest, city.id, true) + ' with' : co.deferred ? 'Card to authorise' : 'Pay with'}</legend><div class="pmethods">${u.methods.filter(m => (!co.deferred || m.type === 'card') && !E.cardExpired(m)).map(m => `<label class="pm"><input type="radio" name="pm" value="${m.id}" data-ch="coMethod" ${co.method === m.id ? 'checked' : ''}>${F.pmIcon(m)}<span><strong>${esc(m.nick || m.brand)}</strong><small class="d-b muted">${F.pmSub(m)}</small></span>${m.default ? '<span class="badge">Default</span>' : ''}</label>`).join('')}</div><button class="btn-link tiny mt8" data-a="addMethod">${F.ic('plus', 12)} Add a payment method</button></fieldset>` : `<div class="notice small">${F.ic('wallet', 16)}<span>Your Wallet covers the full amount.</span></div>`}
   <p class="tiny muted">${F.ic('lock', 11)} Your statement will show ${E.desc(city.id)}. ${co.deferred ? 'If you cancel late, the cancellation charge is taken from this authorisation.' : 'Payments are encrypted and processed by our payment partner.'}</p>
-  <button class="btn btn-cherry btn-lg btn-block" data-a="coPay">${payLabel}</button></div></section>
+  <button class="btn btn-cherry btn-lg btn-block co-pay-main" data-a="coPay">${payLabel}</button></div></section>
+<div class="co-bar" aria-hidden="true"><span><span class="tiny muted d-b">${co.deferred ? 'Charged at check-in' : 'Total'}</span><strong class="mono">${E.money(pr.total, city.id, true)}</strong></span><button class="btn btn-cherry" data-a="coPay" tabindex="-1">${req ? 'Send request' : co.deferred ? 'Authorise' : 'Pay'}</button></div>
 </div>
 <div class="co-side"><details class="card co-sum co-sumd" open><summary class="co-sumh"><span class="h-disp h4">Order summary</span><span class="mono">${E.money(pr.total, city.id, true)} ${F.ic('chevd', 14)}</span></summary>
   <div class="row nowrap mt16">${F.hostPlate(h, 1, 'r34 co-p')}<div><strong class="h-disp h4">${plan.name}</strong><div class="small">with ${esc(h.name)}</div><div class="tiny muted mt8">${U.fmt(c.start, city.tz, 'dt')} to ${U.fmt(end, city.tz, 'time')} ${U.tzAbbr(city.tz, c.start)}</div><div class="tiny muted">${E.venue(c.venueId).name} · ${city.name}</div></div></div>
@@ -11804,6 +11828,8 @@ ${req ? `<div class="notice mb16">${F.ic('clock', 16)}<span><strong>${esc(h.firs
   mount() {
     if (!F.S.cart || !E.user()) return;
     const d = $('.co-sumd'); if (d && window.innerWidth < 960) d.open = false;
+    const op = $('.co-opt'), cp = F.S.cart.prefs || {}; if (op && window.innerWidth <= 640 && !(cp.access || cp.note) && ![...op.querySelectorAll('textarea')].some(t => t.value.trim())) op.open = false;   // phone: the optional part starts folded unless something is in it
+    const main = $('.co-pay-main'), bar = $('.co-bar'); if (F._coIO) F._coIO.disconnect(); F._coIO = null; if (main && bar && 'IntersectionObserver' in window) { F._coIO = new IntersectionObserver(es => es.forEach(x => bar.classList.toggle('off', x.isIntersecting))); F._coIO.observe(main); }   // the bar steps aside while the main Pay button is on screen
     E.hold().then(r => { if (!r.ok) { coHoldFail(r.reason); } tickHold(); });
     F.timers.push(setInterval(tickHold, 1000));
   }
@@ -11945,6 +11971,7 @@ ${o.refund ? `<div class="kv small"><span>Refund (${o.refund.status === 'done' ?
 <footer class="pp-foot mt48"><div class="pp-sign"><span class="hand">Thank you, ${esc(o.guest.name.split(' ')[0])}. Have a lovely night.</span><span class="sig">M. Delacroix</span><span class="sigline">Guest Care, FLINGR</span></div><div class="pp-stamps">${F.stamp(o.refund ? { mid: 'Refunded', bot: U.fmt(o.refund.at || Date.now(), city.tz, 'dshort'), box: true, rot: -9, size: 112, color: '#1F3F8F' } : o.payment.deferred && !o.payment.captured ? { mid: 'Authorised', bot: 'Charged at check-in', box: true, rot: -7, size: 112, color: '#1F3F8F' } : { mid: 'Paid', bot: U.fmt(o.payment.captured || o.createdAt, city.tz, 'md'), box: true, rot: -9, size: 112 })}</div></footer>
 <p class="tiny muted mt24">Questions about this receipt: care@flingr.com · ${city.phone}</p></div>`;
 };
+A.coWhoEdit = () => { F.ui.coWhoEdit = true; const s = $('#co1'); if (s) s.classList.remove('co-min'); const n = $('#coN'); if (n) n.focus(); };
 A.receiptOpen = el => { const o = E.order(el.dataset.o); if (!o) return; F.modal(`${F.receiptPaper(o)}<div class="paper-act noprint"><button class="btn btn-bone btn-sm" data-a="printPaper">${F.ic('print', 14)} Print</button></div>`, { cls: 'modal-paper', label: 'Receipt ' + o.no, focusEl: '.paper' }); };
 A.receiptTxt = el => {
   const o = E.order(el.dataset.o), pr = o.price, city = E.city(o.cityId), m = n => U.money(n, pr.cur, true);
@@ -12497,6 +12524,10 @@ A.rvPlan = el => { const st = F.ui.rv; st.plan = st.plan === el.dataset.p ? null
 const E = F.E, P = F.pages, A = F.A, C = F.C;
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const hm = m => U.pad(Math.floor((m % 1440) / 60)) + ':' + U.pad(m % 60);
+// the weekly hours on a phone: one line per day ("7am–1pm · 6pm–7:30am"), Edit opens that day's windows
+const t12 = m => { m = ((m % 1440) + 1440) % 1440; const h = Math.floor(m / 60), mi = m % 60; return (h % 12 || 12) + (mi ? ':' + U.pad(mi) : '') + (h < 12 ? 'am' : 'pm'); };
+const wkSum = w => w && w.length ? w.map(x => t12(x[0]) + '–' + t12(x[1])).join(' · ') : 'Day off';
+const rowSum = r => { const on = r.querySelector('input[type=checkbox]').checked, ins = [...r.querySelectorAll('input[type=time]')], w = []; for (let k = 0; k < ins.length; k += 2) if (ins[k].value && ins[k + 1].value) { const a = toMin(ins[k].value), b = toMin(ins[k + 1].value); w.push([a, b]); } return on ? wkSum(w) : 'Day off'; };
 const toMin = (s, over) => { const [h, m] = s.split(':').map(Number); let v = h * 60 + m; if (over) v += 1440; return v; };
 
 /* =============== HOST STUDIO =============== */
@@ -12539,7 +12570,7 @@ ${reqs.length ? `<div class="notice mb24">${F.ic('clock', 16)}<span>You have ${U
 <div class="g g4 mt24">${[['Profile views (30 days)', v30], ['Boundaries respected', h.respect && h.respect.total ? Math.round(h.respect.yes / h.respect.total * 100) + '%' : '—'], ['Bookings (30 days)', b30], ['View to booking', v30 ? (b30 / v30 * 100).toFixed(1) + '%' : '—']].map(x => `<div class="card stat sm"><span class="lbl">${x[0]}</span><span class="h-disp h3">${x[1]}</span></div>`).join('')}</div>
 <div class="row between mt48"><div class="lbl">Next bookings</div><label class="tgl-row"><span class="small">${h.status === 'active' ? 'Taking bookings' : 'Paused'}</span><input type="checkbox" class="tgl" data-ch="hostPause" ${h.status === 'active' ? 'checked' : ''}></label></div>
 <div class="tblw mt16"><table class="tbl tbl-cards"><thead><tr><th>When</th><th>Plan</th><th>Guest</th><th>Venue</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>${up.slice(0, 8).map(o => `<tr><td data-l="When">${U.fmt(o.start, tz, 'dt')}</td><td data-l="Plan">${E.plan(o.planId).name}</td><td data-l="Guest">${guestCell(o)}</td><td data-l="Venue">${E.venue(o.venueId || 'partner').name}</td><td data-l="Status">${F.tone(E.disp(o))}</td><td>${actCell(o)}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">No upcoming bookings.</td></tr>'}</tbody></table></div>`;
-    if (tab === 'calendar') body = `<form class="card" data-f="weekly"><div class="row between"><h2 class="h-disp h4">Weekly hours</h2><button type="button" class="btn-link tiny" data-a="copyMon">Copy Monday to all weekdays</button></div><p class="small muted mt8">Times are ${city.name} local time. A window that ends before it starts runs past midnight.</p><div class="wk mt24">${DAYS.map((d, i) => { const w = h.weekly[i] || []; return `<div class="wk-r"><label class="check"><input type="checkbox" name="on${i}" ${w.length ? 'checked' : ''}><span>${d}</span></label><div class="wk-w">${[0, 1, 2].map(k => { const x = w[k]; return `<span class="wk-i"><input class="inp sm" type="time" name="s${i}_${k}" value="${x ? hm(x[0]) : ''}" aria-label="${d} window ${k + 1} start"><span>–</span><input class="inp sm" type="time" name="e${i}_${k}" value="${x ? hm(x[1]) : ''}" aria-label="${d} window ${k + 1} end"></span>`; }).join('')}</div></div>`; }).join('')}</div><button class="btn btn-bone mt24">Save weekly hours</button></form>
+    if (tab === 'calendar') body = `<form class="card" data-f="weekly"><div class="row between"><h2 class="h-disp h4">Weekly hours</h2><button type="button" class="btn-link tiny" data-a="copyMon">Copy Monday to all weekdays</button></div><p class="small muted mt8">Times are ${city.name} local time. A window that ends before it starts runs past midnight.</p><div class="wk mt24">${DAYS.map((d, i) => { const w = h.weekly[i] || []; return `<div class="wk-r"><label class="check"><input type="checkbox" name="on${i}" ${w.length ? 'checked' : ''}><span>${d}</span></label><span class="wk-sum small muted">${wkSum(w)}</span><button type="button" class="btn-link tiny wk-ed" data-a="wkEdit" aria-expanded="false">Edit</button><div class="wk-w">${[0, 1, 2].map(k => { const x = w[k]; return `<span class="wk-i"><input class="inp sm" type="time" name="s${i}_${k}" value="${x ? hm(x[0]) : ''}" aria-label="${d} window ${k + 1} start"><span>–</span><input class="inp sm" type="time" name="e${i}_${k}" value="${x ? hm(x[1]) : ''}" aria-label="${d} window ${k + 1} end"></span>`; }).join('')}</div></div>`; }).join('')}</div><button class="btn btn-bone mt24">Save weekly hours</button></form>
 <div class="card mt24"><h2 class="h-disp h4">Next four weeks</h2><p class="small muted mt8">Click a day to block or unblock it, or press and drag across several days.</p><div class="blk-grid mt16" id="blkGrid">${Array.from({ length: 28 }, (_, k) => U.addDays(E.todayKey(h.cityId), k)).map(k => { const b = h.blocked.includes(k), hasB = F.S.orders.some(o => o.hostId === h.id && o.key === k && E.BLOCK.includes(o.status)); return `<button class="blk-d ${b ? 'on' : ''} ${hasB ? 'busy' : ''}" data-k="${k}" aria-pressed="${b}" aria-label="${U.keyFmt(k, 'dateLong')}${b ? ', blocked' : ''}${hasB ? ', has bookings' : ''}"><span class="tiny">${U.keyFmt(k, 'wd').slice(0, 3)}</span><span class="mono">${+k.slice(8)}</span></button>`; }).join('')}</div><p class="tiny muted mt8">Days with a dot already have bookings, which stay in place.</p>${F.blockTools(h)}</div>
 <div class="card mt24"><h2 class="h-disp h4">Blocked dates</h2><form class="row wrap-gap mt16" data-f="block"><div class="field"><label for="blF" class="tiny">From</label><input class="inp" id="blF" type="date" name="d" min="${E.todayKey(h.cityId)}"></div><div class="field"><label for="blT" class="tiny">To <span class="muted">(optional)</span></label><input class="inp" id="blT" type="date" name="to" min="${E.todayKey(h.cityId)}"></div><button class="btn btn-ghost btn-sm">Block</button></form><div class="row wrap-gap mt16">${h.blocked.length ? h.blocked.sort().map(d => `<button class="chip on" data-a="hUnblock" data-d="${d}">${U.keyFmt(d, 'date')} ${F.ic('close', 12)}</button>`).join('') : '<span class="small muted">No blocked dates.</span>'}</div>${h.blocked.length > 1 ? '<button class="btn-link tiny mt16" data-a="hUnblockAll">Clear all</button>' : ''}</div>`;
     if (tab === 'profile') body = `<form class="card stack" data-f="hostProfile"><div class="field"><label for="hpT">Tagline</label><input class="inp" id="hpT" name="tagline" maxlength="80" value="${esc(h.tagline)}"></div><div class="field"><label for="hpB">About</label><textarea class="inp" id="hpB" name="bio" rows="5">${esc(h.bio)}</textarea></div><div class="field"><label for="hpI">Interests (comma separated)</label><input class="inp" id="hpI" name="interests" value="${esc(h.interests.join(', '))}"></div>
@@ -12590,7 +12621,8 @@ F.Fm.block = (f, d) => {
 };
 A.hUnblock = el => { F.store.commit(() => { const h = myHost(); h.blocked = h.blocked.filter(x => x !== el.dataset.d); }); F.rerender(); };
 A.hUnblockAll = () => { F.store.commit(() => { myHost().blocked = []; }); F.rerender(); };
-A.copyMon = () => { const f = $('form[data-f=weekly]'); for (let i = 2; i <= 5; i++) { f.elements['on' + i].checked = f.elements.on1.checked; for (let k = 0; k < 3; k++) { f.elements[`s${i}_${k}`].value = f.elements[`s1_${k}`].value; f.elements[`e${i}_${k}`].value = f.elements[`e1_${k}`].value; } } F.toast('Copied to Tuesday to Friday. Save to apply.'); };
+A.wkEdit = el => { const r = el.closest('.wk-r'), open = r.classList.toggle('open'); el.textContent = open ? 'Done' : 'Edit'; el.setAttribute('aria-expanded', open); if (!open) r.querySelector('.wk-sum').textContent = rowSum(r); };
+A.copyMon = () => { const f = $('form[data-f=weekly]'); for (let i = 2; i <= 5; i++) { f.elements['on' + i].checked = f.elements.on1.checked; for (let k = 0; k < 3; k++) { f.elements[`s${i}_${k}`].value = f.elements[`s1_${k}`].value; f.elements[`e${i}_${k}`].value = f.elements[`e1_${k}`].value; } } f.querySelectorAll('.wk-r').forEach(r => { r.querySelector('.wk-sum').textContent = rowSum(r); }); F.toast('Copied to Tuesday to Friday. Save to apply.'); };
 F.Fm.hostMsgs = (f, d) => { F.store.commit(() => { const h = myHost(); h.savedReplies = String(d.replies || '').split('\n').map(x => x.trim()).filter(Boolean).slice(0, 12); h.awayMsg = String(d.away || '').trim(); }); F.toast('Messages saved.'); F.rerender(); };
 const phOrder = h => (h.photoOrder || [1, 2, 3, 4]).slice();
 A.phMain = el => { F.store.commit(() => { const h = myHost(), o = phOrder(h), i = +el.dataset.i; h.photoOrder = [i].concat(o.filter(x => x !== i)); }); F.toast('Main photo updated.'); F.rerender(); };
@@ -12623,10 +12655,10 @@ A.hostDecline = async el => { if (!(await F.confirm({ title: E.order(el.dataset.
 /* =============== STAFF CONSOLE =============== */
 P.staff = {
   render(r) {
-    if (!F.S.session.staff) return { title: 'Staff', html: `<section class="sec"><div class="wrap narrow"><form class="card stack" data-f="staffIn"><div class="eyebrow">FLINGR Operations</div><h1 class="h-disp h3">Staff sign in</h1><div class="field"><label for="sfP">Staff code</label><input class="inp" id="sfP" name="code" type="password" autocomplete="off"></div><button type="button" class="btn-link tiny" data-a="staffFill">${F.ic('key', 12)} Use saved code</button><button class="btn btn-bone">Continue</button></form></div></section>` };
+    if (!F.S.session.staff) return { title: 'Staff', html: `<section class="sec"><div class="wrap narrow"><form class="card stack" data-f="staffIn"><div class="eyebrow">FLINGR Operations</div><h1 class="h-disp h3">Staff sign in</h1><div class="field"><label for="sfP">Staff code</label><input class="inp" id="sfP" name="code" type="password" autocomplete="off"></div><button type="button" class="btn-link tiny" data-a="staffFill">${F.ic('key', 12)} Use saved code</button><button class="btn btn-bone">Continue</button></form>${F.fam ? F.fam.staffHub() : ''}</div></section>` };
     const tab = r.params[0] || 'overview';
     const tabs = [['overview', 'Overview'], ['orders', 'Orders'], ['hosts', 'Hosts'], ['places', 'Places'], ['club', 'Afterhours'], ['photos', 'Photos'], ['guests', 'Guests'], ['catalog', 'Catalog'], ['promos', 'Promotions'], ['trust', 'Reports & tickets'], ['apps', 'Applications'], ['events', 'Event log'], ['health', 'Health'], ['settings', 'Settings'], ['data', 'Data']];
-    const body = (SV[tab] || SV.overview)(r);
+    const body = (SV[tab] || SV.overview)(r) + (tab === 'overview' && F.fam ? F.fam.staffHub() : '');
     return { title: 'Operations', html: `<section class="phero phero-sm"><div class="wrap"><div class="row between end"><div><div class="eyebrow ln">Operations</div><h1 class="h-cond phero-t">FLINGR <span class="it">Ops</span></h1></div><button class="btn-link tiny" data-a="staffOut">Sign out</button></div><nav class="subnav mt32">${tabs.map(t => `<a class="${tab === t[0] ? 'on' : ''}" href="#/staff/${t[0]}">${t[1]}</a>`).join('')}</nav></div></section><section class="sec-sm"><div class="wrap">${body}</div></section>` };
   }
 };
@@ -13918,11 +13950,41 @@ const label = t => {
     let i = 0, first = true; [...r.cells].forEach(c => { const h = heads[i]; if (h && !c.hasAttribute('data-l')) c.setAttribute('data-l', h); if (first && c.hasAttribute('data-l')) { c.classList.add('tc-h'); first = false; } i += c.colSpan || 1; });   // the first named cell is the card's title
   }));
   t.classList.add('tbl-cards', 'tc-auto');
+  tools(t);
 };
+/* Long tables (more than 12 rows): a search box above, on every screen; on a phone, 10 rows at a time with "Show more".
+   The box is kept when the page redraws the table in place, and its search is applied to the new rows. */
+const PAGE = 10, phone = () => window.matchMedia && matchMedia('(max-width:640px)').matches;
+const rowsOf = t => [...t.tBodies].flatMap(b => [...b.rows]).filter(r => !r.classList.contains('tc-one'));
+const tools = t => {
+  const rows = rowsOf(t), box = t.closest('.tblw') || t; if (rows.length <= 12 || t.closest('.modal, .sheet') || (box.parentNode && box.parentNode.querySelector(':scope > .pager, .pager'))) return;   // tables that page themselves keep their own pager
+  let bar = box.previousElementSibling && box.previousElementSibling.classList.contains('tc-tools') ? box.previousElementSibling : null;
+  if (!bar) {
+    bar = document.createElement('div'); bar.className = 'tc-tools';
+    bar.innerHTML = `<label class="tc-q"><span class="sr">Search this table</span><input class="inp" type="search" placeholder="Search ${rows.length} rows" autocomplete="off" spellcheck="false"></label><span class="tiny muted tc-n" aria-live="polite"></span>`;
+    box.parentNode.insertBefore(bar, box);
+    bar._box = box; bar._shown = PAGE;
+    bar.querySelector('input').addEventListener('input', () => { bar._shown = PAGE; apply(bar); });
+  }
+  if (bar._t !== t) { bar._t = t; apply(bar); }
+};
+const apply = bar => {
+  const t = bar._t; if (!t || !t.isConnected) return;
+  const q = bar.querySelector('input').value.trim().toLowerCase(), rows = rowsOf(t), hits = rows.filter(r => !q || r.textContent.toLowerCase().includes(q)), cap = phone() ? bar._shown : Infinity;
+  rows.forEach(r => r.classList.add('tc-hide')); hits.slice(0, cap).forEach(r => r.classList.remove('tc-hide'));
+  const shown = Math.min(hits.length, cap), left = hits.length - shown;
+  bar.querySelector('.tc-n').textContent = q ? `${hits.length} of ${rows.length}` : (left > 0 ? `${shown} of ${rows.length}` : '');
+  // "Show more" exists only while there are more rows to show (a registered action, like every other button)
+  let more = bar._box.nextElementSibling && bar._box.nextElementSibling.classList.contains('tc-more') ? bar._box.nextElementSibling : null;
+  if (left > 0) { if (!more) { more = document.createElement('button'); more.type = 'button'; more.className = 'btn btn-ghost btn-sm tc-more'; more.dataset.a = 'tcMore'; bar._box.after(more); } more.textContent = `Show ${Math.min(PAGE, left)} more · ${left} left`; }
+  else if (more) more.remove();
+};
+F.A.tcMore = el => { const box = el.previousElementSibling, bar = box && box.previousElementSibling; if (!bar || !bar.classList.contains('tc-tools')) return; bar._shown += PAGE; apply(bar); };
 const scan = () => document.querySelectorAll('table.tbl').forEach(label);
 let queued = false;
 const later = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; scan(); }); };
-const CSS = `@media (max-width:640px){
+const CSS = `.tc-tools{display:flex;align-items:center;gap:12px;margin:0 0 12px}.tc-q{flex:1;max-width:340px}.tc-q .inp{width:100%}.tc-hide{display:none!important}.tc-more{display:flex;margin:12px auto 0}
+@media (max-width:640px){
 .tblw:has(> .tc-auto){border:0;overflow:visible;background:none}
 .tc-auto thead{display:none}
 .tc-auto,.tc-auto tbody{display:block;width:100%}
@@ -14369,8 +14431,21 @@ FAM.base = site => {
   return m ? location.origin + m[1] + dir + '/' : 'https://titastudio.github.io/' + dir + '/';
 };
 
+/* ---------- every staff area on the three sites, in one place (staff sign-in and the Operations overview) ---------- */
+const STAFF_AREAS = [['flingr', '/staff', 'Operations', 'Bookings, hosts, places, Afterhours, the clock'], ['flingr', '/host-studio', 'Host Studio', 'A host’s calendar, prices, guests and pay'],
+  ['practice', '/staff', 'Operations', 'Members, timetable, educators, skills'], ['practice', '/studio', 'Educator Studio', 'An educator’s day, notes and pay'],
+  ['velvet', '/staff', 'Operations', 'Rooms, therapists, menu, members'], ['velvet', '/desk', 'Front desk', 'Today’s arrivals, rooms and walk-ins']];
+FAM.staffHub = () => {
+  const here = (F.SITE && F.SITE.id) || 'flingr', cur = (F.route && F.route.path) || '';
+  return `<div class="sth"><div class="lbl">All staff areas</div><p class="tiny muted mt4">One staff code opens every one of them.</p><div class="sth-g">${STAFF_AREAS.map(([site, path, name, line]) => {
+    const href = site === here ? '#' + path : FAM.base(site) + '#' + path, on = site === here && (cur === path || cur.startsWith(path + '/'));
+    return `<a class="sth-a${on ? ' on' : ''}" href="${href}"${on ? ' aria-current="page"' : ''}><span class="tiny muted">${NAMES[site]}</span><strong>${name}</strong><small class="muted">${line}</small></a>`;
+  }).join('')}</div></div>`;
+};
+
 /* ---------- styles (one block, so the three stylesheets stay untouched) ---------- */
 const CSS = `
+.sth{margin-top:40px;padding-top:24px;border-top:1px solid var(--ln)}.sth-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.sth-a{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--ln);background:var(--card,transparent);text-decoration:none;color:inherit;transition:border-color .2s}.sth-a:hover{border-color:var(--ln2,var(--fg))}.sth-a.on{border-color:var(--fg)}.sth-a strong{font-weight:500}.sth-a small{font-size:12px;line-height:1.35}@media (max-width:640px){.sth-g{grid-template-columns:1fr 1fr}.sth-a small{display:none}}
 html.hc,html.hc *{--mut:color-mix(in srgb,var(--fg) 92%,transparent);--ln:color-mix(in srgb,var(--fg) 42%,transparent);--ln2:color-mix(in srgb,var(--fg) 55%,transparent)}
 html.hc .muted,html.hc small,html.hc .tiny{opacity:1}
 html.hc a.u,html.hc .btn-link{text-decoration-thickness:2px;text-underline-offset:3px}
